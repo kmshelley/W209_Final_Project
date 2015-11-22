@@ -734,30 +734,8 @@
         "candidate_ids": [
           "P60007168"
         ]
-      },
-      {
-        "committees": [
-          {
-            "type": "Principal campaign committee",
-            "name": "BIDEN FOR PRESIDENT, INC.",
-            "committee_id": "C00431916"
-          },
-          {
-            "type": "Principal campaign committee",
-            "name": "BIDEN FOR PRESIDENT",
-            "committee_id": "C00213652"
-          }
-        ],
-        "name": "BIDEN, JOSEPH R JR",
-        "short_name": "Joe Biden",
-        "candidate_ids": [
-          "P80000722",
-          "P60012143",
-          "P60012135",
-          "P60012465"
-        ]
-      },
-      
+      }
+
     ]
   },
   "2012": {
