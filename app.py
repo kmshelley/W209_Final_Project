@@ -4,9 +4,6 @@ from flask.ext.runner import Runner
 from os import environ
 import requests
 
-#Just adding a comment to test git automation
-
-
 app = Flask(__name__)
 api = Api(app)
 
