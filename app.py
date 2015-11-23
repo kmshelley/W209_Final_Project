@@ -1,6 +1,5 @@
 from flask import Flask
 from flask.ext.restful import Api, Resource, reqparse
-from flask.ext.runner import Runner
 from os import environ
 import requests
 
