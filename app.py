@@ -40,33 +40,33 @@ def all_results(endpoint, params, pagelimit=None):
 
 class ScheduleABySize(Resource):
     @staticmethod
-    def get(committee_id):
-        parser = reqparse.RequestParser()
-        parser.add_argument('cycle')
-        params = parser.parse_args()
-        params['sort'] = 'size'
+    def get(committee_id, cycle):
+        params = {
+            'cycle': cycle,
+            'sort': 'size',
+        }
         return [r for r in all_results('/committee/'+ committee_id +'/schedules/schedule_a/by_size/', params)]
 
 
 class ScheduleAByState(Resource):
     @staticmethod
-    def get(committee_id):
-        parser = reqparse.RequestParser()
-        parser.add_argument('cycle')
-        params = parser.parse_args()
-        params['page'] = 1
-        params['sort'] = '-total'
+    def get(committee_id, cycle):
+        params = {
+            'cycle': cycle,
+            'sort': '-total',
+            'per_page': 70
+        }
         return [r for r in all_results('/committee/'+ committee_id +'/schedules/schedule_a/by_state/', params)]
 
 
 class ScheduleAByZip(Resource):
     @staticmethod
-    def get(committee_id):
-        parser = reqparse.RequestParser()
-        parser.add_argument('cycle')
-        params = parser.parse_args()
-        params['page'] = 1
-        params['sort'] = '-total'
+    def get(committee_id, cycle):
+        params = {
+            'cycle': cycle,
+            'sort': '-total',
+            'per_page': 100
+        }
         data = []
         for r in all_results('/committee/'+ committee_id +'/schedules/schedule_a/by_zip/', params):
                 data.append(r)
@@ -75,12 +75,13 @@ class ScheduleAByZip(Resource):
 
 class ScheduleAByEmployer(Resource):
     @staticmethod
-    def get(committee_id):
-        parser = reqparse.RequestParser()
-        parser.add_argument('cycle')
-        params = parser.parse_args()
-        params['sort'] = '-total'
-        params['per_page'] = 50
+    def get(committee_id, cycle):
+        params = {
+            'cycle': cycle,
+            'sort': '-total',
+            'per_page': 50
+        }
+
         data = []
         pagelimit = 1
         i = 0
@@ -101,21 +102,47 @@ class ScheduleAByEmployer(Resource):
                 break
         return data
 
-class ScheduleAByContributor(Resource):
+
+class MonthlyTotals(Resource):
     @staticmethod
-    def get(committee_id):
-        parser = reqparse.RequestParser()
-        parser.add_argument('cycle')
-        params = parser.parse_args()
-        params['sort'] = '-total'
-        return [r for r in all_results('/committee/'+ committee_id +'/schedules/schedule_a/by_contributor/', params)]
+    def get(committee_id, cycle, real_nom):
+        return {'description': 'this endpoint will return the %s monthly total receipt and disbursement data'
+                               'for committee %s in the %d cycle' % (real_nom, committee_id, cycle),
+                'return_format': {
+                    'monthly_raised': [{'date %Y-%m-%d': 'amount'}, {'date %Y-%m-%d': 'amount'}],
+                    'monthly_spent': [{'date %Y-%m-%d': 'amount'}, {'date %Y-%m-%d': 'amount'}],
+                    'total_raised': 'float total raised in millions across cycle',
+                    'total_spent': 'float total spent in millions across cycle'
+                }}
+
+
+class TopPACs(Resource):
+    @staticmethod
+    def get(candidate_id, cycle, record_limit, real_nom):
+        return {'description': 'this endpoint will return the top %d PACs spending money for or against '
+                               'candidate %s in the %d cycle, '
+                               'with total and mothly %s spend' % (record_limit, candidate_id, cycle, real_nom),
+                'return_format': {
+                    'committee_id': 'pac_committee_id',
+                    'committee_name': 'pac_name',
+                    'for_against': 'for_against',
+                    'total_spend': 'total_spend',
+                    'monthly': [{'date %Y-%m-%d': 'amount'}, {'date %Y-%m-%d': 'amount'}]
+                }}
 
 # API ROUTING
-api.add_resource(ScheduleABySize, '/committee/<string:committee_id>/schedules/schedule_a/by_size/')
-api.add_resource(ScheduleAByState, '/committee/<string:committee_id>/schedules/schedule_a/by_state/')
-api.add_resource(ScheduleAByZip, '/committee/<string:committee_id>/schedules/schedule_a/by_zip/')
-api.add_resource(ScheduleAByEmployer, '/committee/<string:committee_id>/schedules/schedule_a/by_employer/')
-api.add_resource(ScheduleAByContributor, '/committee/<string:committee_id>/schedules/schedule_a/by_contributor/')
+api.add_resource(ScheduleABySize, '/schedule_a/by_size/<string:committee_id>/<int:cycle>/')
+api.add_resource(ScheduleAByState, '/schedule_a/by_state/<string:committee_id>/<int:cycle>/')
+api.add_resource(ScheduleAByZip, '/schedule_a/by_zip/<string:committee_id>/<int:cycle>/')
+api.add_resource(ScheduleAByEmployer, '/schedule_a/by_employer/<string:committee_id>/<int:cycle>/')
+
+api.add_resource(MonthlyTotals, '/monthly_totals/<string:committee_id>/<int:cycle>/<string:real_nom>/')
+api.add_resource(TopPACs, '/top_pacs/<string:candidate_id>/<int:cycle>/<int:record_limit>/<string:real_nom>/')
+
+
+
+
+
 
 if __name__ == "__main__":
     app.run()
