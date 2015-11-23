@@ -1,6 +1,6 @@
 
 function topEmployers(committee_id, cycle, selector, viz){
-    var BASE_URL = "http://localhost:9600";
+    var BASE_URL = "http://data.enalytica.com:9600";
     var url = BASE_URL+'/committee/'+ committee_id +'/schedules/schedule_a/by_employer/?cycle='+cycle;
     d3.json(url, function(error, json) {
         if (error) throw error;
