@@ -4,9 +4,10 @@ from flask.ext.runner import Runner
 from os import environ
 import requests
 
+#Just adding a comment to test git automation
+
 
 app = Flask(__name__)
-runner = Runner(app)
 api = Api(app)
 
 
@@ -83,7 +84,7 @@ class ScheduleAByEmployer(Resource):
         parser.add_argument('cycle')
         params = parser.parse_args()
         params['sort'] = '-total'
-        params['per_page'] = 30
+        params['per_page'] = 50
         data = []
         pagelimit = 1
         i = 0
@@ -121,4 +122,4 @@ api.add_resource(ScheduleAByEmployer, '/committee/<string:committee_id>/schedule
 api.add_resource(ScheduleAByContributor, '/committee/<string:committee_id>/schedules/schedule_a/by_contributor/')
 
 if __name__ == "__main__":
-    runner.run()
+    app.run()

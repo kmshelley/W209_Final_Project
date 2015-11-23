@@ -7,10 +7,6 @@ function tableViz(){
             var t = d3.select(this).selectAll("table").data([data]);
             var table = t.enter().append("table").attr("class", "table-condensed");
 
-            //var t = d3.select(this).select("table");
-
-
-
             var tableHead = table.append("thead");
             var tableBody = table.append("tbody");
 
@@ -34,9 +30,7 @@ function tableViz(){
 
             t.selectAll(".employer")
                 .data(data)
-                .html(function(d){
-                    console.log(d.employer);
-                    return d.employer; });
+                .html(function(d){ return d.employer; });
 
             t.selectAll(".total")
                 .data(data)
