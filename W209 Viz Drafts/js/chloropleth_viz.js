@@ -9,44 +9,51 @@ function chloropleth() {
 		formatCurrency = function(d) { return "$" + formatValue(d); },
 		colors = colorbrewer.Greens[7];
 
-		var projection = d3.geo.albersUsa()
-			.scale(1000)
-			.translate([width / 2, height / 2]);
+	var projection = d3.geo.albersUsa()
+		.scale(1000)
+		.translate([width / 2, height / 2]);
 
-		var path = d3.geo.path()
-			.projection(projection);
+	var path = d3.geo.path()
+		.projection(projection);
 
+	var quantize = d3.scale.quantize();
+	var legend = d3.legend.color()
+        .labelFormat(formatCurrency)
+        .useClass(false);
 
 	function chart(selection) {
 		selection.each(function(data) {
 
-			var quantize = d3.scale.quantize()
-				.domain([0,d3.max(data,yValue)])
-				.range(colors);
-		
-			var legend = d3.legend.color()
-                .labelFormat(formatCurrency)
-                .useClass(false)
-                .scale(quantize);
+			quantize.domain([0,d3.max(data,yValue)]).range(colors);
+			legend.scale(quantize);
 			
-			var svg = d3.select(this).selectAll("svg").data([data]);
-			var g = svg.enter().append("svg").attr("class", "map").append("g");
-		
-			// Update the outer dimensions.
-			svg .attr("width", width)
-				.attr("height", height);
-		
-			g.selectAll("path")
-				.attr("class","loc")
-				.data(data)
-				.enter()
-				.append("path");
+			var svg = d3.select(this)
+                .selectAll("svg")
+                .data([data]);
 
-			svg.selectAll("path")
+            // Enter actions: these are applied to data selections with no elements existing yet
+            // As a result, they are performed on 'g', which is an enter selection:
+			var g = svg.enter()// this only returns a non-empty selection when the chart is first initialized
+                .append("svg")
+                .attr("class", "map")
+                .append("g");
+
+			g.selectAll("path")
+				.data(data)
+				.enter() // return the selection of data with no elements yet bound
+				.append("path")  // add the projection path elements
+				.attr("class","loc");
+
+            // Update actions: these are applied to element selections that are already bound to data
+            // As a result they are performed on 'svg' which is an update selection:
+            svg .attr("width", width)  // Update the outer dimensions.
+				.attr("height", height);
+
+			svg.selectAll(".loc")
 				.data(data)
 				.style("fill",function(d){ return quantize(yValue(d)); })
 				.style("stroke","white")
-				.attr("d",path);
+				.attr("d", path);
 
 			svg.append("g")
 				.attr("class", "legendQuant")
