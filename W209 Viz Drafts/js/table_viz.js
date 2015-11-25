@@ -5,6 +5,7 @@ function tableViz(){
     function chart(selection){
         selection.each(function(data){
             var t = d3.select(this).selectAll("table").data([data]);
+			
             var table = t.enter().append("table").attr("class", "table-condensed");
 
             var tableHead = table.append("thead");

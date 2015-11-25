@@ -1,12 +1,42 @@
 
-function topEmployers(committee_id, cycle, selector, viz){
+function topEmployers(committee_id, candidate_id, cycle, selector, viz){
     var BASE_URL = "http://data.enalytica.com:9600";
     //var BASE_URL = "http://localhost:5000";
     var url = BASE_URL+'/schedule_a/by_employer/'+ committee_id +'/'+cycle;
     d3.json(url, function(error, json) {
         if (error) throw error;
         plotData(selector, json, viz);
-		console.log(json);
+		
+    });
+	
+	d3.json("/data/sched_a_by_cand+state_2007-2015_to_pg500.json", function(error, json) {
+        if (error) throw error;
+		//console.log(committee_id);
+		jsonfiltered = json.filter(function(d){
+					//console.log(d.committee_id);
+					if (d.candidate_id === candidate_id && +d.cycle === +cycle){
+						return true;
+					}else{
+						return false;
+					} 
+				});
+		
+		//defines a mapping from locations to values
+		var mapData = d3.map(); 
+		jsonfiltered.forEach(function(d){
+			mapData.set(d.state,+d.total);
+		});
+		
+		//load the map json	
+		d3.json("../data/states.json", function(error, us) {
+			if (error) return console.error(error);
+			var locs = topojson.feature(us, us.objects.cb_2014_us_state_500k).features;
+			locs.forEach (function(loc){
+				loc.properties["total"] = mapData.get(loc.id);
+			});
+			plotData(selector, locs, chloropleth());
+		});
+		
     });
 
 }
@@ -16,9 +46,9 @@ function plotData(selector, data, plot) { return d3.select(selector).datum(data)
 
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    d3.json("data/candidates.json", function(error, json) {
+    d3.json("/data/candidates.json", function(error, json) {
         if (error) throw error;
-
+		
         var parties = null, partyIndex = null, candidates = null, candidateIndex = null,
             cycles = null, cycleIndex = null;
 
@@ -66,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             var candidate = json[cycles[cycleIndex]][parties[partyIndex]][candidateIndex];
             d3.select("#candidate_id").html(candidate.candidate_ids[0]);
             d3.select("#committee_id").html(candidate.committees[0].committee_id);
-            topEmployers(candidate.committees[0].committee_id, cycles[cycleIndex], '#first_viz', tableViz())
+            topEmployers(candidate.committees[0].committee_id, candidate.candidate_ids[0], cycles[cycleIndex], '#first_viz', tableViz())
 			
         }
 
