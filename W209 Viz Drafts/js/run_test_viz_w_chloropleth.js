@@ -9,7 +9,7 @@ function topEmployers(committee_id, candidate_id, cycle, selector, viz){
 		
     });
 	
-	d3.json("/data/sched_a_by_cand+state_2007-2015_to_pg500.json", function(error, json) {
+	d3.json("data/sched_a_by_cand+state_2007-2015_to_pg500.json", function(error, json) {
         if (error) throw error;
 		//console.log(committee_id);
 		jsonfiltered = json.filter(function(d){
@@ -28,7 +28,7 @@ function topEmployers(committee_id, candidate_id, cycle, selector, viz){
 		});
 		
 		//load the map json	
-		d3.json("../data/states.json", function(error, us) {
+		d3.json("data/states.json", function(error, us) {
 			if (error) return console.error(error);
 			var locs = topojson.feature(us, us.objects.cb_2014_us_state_500k).features;
 			locs.forEach (function(loc){
@@ -46,7 +46,7 @@ function plotData(selector, data, plot) { return d3.select(selector).datum(data)
 
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    d3.json("/data/candidates.json", function(error, json) {
+    d3.json("data/candidates.json", function(error, json) {
         if (error) throw error;
 		
         var parties = null, partyIndex = null, candidates = null, candidateIndex = null,

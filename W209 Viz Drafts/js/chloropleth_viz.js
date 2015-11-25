@@ -8,7 +8,7 @@ function chloropleth() {
 		formatValue = d3.format(".2s"),
 		formatCurrency = function(d) { return "$" + formatValue(d); },
 		colors = colorbrewer.Greens[7];
-		
+
 		var projection = d3.geo.albersUsa()
 			.scale(1000)
 			.translate([width / 2, height / 2]);
@@ -16,47 +16,46 @@ function chloropleth() {
 		var path = d3.geo.path()
 			.projection(projection);
 
-	
-  function chart(selection) {
-    selection.each(function(data) {
 
-		
-		var quantize = d3.scale.quantize()
+	function chart(selection) {
+		selection.each(function(data) {
+
+			var quantize = d3.scale.quantize()
 				.domain([0,d3.max(data,yValue)])
 				.range(colors);
 		
-		var legend = d3.legend.color()
-				.labelFormat(formatCurrency)
-				.useClass(false)
-				.scale(quantize);
+			var legend = d3.legend.color()
+                .labelFormat(formatCurrency)
+                .useClass(false)
+                .scale(quantize);
 			
-		var svg = d3.select(this).selectAll("svg").data([data]);
-		var g = svg.enter().append("svg").attr("class", "map").append("g");
+			var svg = d3.select(this).selectAll("svg").data([data]);
+			var g = svg.enter().append("svg").attr("class", "map").append("g");
 		
-		// Update the outer dimensions.
-		svg .attr("width", width)
-			.attr("height", height);
+			// Update the outer dimensions.
+			svg .attr("width", width)
+				.attr("height", height);
 		
-		var locs = g.selectAll("path").attr("class","loc").data(data);
-		
-			locs.enter().append("path");
-			
-			locs.style("fill",function(d){ 
-					//console.log(xValue(d) + ": " + quantize(yValue(d)));
-					return quantize(yValue(d)); 
-				})
+			g.selectAll("path")
+				.attr("class","loc")
+				.data(data)
+				.enter()
+				.append("path");
+
+			svg.selectAll("path")
+				.data(data)
+				.style("fill",function(d){ return quantize(yValue(d)); })
 				.style("stroke","white")
 				.attr("d",path);
-		
-		
-		svg.append("g")
-			.attr("class", "legendQuant")
-			.attr("transform", "translate(10,10)");
 
-		svg.select(".legendQuant")
-			.call(legend);
-	});
-  }
+			svg.append("g")
+				.attr("class", "legendQuant")
+				.attr("transform", "translate(10,10)");
+
+			svg.select(".legendQuant")
+				.call(legend);
+		});
+	}
 
 	return chart;
 }
