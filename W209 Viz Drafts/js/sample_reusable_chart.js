@@ -12,9 +12,6 @@ function timeSeriesChart() {
 
   function chart(selection) {
     selection.each(function(data) {
-		//define candidate party
-		var party = d3.map()
-	
       // Convert data to standard representation greedily;
       // this is needed for nondeterministic accessors.
       data = data.map(function(d, i) {
