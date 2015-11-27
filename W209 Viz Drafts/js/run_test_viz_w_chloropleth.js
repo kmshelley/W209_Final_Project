@@ -8,7 +8,7 @@ function topEmployers(committee_id, candidate_id, cycle, selector, viz){
         plotData(selector, json, viz);
 		
     });
-	
+	/*
 	d3.json("data/sched_a_by_cand+state_2007-2015_to_pg500.json", function(error, json) {
         if (error) throw error;
 		//console.log(committee_id);
@@ -38,7 +38,14 @@ function topEmployers(committee_id, candidate_id, cycle, selector, viz){
 		});
 		
     });
-
+    */
+		
+		
+	d3.csv("data/payments_receipts_sample.csv", function(error,json){
+			if (error) throw error;
+			data = json.filter(function(d){ return (d.candidate_id === candidate_id && +d.cycle === +cycle) })
+			plotData(selector, data, horizontalBar());
+		});
 }
 
 function plotData(selector, data, plot) { return d3.select(selector).datum(data).call(plot); }
