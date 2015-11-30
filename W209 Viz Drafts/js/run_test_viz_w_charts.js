@@ -8,7 +8,19 @@ function topEmployers(committee_id, candidate_id, cycle, selector, viz){
         plotData(selector, json, viz);
 		
     });
-	/*
+	
+	//segmented bar chart
+	var api_key = '';
+	var FEC_URL = "https://api.open.fec.gov/v1/";
+	var url = FEC_URL+'committee/' + committee_id + '/schedules/schedule_a/by_size/?cycle=' + cycle + '&page=1&per_page=100&api_key=' + api_key;
+    d3.json(url, function(error, json) {
+        if (error) throw error;
+        plotData(selector, json.results, segmentedBar());
+		
+    });
+	
+	/*	
+	//chloropleth
 	d3.json("data/sched_a_by_cand+state_2007-2015_to_pg500.json", function(error, json) {
         if (error) throw error;
 		//console.log(committee_id);
@@ -38,14 +50,16 @@ function topEmployers(committee_id, candidate_id, cycle, selector, viz){
 		});
 		
     });
-    */
+    
 		
-		
+	//horizontal +/- stacked bar charts
 	d3.csv("data/payments_receipts_sample.csv", function(error,json){
 			if (error) throw error;
 			data = json.filter(function(d){ return (d.candidate_id === candidate_id && +d.cycle === +cycle) })
 			plotData(selector, data, horizontalBar());
 		});
+		
+	*/
 }
 
 function plotData(selector, data, plot) { return d3.select(selector).datum(data).call(plot); }

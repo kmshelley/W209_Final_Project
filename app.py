@@ -2,6 +2,9 @@ from flask import Flask
 from flask.ext.restful import Api, Resource, reqparse
 from os import environ
 import requests
+import pymongo
+from dateutil.relativedelta import relativedelta
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -118,17 +121,142 @@ class MonthlyTotals(Resource):
 
 class TopPACs(Resource):
     @staticmethod
-    def get(candidate_id, cycle, record_limit, real_nom):
-        return {'description': 'this endpoint will return the top %d PACs spending money for or against '
-                               'candidate %s in the %d cycle, '
-                               'with total and mothly %s spend' % (record_limit, candidate_id, cycle, real_nom),
-                'return_format': {
-                    'committee_id': 'pac_committee_id',
-                    'committee_name': 'pac_name',
-                    'for_against': 'for_against',
-                    'total_spend': 'total_spend',
-                    'monthly': [{'date %Y-%m-%d': 'amount'}, {'date %Y-%m-%d': 'amount'}]
-                }}
+    def get(candidate_id, cycle, for_against, real_nom=False, topk=10):
+
+        ttype = '24A'
+        if for_against:
+            ttype='24E'
+        
+        start = datetime.datetime(int(cycle) -1 , 1, 1)
+        end = datetime.datetime(int(cycle), 11 , 1, )
+
+        query_results = db.pac_donors.group(['CMTE_ID', 'TRANSACTION_AMT_total'], 
+                                            {'CAND_ID': candidate_id, 
+                                             'month_year': {'$gte': start, '$lt': end}, 
+                                             'TRANSACTION_TP': ttype},
+                                            {'list': []}, 
+                                            'function(obj, prev) {prev.list.push(obj)}')
+
+        query_results = sorted(query_results, key=lambda k: k['TRANSACTION_AMT_total'] , reverse=True)[:topk]
+        response = {"return_format": [],
+                    "description": "this endpoint will return the top 10 PACs spending money for or against candidate %s in the 2012 cycle, with total and mothly nominal spend"%candidate_id}
+
+        for qr in query_results:
+
+            res = {
+                        "total_spend": qr.get('TRANSACTION_AMT_total'),
+                        "committee_name": qr['list'][0].get('Committee Name'),
+                        "for_against": 'for' if qr['list'][0].get('TRANSACTION_TP') == '24E' else 'against' ,
+                        "pac_committee_id": qr.get('CMTE_ID'),
+                        "monthly": []}
+
+            set_all_months = set([datetime.datetime.strftime(start+relativedelta(months=m), '%Y-%m-%d') for m in range(23)])
+            months_added = []
+
+            for month in qr['list']:
+                strdate = datetime.datetime.strftime(month.get('month_year'),'%Y-%m-%d')
+                res['monthly'].append({strdate: month.get('TRANSACTION_AMT')})
+                months_added.append(strdate)
+
+            months_left = set_all_months.difference(months_added)
+
+            for month in months_left:
+                res['monthly'].append({month: 0})
+
+            response["return_format"].append(res)
+        
+        return response
+
+
+class TopContributorsToPACs(Resource):
+    @staticmethod
+    def get(cmte_id, cycle, real_nom=False, topk=10):
+    
+        start = datetime.datetime(int(cycle) -1 , 1, 1)
+        end = datetime.datetime(int(cycle), 11 , 1, )
+
+        query_results = db.pac_contributors.group(['NAME', 'ZIP_CODE', 'TRANSACTION_AMT_total'], 
+
+                                                  {'CMTE_ID': cmte_id, 
+                                                   'month_year': {'$gte': start, '$lt': end}, 
+                                                   },
+
+                                                  {'list': []}, 
+
+                                                   'function(obj, prev) {prev.list.push(obj)}')
+
+        query_results = sorted(query_results, key=lambda k: k['TRANSACTION_AMT_total'] , reverse=True)[:topk]
+        
+        response = {"return_format": [],
+                    "description": "this endpoint will return the top k contributors to PACs spending money for a given cycle, with total and mothly nominal spend"}
+
+        for qr in query_results:
+
+            res = {    
+                        "contributor_zip": qr.get('ZIP_CODE'),
+                        "city": qr['list'][0].get('CITY'),
+                        "state": qr['list'][0].get('STATE'),
+                        "fips_county": qr['list'][0].get('COUNTY'),
+                        "total_spend": qr.get('TRANSACTION_AMT_total'),
+                        "contributor_name": qr.get('NAME'),
+                        "employer": qr['list'][0].get('EMPLOYER'),
+                        "occupation": qr['list'][0].get('OCCUPATION'),
+                        "committee_name": qr['list'][0].get('Committee Name'),
+                        "pac_committee_id": qr['list'][0].get('CMTE_ID'),
+                        "monthly": []}
+
+            set_all_months = set([datetime.datetime.strftime(start+relativedelta(months=m), '%Y-%m-%d') for m in range(23)])
+            months_added = []
+
+            for month in qr['list']:
+                strdate = datetime.datetime.strftime(month.get('month_year'),'%Y-%m-%d')
+                res['monthly'].append({strdate: month.get('TRANSACTION_AMT')})
+                months_added.append(strdate)
+
+            months_left = set_all_months.difference(months_added)
+
+            for month in months_left:
+                res['monthly'].append({month: 0})
+
+            response["return_format"].append(res)
+        
+        return response
+
+class ContributorsByGeography(Resource):
+    @staticmethod
+    def get(cycle, aggregation_level='fips', real_nom=False, topk=10):
+    
+        geo_level = 'COUNTY'
+        if aggregation_level == 'zip_code':
+            geo_level = 'ZIP_CODE'
+        elif aggregation_level == 'state':
+            geo_level = 'STATE'
+        
+        start = datetime.datetime(int(cycle) -1 , 1, 1)
+        end = datetime.datetime(int(cycle), 11 , 1, )
+
+        query_results = db.pac_contributors.group(                                       
+                                                     [geo_level],
+                                                     {'month_year': {'$gte': start, '$lt': end} },
+                                                     { "total" : 0 },
+                                                     'function(curr, result) {result.total += curr.TRANSACTION_AMT}')
+                                    
+        
+        response = {"return_format": [],
+                    "description": "this endpoint will return contribution to PACS by county over election cycle: geo level is zip_code, state, or fips"}
+
+        for qr in query_results:
+
+            res = {    
+                        "level": geo_level,
+                        "location": str(int(qr.get(geo_level))) if geo_level in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level),
+                        "amount": qr.get('total'),
+                    }
+             
+            response["return_format"].append(res)
+        
+        return response
+
 
 # API ROUTING
 api.add_resource(ScheduleABySize, '/schedule_a/by_size/<string:committee_id>/<int:cycle>/')
@@ -137,11 +265,20 @@ api.add_resource(ScheduleAByZip, '/schedule_a/by_zip/<string:committee_id>/<int:
 api.add_resource(ScheduleAByEmployer, '/schedule_a/by_employer/<string:committee_id>/<int:cycle>/')
 
 api.add_resource(MonthlyTotals, '/monthly_totals/<string:committee_id>/<int:cycle>/<string:real_nom>/')
+
+# FIX PARAMS OF ALL 3 API's
 api.add_resource(TopPACs, '/top_pacs/<string:candidate_id>/<int:cycle>/<int:record_limit>/<string:real_nom>/')
+api.add_resource(TopContributorsToPACs, '/top_pacs/<string:candidate_id>/<int:cycle>/<int:record_limit>/<string:real_nom>/')
+api.add_resource(ContributorsByGeography, '/top_pacs/<string:candidate_id>/<int:cycle>/<int:record_limit>/<string:real_nom>/')
 
 
+# MONGO_DB
+host = "data.enalytica.com"
+port = 27017
 
-
+client = pymongo.MongoClient(host, port)
+db = client.w209
+db.authenticate("admin", os.environ['ENALYTICA_MONGO_PWD'])
 
 
 if __name__ == "__main__":

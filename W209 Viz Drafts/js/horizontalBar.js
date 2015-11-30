@@ -9,15 +9,24 @@ function horizontalBar() {
 	  center = w/2,
 	  center_right = center + margin.middle/2,
 	  center_left = center - margin.middle/2,
+	  right_color = "rgb(180,0,0)",
+	  left_color = "rgb(0,180,0)",
 	  monthFormat = d3.time.format("%b"),
 	  formatValue = d3.format(".2s"),
 	  formatCurrency = function(d) { return "$" + formatValue(d); },
-	  xLeft = function(d) { return +d.raised}, //**** NEED TO update field names
-      xRight = function(d) { return +d.spent; }, //**** NEED TO update field names
+	  leftFields = ["principal_comm_raised","main_pac_raised"],//**** NEED TO update field names
+	  rightFields = ["principal_comm_spent","main_pac_spent"],//**** NEED TO update field names
+	  xLeftTotal = function(d) { return +d.total_raised; },
+	  xLeft = function(d) { return d.left; }, 
+	  xRightTotal = function(d){ return +d.total_spent; },
+	  xRight = function(d) { return d.right; }, //**** NEED TO update field names
       yValue = function(d) { return new Date(d.date); }, //**** NEED TO update field names
       xLeftScale = d3.scale.linear(),
 	  xRightScale = d3.scale.linear(),
       yScale = d3.scale.ordinal(),
+	  lcolorScale = d3.scale.ordinal().range([1.0, 0.5]).domain(leftFields), //scale for color transparency
+	  rcolorScale = d3.scale.ordinal().range([1.0, 0.5]).domain(rightFields), //scale for color transparency
+      xLeftAxis = d3.svg.axis().scale(xLeftScale).orient("top").tickSize(6, 0).tickFormat(formatCurrency),
       xLeftAxis = d3.svg.axis().scale(xLeftScale).orient("top").tickSize(6, 0).tickFormat(formatCurrency),
 	  xRightAxis = d3.svg.axis().scale(xRightScale).orient("top").tickSize(6, 0).tickFormat(formatCurrency),
 	  yAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(0, 0).tickFormat(monthFormat);
@@ -25,20 +34,36 @@ function horizontalBar() {
   function chart(selection) {
     selection.each(function(data) {
 	
+	  //**** FORMAT THE DATA FOR STACKED CHARTS ***
+	  //map the data to best format for update-able stacked bar chart
+	  data.forEach(function(d) {
+		var lx0 = 0;
+		d.left = lcolorScale.domain().map(function(name) { return {name: name, y: yValue(d), x0: lx0, x1: lx0 += +d[name]}; });
+		
+		var rx0 = 0;
+		d.right = rcolorScale.domain().map(function(name) { return {name: name, y: yValue(d), x0: rx0, x1: rx0 += +d[name]}; });
+	  }); 
+	  //flatten the left and right data sets
+	  var leftVals = data.map(function(d){ return xLeft(d); });
+	  var rightVals = data.map(function(d){ return xRight(d); });
+	  var leftData = [].concat.apply([], leftVals);
+	  var rightData = [].concat.apply([], rightVals);
+	  //********
+	   
 	  // place the y-axis in the middle of the chart
 	  //bars that grow from center to left
       xLeftScale
-          .domain([0,d3.max(data, xLeft)])
+          .domain([0,d3.max(data, xLeftTotal)])
           .range([center_left,left]);
 	  //bars that grow from center to right
 	  xRightScale
-          .domain([0,d3.max(data, xRight)])
+          .domain([0,d3.max(data, xRightTotal)])
           .range([center_right,right]);
 		  
       // Update the y-scale.
       yScale
           .domain(data.map(yValue))
-          .rangeBands([margin.top,h - margin.bottom],0.1);
+          .rangeBands([margin.top,h - margin.bottom],0.6);
 
       var svg = d3.select(this)
                 .selectAll("svg")
@@ -68,41 +93,81 @@ function horizontalBar() {
       svg.selectAll("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 		  
-	  //add bars (from center to right)    
+	  //**** BARS -- CENTER TO RIGHT ****   
       var bar_r = g.selectAll("bar.right").data(data)
 	  //bar_r.exit().remove(); //for proper updating
+	  
+	  //bigger, transparent, total bar
 	  bar_r	
 		.enter() // return the selection of data with no elements yet bound
 		.append("rect")  // add the projection path elements
-		.attr("class","bar right")
-		.style("fill", "rgba(120,0,0,0.6)");	
+		.attr("class","bar right total")
+		.style("fill", right_color)
+		.style("opacity",0.3);	
 	  
-      svg.selectAll(".bar.right")
+      svg.selectAll(".bar.right.total")
 		.data(data)
 		.attr("x", center_right)
+        .attr("height", yScale.rangeBand() + 10)
+        .attr("y", function(d) { return yScale(yValue(d)) - 5; })
+        .attr("width", function(d) { return xRightScale(xRightTotal(d)) - center_right; });
+		
+	  //stacked bars, center to right
+	  var bar_r_stacked = g.selectAll("bar.right.stacked").data(rightData)
+	  
+	  bar_r_stacked
+	    .enter()
+		.append("rect")
+		.attr("class","bar right stacked")
+		.style("fill", right_color);  	
+	  
+      svg.selectAll(".bar.right.stacked")
+		.data(rightData)
+		//.enter().append("rect")
+		.attr("x", function(d) { return xRightScale(d.x0); })
         .attr("height", yScale.rangeBand())
-        .attr("y", function(d) { return yScale(yValue(d)); })
-        .attr("width", function(d) { return xRightScale(xRight(d)) - center_right; });
+        .attr("y", function(d) { return yScale(d.y); })
+        .attr("width", function(d) { return xRightScale(d.x1) - xRightScale(d.x0); })
+		.style("opacity",function(d){ return rcolorScale(d.name); });
 
-	  //add bars (from center to left)  
+	
+	  //**** BARS -- CENTER TO LEFT ****
       var bar_l = g.selectAll("bar.left").data(data)
-	  //bar_l.exit().remove(); //for proper updating
-	  bar_l
+	  //bigger, transparent, total bar
+	  bar_l	
 		.enter() // return the selection of data with no elements yet bound
-		.append("rect")  
-		.attr("class","bar left");
+		.append("rect")  // add the projection path elements
+		.attr("class","bar left total")
+		.style("fill", left_color)
+		.style("opacity",0.3);	
 	  
-	  //add bars (from center to left) 
-      svg.selectAll(".bar.left")
+      svg.selectAll(".bar.left.total")
 		.data(data)
-		.attr("class","bar left")
-		.style("fill", "rgba(120,130,40,0.6)")
-        .attr("x", function(d) { return xLeftScale(xLeft(d)); })
-        .attr("height", yScale.rangeBand())
-        .attr("y", function(d) { return yScale(yValue(d)); })
-        .attr("width", function(d) { return center_left - xLeftScale(xLeft(d)); });
-		  
+		.attr("x", function(d) { return xLeftScale(xLeftTotal(d)); })
+        .attr("height", yScale.rangeBand() + 10)
+        .attr("y", function(d) { return yScale(yValue(d)) - 5; })
+        .attr("width", function(d) { return center_left - xLeftScale(xLeftTotal(d)); });
+		
+	  //stacked bars, center to right
+	  var bar_l_stacked = g.selectAll("bar.left.stacked").data(leftData)
+							
+	  bar_l_stacked
+	    .enter()
+		.append("rect")
+		.attr("class","bar left stacked")
+		.style("fill", left_color);  	
 	  
+      svg.selectAll(".bar.left.stacked")
+		.data(leftData)
+		//.enter().append("rect")
+		.attr("x", function(d) { return xLeftScale(d.x1); })
+        .attr("height", yScale.rangeBand())
+        .attr("y", function(d) { return yScale(d.y); })
+        .attr("width", function(d) { return xLeftScale(d.x0) - xLeftScale(d.x1); })
+		.style("opacity",function(d){ return rcolorScale(d.name); });
+
+	
+	  //**** AXES ****
 	  // Update the x-axes.
       svg.select(".x.left.axis")
           .attr("transform", "translate(0," + margin.top + ")")
@@ -125,7 +190,7 @@ function horizontalBar() {
 		.append("text")  
 		.text(function(d){ return monthFormat(yValue(d)); })
 		.attr("x",center)
-		.attr("y", function(d) { return yScale(yValue(d)); })
+		.attr("y", function(d) { return yScale(yValue(d)) - 10; })
 		.attr("transform", "translate(0," + margin.top + ")")
 		.style("text-anchor", "middle");
 		 
