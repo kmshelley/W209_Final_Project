@@ -1,7 +1,8 @@
 (function() {
     var vizAPI = function($http) {
 
-        var BASE_URL = "http://data.enalytica.com:9600";
+        //var BASE_URL = "http://data.enalytica.com:9600";
+        var BASE_URL = "http://127.0.0.1:5000";
 
         var factory = {};
 
@@ -9,12 +10,16 @@
             return $http.get('./data/candidates.json');
         };
 
-        factory.get_by_geo = function() {
+        factory.contributors_by_state = function() {
             return $http.get('./data/sched_a_by_cand+state_2007-2015_to_pg500.json');
         };
 
+        factory.contributors_by_geo = function(committee_id, cycle, geo_agg, real_nom) {
+            return $http.get(BASE_URL+'/contributors/'+ committee_id +'/'+cycle +'/'+ geo_agg+'/');
+        };
+
         factory.get_map_json = function() {
-            return $http.get('./data/states.json');
+            return $http.get('./data/us.json');
         };
 
         factory.get_by_employer = function(committee_id, cycle) {

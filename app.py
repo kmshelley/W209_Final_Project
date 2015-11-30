@@ -225,7 +225,7 @@ class TopContributorsToPACs(Resource):
 
 class ContributorsByGeography(Resource):
     @staticmethod
-    def get(cycle, cmte_id=None, aggregation_level='fips', real_nom=False):
+    def get(cycle, cmte_id=None, aggregation_level='fips'):
     
         geo_level = 'COUNTY'
         if aggregation_level == 'zip_code':
@@ -234,7 +234,7 @@ class ContributorsByGeography(Resource):
             geo_level = 'STATE'
         
         start = datetime.datetime(int(cycle)-1, 1, 1)
-        end = datetime.datetime(int(cycle)+1, 1, 1, )
+        end = datetime.datetime(int(cycle)+1, 1, 1)
 
         condition = {'month_year': {'$gte': start, '$lt': end}}
         
@@ -248,9 +248,7 @@ class ContributorsByGeography(Resource):
             'function(curr, result) {result.total += curr.TRANSACTION_AMT}'
         )
 
-        response = {"return_format": [],
-                    "description": "this endpoint will return contribution to PACS by county over election cycle: geo level is zip_code, state, or fips"}
-
+        response = []
         for qr in query_results:
 
             res = {
@@ -259,7 +257,7 @@ class ContributorsByGeography(Resource):
                 "location": str(int(qr.get(geo_level))) if geo_level in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level),
                 "amount": qr.get('total'),
             }
-            response["return_format"].append(res)
+            response.append(res)
         
         return response
 
@@ -278,7 +276,7 @@ api.add_resource(TopContributorsToPACs,
                  '/top_pacs/<string:candidate_id>/<int:cycle>/<int:record_limit>/<string:real_nom>/')
 
 api.add_resource(ContributorsByGeography,
-                 '/contributors/<string:cmte_id>/<int:cycle>/<string:aggregation_level>/<string:real_nom>/')
+                 '/contributors/<string:cmte_id>/<int:cycle>/<string:aggregation_level>/')
 
 
 # MONGO_DB

@@ -46,28 +46,34 @@
             //        console.log(json);
             //    });
 
-            vizAPI.get_by_geo()
-                .success(function(json){
-                    json = json.filter(function(d){
-                        return (d.candidate_id === $scope.candidate.candidate_ids[0]
-                        && +d.cycle === +($scope.ddOptions.cycle))
-                    });
+            //vizAPI.contributors_by_state()
+            //    .success(function(json){
+            //        json = json.filter(function(d){
+            //            return (d.candidate_id === $scope.candidate.candidate_ids[0]
+            //            && +d.cycle === +($scope.ddOptions.cycle))
+            //        });
+            //
+            //        //defines a mapping from locations to values
+            //        var mapData = d3.map();
+            //        json.forEach(function(d){ mapData.set(d.state,+d.total); });
+            //        $scope.mapData.forEach(function(loc){ loc.properties["total"] = mapData.get(loc.id); });
+            //        $scope.mapUpdated = true;
+            //    });
 
+            vizAPI.contributors_by_geo('C00490045', $scope.ddOptions.cycle, 'fips')
+                .success(function(json){
                     //defines a mapping from locations to values
                     var mapData = d3.map();
-                    json.forEach(function(d){ mapData.set(d.state,+d.total); });
+                    json.forEach(function(d){ mapData.set(d.location, d.amount); });
                     $scope.mapData.forEach(function(loc){ loc.properties["total"] = mapData.get(loc.id); });
                     $scope.mapUpdated = true;
                 });
-
         };
-
-
 
         $scope.initialize = function () {
             vizAPI.get_map_json()  // load map json on init first
-                .success(function(json){
-                    $scope.mapData = topojson.feature(json, json.objects.cb_2014_us_state_500k).features;
+                .success(function(us){
+                    $scope.mapData = topojson.feature(us, us.objects.counties).features;
 
                     vizAPI.get_candiates()  // then load the candidates json
                         .success(function(json){
