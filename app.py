@@ -127,8 +127,8 @@ class TopPACs(Resource):
         if for_against:
             ttype='24E'
         
-        start = datetime.datetime(int(cycle) -1 , 1, 1)
-        end = datetime.datetime(int(cycle), 11 , 1, )
+        start = datetime.datetime(int(cycle)-1 , 1, 1)
+        end = datetime.datetime(int(cycle)+1, 1 , 1, )
 
         query_results = db.pac_donors.group(['CMTE_ID', 'TRANSACTION_AMT_total'], 
                                             {'CAND_ID': candidate_id, 
@@ -172,8 +172,8 @@ class TopContributorsToPACs(Resource):
     @staticmethod
     def get(cmte_id, cycle, real_nom=False, topk=10):
     
-        start = datetime.datetime(int(cycle) -1 , 1, 1)
-        end = datetime.datetime(int(cycle), 11 , 1, )
+        start = datetime.datetime(int(cycle)-1 , 1, 1)
+        end = datetime.datetime(int(cycle)+1, 1 , 1, )
 
         query_results = db.pac_contributors.group(['NAME', 'ZIP_CODE', 'TRANSACTION_AMT_total'], 
 
@@ -224,7 +224,7 @@ class TopContributorsToPACs(Resource):
 
 class ContributorsByGeography(Resource):
     @staticmethod
-    def get(cycle, aggregation_level='fips', real_nom=False, topk=10):
+    def get(cycle, cmte_id=None, aggregation_level='fips', real_nom=False, topk=10):
     
         geo_level = 'COUNTY'
         if aggregation_level == 'zip_code':
@@ -232,12 +232,17 @@ class ContributorsByGeography(Resource):
         elif aggregation_level == 'state':
             geo_level = 'STATE'
         
-        start = datetime.datetime(int(cycle) -1 , 1, 1)
-        end = datetime.datetime(int(cycle), 11 , 1, )
+        start = datetime.datetime(int(cycle)-1 , 1, 1)
+        end = datetime.datetime(int(cycle)+1, 1 , 1, )
 
+        condition = {'month_year': {'$gte': start, '$lt': end} }
+        
+        if cmte_id:
+            condition['CMTE_ID'] = cmte_id
+            
         query_results = db.pac_contributors.group(                                       
                                                      [geo_level],
-                                                     {'month_year': {'$gte': start, '$lt': end} },
+                                                     condition,
                                                      { "total" : 0 },
                                                      'function(curr, result) {result.total += curr.TRANSACTION_AMT}')
                                     
@@ -249,6 +254,7 @@ class ContributorsByGeography(Resource):
 
             res = {    
                         "level": geo_level,
+                        "cmte_id": condition.get('CMTE_ID'),
                         "location": str(int(qr.get(geo_level))) if geo_level in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level),
                         "amount": qr.get('total'),
                     }
