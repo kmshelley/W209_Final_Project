@@ -1,0 +1,52 @@
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>This is for testing visualizations as we develop them</h2>
+                <p>No fancy layouts or anything at this point, we can just dump vizes here to see what they look like.</p>
+                <p>Layouts and all the rest can follow later.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+
+                <div class="form-group">
+                    <label for="cycleSelector">Select Election Cycle</label>
+                    <select id="cycleSelector" ng-model="ddOptions.cycle" ng-change="updateCandidates()"
+                        ng-options="c for c in ddOptions.cycles" class="form-control">
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="partySelector">Select Party</label>
+                    <select id="partySelector" ng-model="ddOptions.party" ng-change="updateCandidates()"
+                        ng-options="p for p in ddOptions.parties" class="form-control">
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="candidateSelector">Select Candidate</label>
+                    <select id="candidateSelector" ng-model="ddOptions.candidate" ng-change="updateCandidate(c.value)"
+                        ng-options="c for c in ddOptions.candidates" class="form-control">
+                    </select>
+                </div>
+
+            </div>
+            <div class="col-xs-4 col-xs-offset-2">
+                <p><strong>Candidate ID: </strong>{{candidate.candidate_ids[0]}}</p>
+                <p><strong>Committee ID: </strong>{{candidate.committees[0].committee_id}}</p>
+            </div>
+        </div>
+        <div class="row spacer">
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+
+                <div id="first_viz"></div>
+
+
+                <custom-chart chart-type="'barChart'" height=400 data="data"></custom-chart>
+
+            </div>
+        </div>
+
+    </div>
