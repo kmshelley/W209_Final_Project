@@ -3,7 +3,7 @@ function chloropleth() {
 	var margin = {top: 20, right: 20, bottom: 20, left: 20},
 		width = 960,
 		height = 500,
-		xValue = function(d) { return d.id; }, //*********NEED TO MAKE THIS MORE GENERIC
+		xValue = function(d) { return d.id; }, 
 		yValue = function(d) { return d.properties.total; }, //*********NEED TO MAKE THIS MORE GENERIC
 		formatValue = d3.format(".2s"),
 		formatCurrency = function(d) { return "$" + formatValue(d); },
@@ -17,6 +17,7 @@ function chloropleth() {
 		.projection(projection);
 
 	var quantize = d3.scale.quantize();
+	
 	var legend = d3.legend.color()
         .labelFormat(formatCurrency)
         .useClass(false);
