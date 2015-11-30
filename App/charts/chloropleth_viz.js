@@ -66,4 +66,4 @@ d3.custom.choropleth = function () {
 	}
 
 	return chart;
-}
+};

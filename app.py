@@ -4,6 +4,7 @@ from os import environ
 import requests
 import pymongo
 from dateutil.relativedelta import relativedelta
+import datetime, os
 
 
 app = Flask(__name__)
@@ -224,7 +225,7 @@ class TopContributorsToPACs(Resource):
 
 class ContributorsByGeography(Resource):
     @staticmethod
-    def get(cycle, cmte_id=None, aggregation_level='fips', real_nom=False, topk=10):
+    def get(cycle, cmte_id=None, aggregation_level='fips', real_nom=False):
     
         geo_level = 'COUNTY'
         if aggregation_level == 'zip_code':
@@ -232,33 +233,32 @@ class ContributorsByGeography(Resource):
         elif aggregation_level == 'state':
             geo_level = 'STATE'
         
-        start = datetime.datetime(int(cycle)-1 , 1, 1)
-        end = datetime.datetime(int(cycle)+1, 1 , 1, )
+        start = datetime.datetime(int(cycle)-1, 1, 1)
+        end = datetime.datetime(int(cycle)+1, 1, 1, )
 
-        condition = {'month_year': {'$gte': start, '$lt': end} }
+        condition = {'month_year': {'$gte': start, '$lt': end}}
         
         if cmte_id:
             condition['CMTE_ID'] = cmte_id
             
-        query_results = db.pac_contributors.group(                                       
-                                                     [geo_level],
-                                                     condition,
-                                                     { "total" : 0 },
-                                                     'function(curr, result) {result.total += curr.TRANSACTION_AMT}')
-                                    
-        
+        query_results = db.pac_contributors.group(
+            [geo_level],
+            condition,
+            {"total": 0},
+            'function(curr, result) {result.total += curr.TRANSACTION_AMT}'
+        )
+
         response = {"return_format": [],
                     "description": "this endpoint will return contribution to PACS by county over election cycle: geo level is zip_code, state, or fips"}
 
         for qr in query_results:
 
-            res = {    
-                        "level": geo_level,
-                        "cmte_id": condition.get('CMTE_ID'),
-                        "location": str(int(qr.get(geo_level))) if geo_level in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level),
-                        "amount": qr.get('total'),
-                    }
-             
+            res = {
+                "level": geo_level,
+                "cmte_id": condition.get('CMTE_ID'),
+                "location": str(int(qr.get(geo_level))) if geo_level in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level),
+                "amount": qr.get('total'),
+            }
             response["return_format"].append(res)
         
         return response
@@ -274,8 +274,11 @@ api.add_resource(MonthlyTotals, '/monthly_totals/<string:committee_id>/<int:cycl
 
 # FIX PARAMS OF ALL 3 API's
 api.add_resource(TopPACs, '/top_pacs/<string:candidate_id>/<int:cycle>/<int:record_limit>/<string:real_nom>/')
-api.add_resource(TopContributorsToPACs, '/top_pacs/<string:candidate_id>/<int:cycle>/<int:record_limit>/<string:real_nom>/')
-api.add_resource(ContributorsByGeography, '/top_pacs/<string:candidate_id>/<int:cycle>/<int:record_limit>/<string:real_nom>/')
+api.add_resource(TopContributorsToPACs,
+                 '/top_pacs/<string:candidate_id>/<int:cycle>/<int:record_limit>/<string:real_nom>/')
+
+api.add_resource(ContributorsByGeography,
+                 '/contributors/<string:cmte_id>/<int:cycle>/<string:aggregation_level>/<string:real_nom>/')
 
 
 # MONGO_DB
