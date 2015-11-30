@@ -10,16 +10,17 @@
                 height: '=',
                 width: '=',
                 data: '=',
+                watch: '=',
                 chartType: '='
             },
             link: function(scope, element, attrs) {
-                var chart = d3.custom[scope.chartType]()
-                    .height(scope.height);
-
+                var chart = d3.custom[scope.chartType]();
                 var chartEl = d3.select(element[0]);
+                scope.$watch('watch', function (newValue, oldValue) {
+                    if (newValue){
+                        chartEl.datum(scope.data).call(chart);
+                    }
 
-                scope.$watch('data', function (newVal, oldVal) {
-                    chartEl.datum(newVal).call(chart);
                 });
             }
         }
