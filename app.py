@@ -123,35 +123,35 @@ class MonthlyTotals(Resource):
 class TopPACs(Resource):
     @staticmethod
     def get(candidate_id, cycle, for_against, real_nom=False, topk=10):
-
-        ttype = '24A'
-        if for_against:
-            ttype='24E'
+        convert_for_against = {'for': '24E', 'against': '24A'}
+        invert_for_against = {v: k for k, v in convert_for_against.items()}
+        ttype= convert_for_against[for_against]
         
-        start = datetime.datetime(int(cycle)-1 , 1, 1)
-        end = datetime.datetime(int(cycle)+1, 1 , 1, )
+        start = datetime.datetime(int(cycle)-1, 1, 1)
+        end = datetime.datetime(int(cycle)+1, 1, 1)
 
-        query_results = db.pac_donors.group(['CMTE_ID', 'TRANSACTION_AMT_total'], 
-                                            {'CAND_ID': candidate_id, 
-                                             'month_year': {'$gte': start, '$lt': end}, 
-                                             'TRANSACTION_TP': ttype},
-                                            {'list': []}, 
-                                            'function(obj, prev) {prev.list.push(obj)}')
+        query_results = db.pac_donors.group(
+            ['CMTE_ID', 'TRANSACTION_AMT_total'],
+            {'CAND_ID': candidate_id,
+             'month_year': {'$gte': start, '$lt': end},
+             'TRANSACTION_TP': ttype},
+            {'list': []},
+            'function(obj, prev) {prev.list.push(obj)}'
+        )
 
         query_results = sorted(query_results, key=lambda k: k['TRANSACTION_AMT_total'] , reverse=True)[:topk]
-        response = {"return_format": [],
-                    "description": "this endpoint will return the top 10 PACs spending money for or against candidate %s in the 2012 cycle, with total and mothly nominal spend"%candidate_id}
+        response = []
 
         for qr in query_results:
 
-            res = {
-                        "total_spend": qr.get('TRANSACTION_AMT_total'),
-                        "committee_name": qr['list'][0].get('Committee Name'),
-                        "for_against": 'for' if qr['list'][0].get('TRANSACTION_TP') == '24E' else 'against' ,
-                        "pac_committee_id": qr.get('CMTE_ID'),
-                        "monthly": []}
+            res = {"total_spend": qr.get('TRANSACTION_AMT_total'),
+                   "committee_name": qr['list'][0].get('Committee Name'),
+                   "for_against": invert_for_against[qr['list'][0].get('TRANSACTION_TP')],
+                   "pac_committee_id": qr.get('CMTE_ID'),
+                   "monthly": []}
 
-            set_all_months = set([datetime.datetime.strftime(start+relativedelta(months=m), '%Y-%m-%d') for m in range(23)])
+            set_all_months = set([datetime.datetime.strftime(start+relativedelta(months=m), '%Y-%m-%d')
+                                  for m in range(23)])
             months_added = []
 
             for month in qr['list']:
@@ -164,7 +164,7 @@ class TopPACs(Resource):
             for month in months_left:
                 res['monthly'].append({month: 0})
 
-            response["return_format"].append(res)
+            response.append(res)
         
         return response
 
@@ -271,7 +271,8 @@ api.add_resource(ScheduleAByEmployer, '/schedule_a/by_employer/<string:committee
 api.add_resource(MonthlyTotals, '/monthly_totals/<string:committee_id>/<int:cycle>/<string:real_nom>/')
 
 # FIX PARAMS OF ALL 3 API's
-api.add_resource(TopPACs, '/top_pacs/<string:candidate_id>/<int:cycle>/<int:record_limit>/<string:real_nom>/')
+api.add_resource(TopPACs, '/top_pacs/<string:candidate_id>/<int:cycle>/<string:for_against>/<int:topk>/<string:real_nom>/')
+
 api.add_resource(TopContributorsToPACs,
                  '/top_pacs/<string:candidate_id>/<int:cycle>/<int:record_limit>/<string:real_nom>/')
 
