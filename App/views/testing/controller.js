@@ -60,7 +60,7 @@
             //        $scope.mapUpdated = true;
             //    });
 
-            vizAPI.contributors_by_geo('C00490045', $scope.ddOptions.cycle, 'fips')
+            vizAPI.contributors_by_geo($scope.candidate.committees[0].committee_id, $scope.ddOptions.cycle, 'fips')
                 .success(function(json){
                     //defines a mapping from locations to values
                     var mapData = d3.map();
