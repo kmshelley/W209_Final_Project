@@ -26,10 +26,6 @@
             return $http.get(BASE_URL+'/schedule_a/by_employer/'+ committee_id +'/'+cycle);
         };
 
-        factory.put_panel_data = function(data) {
-            return $http.put(BASE_URL+'/panel_data', data);
-        };
-
         return factory;
     };
 

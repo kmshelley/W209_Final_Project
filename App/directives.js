@@ -14,7 +14,10 @@
                 chartType: '='
             },
             link: function(scope, element, attrs) {
-                var chart = d3.custom[scope.chartType]();
+                var chart = d3.custom[scope.chartType]()
+                    .height(scope.height)
+                    .width(scope.width);
+
                 var chartEl = d3.select(element[0]);
                 scope.$watch('watch', function (newValue, oldValue) {
                     if (newValue){
