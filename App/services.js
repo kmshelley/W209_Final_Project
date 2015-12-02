@@ -35,7 +35,7 @@
         };
 
 		//Added by Katherine -- for loading segmented bar chart of contributions by size
-		var api_key = '5TayTExo0PzGwMt1xBpjn9MUZPSLYn4JwfpoAotx';
+		var api_key = '';
 	    var FEC_URL = "https://api.open.fec.gov/v1/";
 		
 		factory.get_sched_a_by_size = function(committee_id, cycle) {
