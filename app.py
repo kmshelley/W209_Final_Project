@@ -189,10 +189,8 @@ class TopContributorsToPACs(Resource):
                                                    'function(obj, prev) {prev.list.push(obj)}')
 
         query_results = sorted(query_results, key=lambda k: k['TRANSACTION_AMT_total'] , reverse=True)[:topk]
-        
-        response = {"return_format": [],
-                    "description": "this endpoint will return the top k contributors to PACs spending money for a given cycle, with total and mothly nominal spend"}
 
+        response = []
         for qr in query_results:
 
             res = {    
@@ -213,15 +211,16 @@ class TopContributorsToPACs(Resource):
 
             for month in qr['list']:
                 strdate = datetime.datetime.strftime(month.get('month_year'),'%Y-%m-%d')
-                res['monthly'].append({strdate: month.get('TRANSACTION_AMT')})
+                res['monthly'].append({'date': strdate, 'value': month.get('TRANSACTION_AMT')})
                 months_added.append(strdate)
 
             months_left = set_all_months.difference(months_added)
 
             for month in months_left:
-                res['monthly'].append({month: 0})
+                res['monthly'].append({'date': month, 'value': 0})
 
-            response["return_format"].append(res)
+            res['monthly'] = sorted(res['monthly'], key=lambda k: k['date'])
+            response.append(res)
         
         return response
 
@@ -276,7 +275,7 @@ api.add_resource(MonthlyTotals, '/monthly_totals/<string:committee_id>/<int:cycl
 api.add_resource(TopPACs, '/top_pacs/<string:candidate_id>/<int:cycle>/<string:for_against>/<int:topk>/<string:real_nom>/')
 
 api.add_resource(TopContributorsToPACs,
-                 '/top_pacs/<string:candidate_id>/<int:cycle>/<int:record_limit>/<string:real_nom>/')
+                 '/top_pacs/<string:cmte_id>/<int:cycle>/<int:topk>/<string:real_nom>/')
 
 api.add_resource(ContributorsByGeography,
                  '/contributors/<string:cmte_id>/<int:cycle>/<string:aggregation_level>/')

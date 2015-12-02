@@ -1,8 +1,8 @@
 (function() {
     var vizAPI = function($http) {
 
-        //var BASE_URL = "http://data.enalytica.com:9600";
-        var BASE_URL = "http://127.0.0.1:5000";
+        var BASE_URL = "http://data.enalytica.com:9600";
+        //var BASE_URL = "http://127.0.0.1:5000";
 
         var factory = {};
 
@@ -20,6 +20,10 @@
 
         factory.topPACS = function(candidate_id, cycle, for_against, topk, real_nom) {
             return $http.get(BASE_URL+'/top_pacs/'+ candidate_id +'/'+cycle +'/'+ for_against+'/'+topk +'/'+real_nom +'/');
+        };
+
+        factory.topContributorsToPACs = function(committee_id, cycle, topk, real_nom) {
+            return $http.get(BASE_URL+'/top_pacs/'+ committee_id +'/'+cycle +'/'+topk +'/'+real_nom +'/');
         };
 
         factory.get_map_json = function() {

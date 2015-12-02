@@ -2,10 +2,15 @@
 
     var testingController = function ($scope, vizAPI) {
         $scope.candidate = {};
+        $scope.PAC = {};
         $scope.mapUpdated = false;
 
         $scope.ddOptions = {};
         $scope.candidateJSON = null;
+
+        $scope.logger = function (m){
+            console.log(m);
+        };
 
         function getParties(json, cycle){ return Object.keys(json[cycle]); }
 
@@ -21,6 +26,16 @@
             vizAPI.topPACS($scope.candidate.candidate_ids[0], $scope.ddOptions.cycle, for_against, '10', 'real')
                 .success(function(json){
                     $scope.candidate.topPACs = json;
+                    $scope.PAC.selected = $scope.candidate.topPACs[0]
+                    $scope.getTopContributorsToPACs($scope.PAC.selected);
+                });
+        };
+
+        $scope.getTopContributorsToPACs = function(pac){
+            $scope.PAC.selected = pac;
+            vizAPI.topContributorsToPACs(pac.pac_committee_id, $scope.ddOptions.cycle, '10', 'real')
+                .success(function(json){
+                    $scope.PAC.contributors = json;
                 });
         };
 
