@@ -1,12 +1,12 @@
 d3.custom.sparklineBar = function (){
 
-    var margin = {top: 40, right: 25, bottom: 25, left: 25},
+    var margin = {top: 0, right: 0, bottom: 0, left: 0},
         width = 940 - margin.left - margin.right,
         height = 300 - margin.top - margin.bottom,
         markerWidth = 2, markerHeight = 1;
 
     var datePrintFormat = d3.time.format('%b %Y');
-
+    var	parseDate = d3.time.format("%Y-%m-%d").parse;
     var chartdata;
 
     var xScale = d3.scale.ordinal();
@@ -16,7 +16,7 @@ d3.custom.sparklineBar = function (){
         .attr('class', 'd3-tip')
         .offset([-10, 0])
         .html(function(d) {
-            return "<strong>"+ datePrintFormat(d.date) +" Spend: </strong><span style='color:red'>" + Math.round(d.value/10000)/100 + " mm</span>";
+            return "<strong>"+ datePrintFormat(parseDate(d.date)) +" Spend: </strong><span style='color:red'>" + Math.round(d.value/10000)/100 + " mm</span>";
         });
 
     function chart(selection){
@@ -26,7 +26,7 @@ d3.custom.sparklineBar = function (){
 
             // Set up X and Y Scales
 
-            xScale.rangeRoundBands([0, width], .1).domain(data.map(function(d) { return d.date; }));
+            xScale.rangeRoundBands([0, width], .1).domain(data.map(function(d) { return parseDate(d.date); }));
 
             yScale.range([height, 0]).domain([0, d3.max(data, function(d) { return d.value; })]);
 
@@ -57,7 +57,7 @@ d3.custom.sparklineBar = function (){
 
             g.selectAll(".bar")
                 .attr({
-                    "x": function (d) { return xScale(d.date); },
+                    "x": function (d) { return xScale(parseDate(d.date)); },
                     "width": xScale.rangeBand(),
                     "y": function (d) { return yScale(d.value); },
                     "height": function (d) { return height - yScale(d.value); }

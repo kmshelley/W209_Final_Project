@@ -59,7 +59,7 @@
                         <td>{{ pac.committee_name }}</td>
                         <td>{{ pac.total_spend/1000000 | currency }} mm</td>
                         <td>{{ pac.for_against }}</td>
-                        <td> <custom-chart chart-type="'sparklineBar'" height=20 width=100 data="candidate.topPACsMonthly" watch="candidate.topPACsMonthlyUpdated"></custom-chart></td>
+                        <td><custom-chart chart-type="'sparklineBar'" height=25 width=200 data="pac.monthly" watch="pac.monthly"></custom-chart></td>
                     </tr>
                 </table>
                 <!--<custom-chart chart-type="'choropleth'" height=500 width=960 data="mapData" watch="mapUpdated"></custom-chart>-->
