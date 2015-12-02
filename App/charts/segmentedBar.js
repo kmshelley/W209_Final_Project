@@ -19,7 +19,6 @@ d3.custom.segmentedBar = function () {
 
   function chart(selection) {
     selection.each(function(data) {
-		console.log(data);
 	  //**** SCALES ****
 	  //update the width scale
       wScale
@@ -62,7 +61,7 @@ d3.custom.segmentedBar = function () {
           .attr("height", h);
 	 
 	  //**** BARS -- CENTER TO RIGHT ****   
-      var bar = g.selectAll("bar.seg").data(data)
+      var bar = g.selectAll("bar.seg").data(data);
 	  
 	  //segmented bar
 	  bar	
@@ -104,4 +103,4 @@ d3.custom.segmentedBar = function () {
 
 
   return chart;
-}
+};

@@ -41,6 +41,11 @@
         <div class="row">
             <div class="col-xs-12">
 
+                <!--<custom-chart chart-type="'choropleth'" height=500 width=960 data="mapData" watch="mapUpdated"></custom-chart>-->
+				<custom-chart chart-type="'segmentedBar'" height=500 width=960 data="candidate.committee.contributors_by_size" watch="candidate.committee.contributors_by_size"></custom-chart>
+				<custom-chart chart-type="'horizontalBar'" height=500 width=960 data="candidate.committee.monthly_rd" watch="candidate.committee.monthly_rd"></custom-chart>
+
+
                 <div id="first_viz"></div>
 
                 <h3>Outside Groups Spending For/Against {{candidate.short_name}}</h3>
@@ -79,12 +84,6 @@
                         <td><custom-chart chart-type="'sparklineBar'" height=25 width=200 data="contributor.monthly" watch="contributor.monthly"></custom-chart></td>
                     </tr>
                 </table>
-
-
-
-                <!--<custom-chart chart-type="'choropleth'" height=500 width=960 data="mapData" watch="mapUpdated"></custom-chart>-->
-				<!--<custom-chart chart-type="'segmentedBar'" height=500 width=960 data="sched_a" watch="dataLoaded"></custom-chart>-->
-				<!--<custom-chart chart-type="'horizontalBar'" height=500 width=960 data="payments" watch="dataLoaded"></custom-chart>-->
 
             </div>
         </div>
