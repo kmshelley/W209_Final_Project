@@ -156,13 +156,15 @@ class TopPACs(Resource):
 
             for month in qr['list']:
                 strdate = datetime.datetime.strftime(month.get('month_year'),'%Y-%m-%d')
-                res['monthly'].append({strdate: month.get('TRANSACTION_AMT')})
+                res['monthly'].append({'date': strdate, 'value': month.get('TRANSACTION_AMT')})
                 months_added.append(strdate)
 
             months_left = set_all_months.difference(months_added)
 
             for month in months_left:
-                res['monthly'].append({month: 0})
+                res['monthly'].append({'date': month, 'value': 0})
+
+            res['monthly'] = sorted(res['monthly'], key=lambda k: k['date'])
 
             response.append(res)
         
