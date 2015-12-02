@@ -151,7 +151,7 @@ class TopPACs(Resource):
                    "monthly": []}
 
             set_all_months = set([datetime.datetime.strftime(start+relativedelta(months=m), '%Y-%m-%d')
-                                  for m in range(23)])
+                                  for m in range(24)])
             months_added = []
 
             for month in qr['list']:
@@ -206,7 +206,7 @@ class TopContributorsToPACs(Resource):
                         "pac_committee_id": qr['list'][0].get('CMTE_ID'),
                         "monthly": []}
 
-            set_all_months = set([datetime.datetime.strftime(start+relativedelta(months=m), '%Y-%m-%d') for m in range(23)])
+            set_all_months = set([datetime.datetime.strftime(start+relativedelta(months=m), '%Y-%m-%d') for m in range(24)])
             months_added = []
 
             for month in qr['list']:
@@ -262,6 +262,86 @@ class ContributorsByGeography(Resource):
         
         return response
 
+class MonthlyCommitteeTimeSeries(Resource):
+    @staticmethod
+    def get(cycle, cmte_id=None, real_nom=False):
+    
+        start = datetime.datetime(int(cycle)-1 , 1, 1)
+        end = datetime.datetime(int(cycle)+1, 1 , 1, )
+    
+        condition = {'month_year': {'$gte': start, '$lt': end} }
+    
+        if cmte_id:
+            condition['CMTE_ID'] = cmte_id
+    
+        query_results = db.pac_contributors.group(
+                                                    ['month_year'],
+                                                     condition,
+                                                    {"total" : 0 },
+                                                    'function(curr, result) {result.total += curr.TRANSACTION_AMT}')
+    
+        response = {"return_format": [],
+                    "description": "this endpoint will return monthly contributions to PACSuu over election cycle"}
+    
+    
+        set_all_months = set([datetime.datetime.strftime(start+relativedelta(months=m), '%Y-%m-%d') for m in range(24)])
+        months_added = []
+    
+        for qr in query_results:
+    
+            res = {
+                        "month_year": qr.get('month_year'),
+                        "cmte_id": condition.get('CMTE_ID'),
+                        "amount": qr.get('total'),
+                    }
+    
+            response["return_format"].append(res)
+            strdate = datetime.datetime.strftime(qr.get('month_year'),'%Y-%m-%d')
+            months_added.append(strdate)
+    
+        months_left = set_all_months.difference(months_added)
+    
+        for month in months_left:
+            response['return_format'].append({"month_year": month,
+                                              "cmte_id": condition.get('CMTE_ID'),
+                                              "amount": 0})
+    
+        return response
+        
+class ContributorsByEmployer(Resource):
+    @staticmethod
+    def get_employers(cycle, cmte_id=None, topk=10, real_nom=False):
+        
+        start = datetime.datetime(int(cycle)-1 , 1, 1)
+        end = datetime.datetime(int(cycle)+1, 1 , 1, )
+
+        condition = {'month_year': {'$gte': start, '$lt': end} }
+        
+        if cmte_id:
+            condition['CMTE_ID'] = cmte_id
+            
+        query_results = db.pac_contributors.group(                                       
+                                                    ['EMPLOYER'],
+                                                     condition,
+                                                    {"total" : 0 },
+                                                    'function(curr, result) {result.total += curr.TRANSACTION_AMT}')
+                                    
+        query_results = sorted(query_results, reverse=True, key=lambda x: x['total'])[:topk]
+        
+        response = {"return_format": [],
+                    "description": "this endpoint will return contribution to PACS by employer over election cycle"}
+
+        for qr in query_results:
+
+            res = {    
+                        "employer": qr.get('EMPLOYER'),
+                        "cmte_id": condition.get('CMTE_ID'),
+                        "amount": qr.get('total'),
+                    }
+             
+            response["return_format"].append(res)
+        
+        return response
 
 # API ROUTING
 api.add_resource(ScheduleABySize, '/schedule_a/by_size/<string:committee_id>/<int:cycle>/')
@@ -280,6 +360,11 @@ api.add_resource(TopContributorsToPACs,
 api.add_resource(ContributorsByGeography,
                  '/contributors/<string:cmte_id>/<int:cycle>/<string:aggregation_level>/')
 
+api.add_resource(MonthlyCommitteeTimeSeries,
+                 '/top_pacs/<string:cmte_id>/<int:cycle>/<string:real_nom>/')
+
+api.add_resource(ContributorsByEmployer,
+                 '/contributors/<string:cmte_id>/<int:cycle>/<int:topk>/<string:real_nom>/')
 
 # MONGO_DB
 host = "data.enalytica.com"
