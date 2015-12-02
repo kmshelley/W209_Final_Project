@@ -4,6 +4,8 @@
         $scope.candidate = {};
         $scope.PAC = {};
         $scope.mapUpdated = false;
+		//added by kms
+		$scope.dataLoaded = false;
 
         $scope.ddOptions = {};
         $scope.candidateJSON = null;
@@ -56,6 +58,9 @@
 
         $scope.updateCandidate = function(){
             $scope.mapUpdated = false;
+			//added by kms
+			$scope.dataLoaded = false;
+			
             $scope.candidate = getCandidate(
                 $scope.candidateJSON,
                 $scope.ddOptions.cycle,
@@ -91,6 +96,31 @@
             //        $scope.mapUpdated = true;
             //    });
 
+			/*
+			//Added by Katherine -- for loading segmented bar chart of contributions by size
+			vizAPI.get_sched_a_by_size($scope.candidate.committees[0].committee_id, $scope.ddOptions.cycle)
+                .success(function(json){
+                    $scope.sched_a = json.results;
+					$scope.dataLoaded = true;					
+                });			
+			
+			*/
+			
+			/*
+			//Added by Katherine -- for loading horizontal +/- bar charts for receipts/disp by candidate
+			vizAPI.get_receipts_dispersments_by_candidate($scope.candidate.candidate_ids[0], $scope.ddOptions.cycle)
+                .success(function(json){
+                    //$scope.payments = json.results;
+					json = json.filter(function(d){
+                        return (d.candidate_id === $scope.candidate.candidate_ids[0]
+                        && +d.cycle === +($scope.ddOptions.cycle))
+                    });
+					//console.log(json);
+					$scope.payments = json;
+					$scope.dataLoaded = true;					
+                });
+				*/
+				
             $scope.getTopPACs('against')
         };
 
