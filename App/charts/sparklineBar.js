@@ -1,6 +1,6 @@
 d3.custom.sparklineBar = function (){
 
-    var margin = {top: 0, right: 0, bottom: 0, left: 0},
+    var margin = {top: 0, right: 0, bottom: 2, left: 0},
         width = 940 - margin.left - margin.right,
         height = 300 - margin.top - margin.bottom,
         markerWidth = 2, markerHeight = 1;
@@ -12,11 +12,16 @@ d3.custom.sparklineBar = function (){
     var xScale = d3.scale.ordinal();
     var yScale = d3.scale.linear();
 
+    var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .orient("bottom")
+        .tickFormat("");
+
     var tip = d3.tip()
         .attr('class', 'd3-tip')
         .offset([-10, 0])
         .html(function(d) {
-            return "<strong>"+ datePrintFormat(parseDate(d.date)) +" Amount: </strong><span style='color:red'>$" + Math.round(d.value/10000)/100 + " mm</span>";
+            return "<strong>"+ datePrintFormat(parseDate(d.date)) +": </strong><span style='color:orangered'>$" + Math.round(d.value/10000)/100 + " mm</span>";
         });
 
     function chart(selection){
@@ -26,12 +31,14 @@ d3.custom.sparklineBar = function (){
 
             // Set up X and Y Scales
 
-            xScale.rangeRoundBands([0, width], .1).domain(data.map(function(d) { return parseDate(d.date); }));
+            xScale
+                .rangeRoundBands([0, width], .1)
+                .domain(data.map(function(d) { return parseDate(d.date); }));
 
-            yScale.range([height, 0]).domain([0, d3.max(data, function(d) { return d.value; })]);
+            yScale
+                .range([height, 0])
+                .domain([0, d3.max(data, function(d) { return d.value; })]);
 
-            var gapWidth = 1;
-            var barWidth = xScale.range()[1]/data.length - gapWidth;
             // Select the svg element, if it exists.
             var svg = d3.select(this).selectAll("svg").data([data]);
 
@@ -47,7 +54,11 @@ d3.custom.sparklineBar = function (){
 
             // Update the inner dimensions.
             var g = svg.select("g")
-              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+            gEnter.append("g").attr("class", "x axis");
+
 
             g.selectAll(".bar")
                 .data(data)
@@ -64,6 +75,11 @@ d3.custom.sparklineBar = function (){
                 })
                 .on("mouseover", tip.show)
                 .on("mouseout", tip.hide);
+
+            // Update the x-axis.
+            g.select(".x.axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
 
 
         });

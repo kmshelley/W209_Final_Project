@@ -6,15 +6,31 @@ body {
     fill: none;
 }
 
+.table tbody>tr>td.vert-align{
+    vertical-align: middle;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 .axis {
-    font: 10px sans-serif;
+  font: 10px sans-serif;
 }
 
 .axis path,
 .axis line {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
 }
 
 .x.axis path {
@@ -23,7 +39,7 @@ body {
 
 
 .bar {
-    fill: orange;
+    fill: #7d7d7d;
 }
 
 .bar:hover {
@@ -36,7 +52,7 @@ body {
     font-size: 9px;
     font-weight: bold;
     padding: 5px;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(50, 50, 50, 0.8);
     color: #fff;
     border-radius: 2px;
 }
@@ -48,7 +64,7 @@ body {
     font-size: 8px;
     width: 100%;
     line-height: 1;
-    color: rgba(0, 0, 0, 0.8);
+    color: rgba(50, 50, 50, 0.8);
     content: "\25BC";
     position: absolute;
     text-align: center;
