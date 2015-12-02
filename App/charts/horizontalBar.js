@@ -40,16 +40,12 @@ d3.custom.horizontalBar = function () {
             data.forEach(function(d) {
                 var lx0 = 0;
                 d.left = lcolorScale.domain().map(function(name) {
-                    var output = {name: name, y: yValue(d), x0: lx0, x1: lx0 += +d[name]};
-                    console.log('left', output);
-                    return output;
+                    return {name: name, y: yValue(d), x0: lx0, x1: lx0 += +d[name]};
                 });
 
                 var rx0 = 0;
                 d.right = rcolorScale.domain().map(function(name) {
-                    var output = {name: name, y: yValue(d), x0: rx0, x1: rx0 += +d[name]};
-                    console.log('right', output);
-                    return output;
+                    return {name: name, y: yValue(d), x0: rx0, x1: rx0 += +d[name]};
                 });
             });
             //flatten the left and right data sets
