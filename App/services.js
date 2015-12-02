@@ -18,6 +18,10 @@
             return $http.get(BASE_URL+'/contributors/'+ committee_id +'/'+cycle +'/'+ geo_agg+'/');
         };
 
+        factory.topPACS = function(candidate_id, cycle, for_against, topk, real_nom) {
+            return $http.get(BASE_URL+'/top_pacs/'+ candidate_id +'/'+cycle +'/'+ for_against+'/'+topk +'/'+real_nom +'/');
+        };
+
         factory.get_map_json = function() {
             return $http.get('./data/us.json');
         };

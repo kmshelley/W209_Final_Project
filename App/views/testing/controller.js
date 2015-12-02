@@ -3,6 +3,7 @@
     var testingController = function ($scope, vizAPI) {
         $scope.candidate = {};
         $scope.mapUpdated = false;
+        $scope.candidate.topPACsMonthlyUpdated = false
 
         $scope.ddOptions = {};
         $scope.candidateJSON = null;
@@ -16,6 +17,31 @@
         function getCandidate(json, cycle, party, candidateIndex){
             return json[cycle][party][candidateIndex];
         }
+
+        $scope.getTopPACs = function(for_against){
+            $scope.topPACsMonthlyUpdated = false;
+            vizAPI.topPACS($scope.candidate.candidate_ids[0], $scope.ddOptions.cycle, for_against, '10', 'real')
+                .success(function(json){
+                    $scope.candidate.topPACs = json;
+                    console.log(json);
+
+                    var	parseDate = d3.time.format("%Y-%m-%d").parse;
+
+                    $scope.candidate.topPACsMonthly = json.monthly.map(function(d) {
+                        date = Object.keys(d)[0];
+                        value = d[date];
+                        return ({'date': parseDate(date), 'value': +value})
+                    });
+
+                    function sortByDateAscending(a, b) {
+                        // Dates will be cast to numbers automagically:
+                        return a.date - b.date;
+                    }
+
+                    $scope.candidate.topPACsMonthly = $scope.candidate.topPACsMonthly.sort(sortByDateAscending);
+                    $scope.candidate.topPACsMonthlyUpdated = true;
+                });
+        };
 
         $scope.updateParties = function (){
             var parties =  getParties($scope.candidateJSON, $scope.ddOptions.cycle);
@@ -60,14 +86,16 @@
             //        $scope.mapUpdated = true;
             //    });
 
-            vizAPI.contributors_by_geo($scope.candidate.committees[0].committee_id, $scope.ddOptions.cycle, 'fips')
-                .success(function(json){
-                    //defines a mapping from locations to values
-                    var mapData = d3.map();
-                    json.forEach(function(d){ mapData.set(d.location, d.amount); });
-                    $scope.mapData.forEach(function(loc){ loc.properties["total"] = mapData.get(loc.id); });
-                    $scope.mapUpdated = true;
-                });
+            //vizAPI.contributors_by_geo($scope.candidate.committees[0].committee_id, $scope.ddOptions.cycle, 'fips')
+            //    .success(function(json){
+            //        //defines a mapping from locations to values
+            //        var mapData = d3.map();
+            //        json.forEach(function(d){ mapData.set(d.location, d.amount); });
+            //        $scope.mapData.forEach(function(loc){ loc.properties["total"] = mapData.get(loc.id); });
+            //        $scope.mapUpdated = true;
+            //    });
+
+            $scope.getTopPACs('against')
         };
 
         $scope.initialize = function () {
