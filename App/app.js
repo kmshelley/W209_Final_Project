@@ -1,14 +1,18 @@
 (function() {
-    var myApp = angular.module('myApp', ['ngRoute']);
+    var myApp = angular.module('myApp', ['ui.router', 'ui.bootstrap']);
 
-    myApp.config(['$routeProvider',
-        function($routeProvider) {
-            $routeProvider
-                .when('/', {
-                    templateUrl: 'views/testing/view.html',
+    myApp.config(['$stateProvider', '$urlRouterProvider',
+        function($stateProvider, $urlRouterProvider) {
+
+            $urlRouterProvider.otherwise("/");
+
+            $stateProvider
+                .state('testing', {
+                    url: "/",
+                    templateUrl: "views/testing/view.html",
                     controller: 'testingController'
-                })
-                .otherwise({ redirectTo: '/' });
+                });
+
         }]);
 
 }());

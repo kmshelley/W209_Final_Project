@@ -2,8 +2,10 @@
 
     var testingController = function ($scope, vizAPI) {
         $scope.candidate = {};
-        $scope.PAC = {};
+        $scope.outsideGroup = {};
+        $scope.pac = {};
         $scope.mapUpdated = false;
+        $scope.cycle = null; // come back to this
 
         $scope.ddOptions = {};
         $scope.candidateJSON = null;
@@ -22,22 +24,6 @@
             return json[cycle][party][candidateIndex];
         }
 
-        $scope.getTopPACs = function(for_against){
-            vizAPI.topPACS($scope.candidate.candidate_ids[0], $scope.ddOptions.cycle, for_against, '10', 'real')
-                .success(function(json){
-                    $scope.candidate.topPACs = json;
-                    $scope.PAC.selected = $scope.candidate.topPACs[0]
-                    $scope.getTopContributorsToPACs($scope.PAC.selected);
-                });
-        };
-
-        $scope.getTopContributorsToPACs = function(pac){
-            $scope.PAC.selected = pac;
-            vizAPI.topContributorsToPACs(pac.pac_committee_id, $scope.ddOptions.cycle, '10', 'real')
-                .success(function(json){
-                    $scope.PAC.contributors = json;
-                });
-        };
 
         $scope.updateParties = function (){
             var parties =  getParties($scope.candidateJSON, $scope.ddOptions.cycle);
@@ -111,7 +97,6 @@
                 });
 
 				
-            $scope.getTopPACs('against')
         };
 
         $scope.initialize = function () {

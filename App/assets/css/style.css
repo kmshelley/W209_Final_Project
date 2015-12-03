@@ -81,11 +81,106 @@ body {
 
 
 .spacer {
-    min-height: 40px;
+    padding: 15px 0;
 }
 
 
 .btn:focus,.btn:active:focus,.btn.active:focus,
 .btn.focus,.btn:active.focus,.btn.active.focus {
     outline: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* -------------------------------------------------------------------
+Sections
+------------------------------------------------------------------- */
+
+.navbar-custom + .main {
+    margin-top: 50px;
+}
+
+.main {
+    position: relative;
+    background-color: #fff;
+    z-index: 1;
+}
+
+.module,
+.module-small {
+    position: relative;
+    padding: 80px 0;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.module-small {
+    padding: 70px 0;
+}
+
+.module-tall {
+    padding: 120px 0;
+}
+
+.module-title {
+    position: relative;
+    /*letter-spacing: 4px;*/
+    text-align: left;
+    /*font-weight: 400;*/
+    font-size: 30px;
+    margin-bottom: 10px;
+    /*margin: 0 0 70px;*/
+}
+
+.module-subtitle {
+    text-align: left;
+    font-size: 16px;
+    color: #111;
+    /*margin-bottom: 70px;*/
+}
+
+.module-icon {
+    text-align: left;
+    font-size: 32px;
+    /*margin-bottom: 20px;*/
+}
+
+.module-title + .module-subtitle {
+    margin-top: -35px;
+}
+
+/* Sections dividers */
+
+.divider-w {
+    border-top: 1px solid #eaeaea;
+    margin: 0;
+}
+
+.divider-d {
+    border-top: 1px solid #202020;
+    margin: 0;
 }
