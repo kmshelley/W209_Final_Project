@@ -1,42 +1,206 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="myApp">
+<html lang="en" ng-app="myApp" ng-controller="myController">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap: Latest compiled and minified CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/bootstrap-theme.min.css">
-
     <link rel="stylesheet" href="assets/css/style.css">
 
 </head>
 <body>
 
-    <div ui-view class="main"></div>
 
-    <script src="assets/js/angular.js"></script>
-    <!--<script src="assets/js/angular-route.js"></script>-->
-    <script src="assets/js/ui-bootstrap-tpls-0.14.3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+<header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="" class="navbar-brand">The Price of a US Presidential Election</a>
+        </div>
+    </div>
+</header>
 
-    <script src="app.js"></script>
-    <script src="directives.js"></script>
-    <script src="services.js"></script>
-    <script src="views/testing/controller.js"></script>
 
-    <script src="assets/js/d3.js"></script>
-    <script src="//d3js.org/topojson.v1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/1.5.0/d3-legend.js"></script>
-    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<div class="bs-header" id="content">
+    <div class="container">
+        <div class="col-md-12">
+            <section id="top" class="module-small">
+                <h1>The Price of A US Presidential Election</h1>
+                <h4>Visualization by Tom Kunicki, Charles Maalouf, Janak Mayer & Katherine Shelley</h4>
 
-    <script src="assets/js/colorbrewer.js"></script>
+                <p>The purpose of this visualization is to walk the viewer through the complicated
+                    world of Presidential campaign financing in the United States.
+                    All data in this visualization comes from the Federal Election Commision (www.fec.gov).
+                    Each section delves into a different area of campaign financing, with interactive features that
+                    allow for filtering and summarizing in order to enhance understanding.</p>
 
-    <script>d3.custom = {};</script>
-    <script src="charts/chloropleth_viz.js"></script>
-	<script src="charts/segmentedBar.js"></script>
-	<script src="charts/horizontalBar.js"></script>
-    <script src="charts/sparklineBar.js"></script>
+            </section>
+        </div>
+    </div>
+</div>
+
+
+<div class="container bs-docs-container">
+    <div class="row">
+
+        <div class="col-md-2 hidden-sm hidden-xs">
+            <div>
+                <div class="bs-sidebar hidden-print" role="complementary" data-offset-top="-100" bs-affix="">
+                    <ul class="nav bs-sidenav" bs-scrollspy-list>
+
+                        <li data-target="#top"><a href="#top">Top</a></li>
+                        <li data-target="#view-over-time"><a href="#view-over-time">The View Over Time</a></li>
+                        <li data-target="#current-cycle"><a href="#current-cycle">{{model.cycle}} Election Cycle</a></li>
+                        <li data-target="#candidate_committees"><a href="#candidate_committees">Candidate Committees</a></li>
+                        <li data-target="#outside_groups"><a href="#outside_groups">Outside Groups</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-10">
+            <section id="view-over-time" class="module-top">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h2>The View Over Time</h2>
+                        <p>Here we can put our visualization of total fundraising or spending over time in different cycles.</p>
+                        <p>We can either use the viz to select a cycle, or a dropdown like the one below.</p>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label for="cycleSelector">Select Election Cycle</label>
+                            <select id="cycleSelector" ng-model="model.cycle"
+                                    ng-options="c for c in model.cycles" class="form-control">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+
+            <div class="divider-d"></div>
+            <section id="current-cycle" class="module-small" target="_blank">
+
+                <div class="row">
+
+                    <div class="col-xs-12">
+                        <h2>{{model.cycle}} Election Cycle:</h2>
+
+                        <p>Here we can put a visualization of total fundraising or spending by candidate in the {{model.cycle}}
+                            election.</p>
+                        <p>We can either use the viz to select candidates, or dropdowns like the one below.</p>
+
+                        <h3>Select Candidates to Compare</h3>
+                    </div>
+                    <div class="col-xs-4">
+                        <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle" party="model.party" candidate="model.candidates[0]" party-index="1"></candidate-selector>
+                        <p><strong>Candidate ID: </strong>{{model.candidates[0].candidate_ids[0]}}</p>
+                        <p><strong>Committee ID: </strong>{{model.candidates[0].committees[0].committee_id}}</p>
+                    </div>
+                    <div class="col-xs-4 col-xs-offset-2">
+                        <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle" party="model.party" candidate="model.candidates[1]" party-index="0"></candidate-selector>
+                        <p><strong>Candidate ID: </strong>{{model.candidates[1].candidate_ids[0]}}</p>
+                        <p><strong>Committee ID: </strong>{{model.candidates[1].committees[0].committee_id}}</p>
+
+                    </div>
+                </div>
+            </section>
+
+            <div class="divider-d"></div>
+            <section id="candidate_committees" class="module-small">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h2>Candidate Committee Receipts and Expenditures</h2>
+                    </div>
+                </div>
+            </section>
+
+
+            <div class="divider-d"></div>
+            <section id="outside_groups" class="module-small">
+
+
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h2>Outside Groups</h2>
+
+                        <p>While outside groups have always played outsized role in American politics, their influence has
+                            increased dramatically since 2010. In that year, the United States Supreme Court
+                            ruled in Citizens United v. FEC, that the first amendment prohibited the government from restricting
+                            independent political expenditures - that is expenditures made by outside groups not coordinating
+                            their activities with a candidate.</p>
+
+                        <p>Contributions to candidates and their committees are strictly regulated and capped at a
+                            relatively low level - in the 2015-2016 election cycle, an individual can give a maximum of $2,700
+                            to any candidate committee, or a maximum of $5,000 to a traditional Political Action Committee
+                            (PAC). The aftermath of Citizens United, however was to see a proliferation of
+                            "independent-expenditure-only Political Action Committees", also known as Super-PACs. Contributions
+                            to these groups are entirely uncapped, enabling the wealthiest Americans to have an outized voice in
+                            recent elections.</p>
+
+                        <div class="spacer"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4>Top Outside Groups</h4>
+                    </div>
+                    <div class="col-xs-6">
+                        <outside-groups candidate="model.candidates[0]" cycle="model.cycle" outside-group="model.outsideGroups[0]"></outside-groups>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <outside-groups candidate="model.candidates[1]" cycle="model.cycle" outside-group="model.outsideGroups[1]"></outside-groups>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4>Top Outside Group Contributors</h4>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <group-donors outside-group="model.outsideGroups[0]" cycle="model.cycle"></group-donors>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <group-donors outside-group="model.outsideGroups[1]" cycle="model.cycle"></group-donors>
+                    </div>
+                </div>
+
+            </section>
+
+
+        </div>
+    </div>
+</div>
+
+<script src="assets/js/angular.min.js"></script>
+<script src="assets/js/angular-strap.min.js"></script>
+<script src="assets/js/angular-strap.tpl.min.js"></script>
+
+<script src="app.js"></script>
+
+<script src="assets/js/d3.js"></script>
+<script src="//d3js.org/topojson.v1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/1.5.0/d3-legend.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+<script src="assets/js/colorbrewer.js"></script>
+
+<script>d3.custom = {};</script>
+<script src="charts/chloropleth_viz.js"></script>
+<script src="charts/segmentedBar.js"></script>
+<script src="charts/horizontalBar.js"></script>
+<script src="charts/sparklineBar.js"></script>
 
 </body>
 </html>
