@@ -1,10 +1,12 @@
 function segmentedBar() {
+	
   var margin = {top: 20, right: 30, bottom: 20, left: 30, middle: 25},
-      w = 760,
-      h = w/5,
+      w = 1000,
+      h = 200,
 	  width = w - margin.left - margin.height,
 	  height = h - margin.top - margin.bottom,
-	  hcenter = 3*h/5; //center from top
+	  hcenter = h/2; //center from top
+	  bar_height = 75,
 	  left = margin.left,
 	  right = (w - margin.right),	  
 	  formatValue = d3.format(".2s"),
@@ -13,12 +15,11 @@ function segmentedBar() {
 	  dCategory = function (d) { return d.size; },
       wScale = d3.scale.linear(),
 	  colorScale = d3.scale.category10(), //scale for colors
-	  categories = {"0":"$200 and under", "200": "$200 - $499.99", "500":"$500 - $999.99", "1000":"$1000 - $1999.99","2000":"$2000 +" };
+	  categories = {"0":"$200 and under", "200": "$200 - $499", "500":"$500 - $999", "1000":"$1000 - $1999","2000":"$2000+" };
 	  
 
   function chart(selection) {
     selection.each(function(data) {
-		
 	  //**** SCALES ****
 	  //update the width scale
       wScale
@@ -27,12 +28,6 @@ function segmentedBar() {
 	  
 	  //update the color scale
 	  colorScale.domain(d3.map(data,dCategory).keys());
-	  
-	 //define the legend based on categories 
-	  var legend = d3.legend.color()
-        .useClass(false)
-		.scale(colorScale)
-		.labels(d3.values(categories));
 	  //****	
 	  
 	  //**** FORMAT THE DATA FOR SEGMENTED CHART ***
@@ -61,7 +56,8 @@ function segmentedBar() {
           .attr("height", h);
 	 
 	  //**** BARS -- CENTER TO RIGHT ****   
-      var bar = g.selectAll("bar.seg").data(data)
+      var bar = g.selectAll("bar.seg").data(data);
+	  var legend = g.selectAll("legend").data(data)
 	  
 	  //segmented bar
 	  bar	
@@ -72,24 +68,45 @@ function segmentedBar() {
       svg.selectAll(".bar.seg")
 		.data(data)
 		.attr("x", function(d) { return wScale(d.x0); })
-        .attr("height",height)
+        .attr("height",75)
         .attr("y", hcenter)
         .attr("width", function(d) { return wScale(d.x1) - wScale(d.x0); })
 		.style("fill",function(d) { return colorScale(dCategory(d)); });
 	
+	  legend	
+		.enter() // return the selection of data with no elements yet bound
+		.append("text")  
+		.attr("class","legend");	
 	  
-	  //add the legend	
-	  svg.append("svg")
-		.attr("class", "legendColor")
-		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-	  svg.select(".legendColor")
-		.call(legend);
+      svg.selectAll(".legend")
+		.data(data)
+		.text(function(d){ return categories[dCategory(d)]; })
+		.attr("x", function(d) { return wScale(d.x0); })
+		.attr("y", function(d,i){ 
+			if (i%2 === 0){
+				return hcenter - 5;
+			}else{
+				return hcenter + bar_height + 10; 
+			}
+		})
+		.style("fill",function(d) { return colorScale(dCategory(d)); })
+		.style("font-size","10px");
 		  
     });
   }
 
- 
+   chart.width = function(_x) {
+        if (!arguments.length || arguments===null) return width;
+        width = parseInt(_x);
+        return this;
+    };
+
+	chart.height = function(_x) {
+        if (!arguments.length || arguments===null) return height;
+        height = parseInt(_x);
+        return this;
+    };
+
 
   return chart;
-}
+};
