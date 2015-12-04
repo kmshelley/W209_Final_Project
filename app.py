@@ -174,37 +174,35 @@ class TopPACs(Resource):
 class TopContributorsToPACs(Resource):
     @staticmethod
     def get(cmte_id, cycle, real_nom=False, topk=10):
-    
-        start = datetime.datetime(int(cycle)-1 , 1, 1)
-        end = datetime.datetime(int(cycle)+1, 1 , 1, )
 
-        query_results = db.pac_contributors.group(['NAME', 'ZIP_CODE', 'TRANSACTION_AMT_total'], 
+        start = datetime.datetime(int(cycle)-1, 1, 1)
+        end = datetime.datetime(int(cycle)+1, 1, 1)
 
-                                                  {'CMTE_ID': cmte_id, 
-                                                   'month_year': {'$gte': start, '$lt': end}, 
-                                                   },
-
-                                                  {'list': []}, 
-
-                                                   'function(obj, prev) {prev.list.push(obj)}')
+        query_results = db.pac_contributors.group(
+            ['NAME', 'ZIP_CODE', 'TRANSACTION_AMT_total'],
+            {'CMTE_ID': cmte_id, 'month_year': {'$gte': start, '$lt': end}},
+            {'list': []},
+            'function(obj, prev) {prev.list.push(obj)}'
+        )
 
         query_results = sorted(query_results, key=lambda k: k['TRANSACTION_AMT_total'] , reverse=True)[:topk]
 
         response = []
         for qr in query_results:
 
-            res = {    
-                        "contributor_zip": qr.get('ZIP_CODE'),
-                        "city": qr['list'][0].get('CITY'),
-                        "state": qr['list'][0].get('STATE'),
-                        "fips_county": qr['list'][0].get('COUNTY'),
-                        "total_spend": qr.get('TRANSACTION_AMT_total'),
-                        "contributor_name": qr.get('NAME'),
-                        "employer": qr['list'][0].get('EMPLOYER'),
-                        "occupation": qr['list'][0].get('OCCUPATION'),
-                        "committee_name": qr['list'][0].get('Committee Name'),
-                        "pac_committee_id": qr['list'][0].get('CMTE_ID'),
-                        "monthly": []}
+            res = {
+                "contributor_zip": qr.get('ZIP_CODE'),
+                "city": qr['list'][0].get('CITY'),
+                "state": qr['list'][0].get('STATE'),
+                "fips_county": qr['list'][0].get('COUNTY'),
+                "total_spend": qr.get('TRANSACTION_AMT_total'),
+                "contributor_name": qr.get('NAME'),
+                "employer": qr['list'][0].get('EMPLOYER'),
+                "occupation": qr['list'][0].get('OCCUPATION'),
+                "committee_name": qr['list'][0].get('Committee Name'),
+                "pac_committee_id": qr['list'][0].get('CMTE_ID'),
+                "monthly": []
+            }
 
             set_all_months = set([datetime.datetime.strftime(start+relativedelta(months=m), '%Y-%m-%d') for m in range(24)])
             months_added = []
@@ -221,7 +219,7 @@ class TopContributorsToPACs(Resource):
 
             res['monthly'] = sorted(res['monthly'], key=lambda k: k['date'])
             response.append(res)
-        
+
         return response
 
 class ContributorsByGeography(Resource):
@@ -265,82 +263,82 @@ class ContributorsByGeography(Resource):
 class MonthlyCommitteeTimeSeries(Resource):
     @staticmethod
     def get(cycle, cmte_id=None, real_nom=False):
-    
+
         start = datetime.datetime(int(cycle)-1 , 1, 1)
         end = datetime.datetime(int(cycle)+1, 1 , 1, )
-    
-        condition = {'month_year': {'$gte': start, '$lt': end} }
-    
+
+        condition = {'month_year': {'$gte': start, '$lt': end}}
+
         if cmte_id:
             condition['CMTE_ID'] = cmte_id
-    
+
         query_results = db.pac_contributors.group(
-                                                    ['month_year'],
-                                                     condition,
-                                                    {"total" : 0 },
-                                                    'function(curr, result) {result.total += curr.TRANSACTION_AMT}')
-    
+            ['month_year'],
+            condition,
+            {"total" : 0 },
+            'function(curr, result) {result.total += curr.TRANSACTION_AMT}')
+
         response = {"return_format": [],
                     "description": "this endpoint will return monthly contributions to PACSuu over election cycle"}
-    
-    
+
         set_all_months = set([datetime.datetime.strftime(start+relativedelta(months=m), '%Y-%m-%d') for m in range(24)])
         months_added = []
-    
+
         for qr in query_results:
-    
+
             res = {
-                        "month_year": qr.get('month_year'),
-                        "cmte_id": condition.get('CMTE_ID'),
-                        "amount": qr.get('total'),
-                    }
-    
+                "month_year": qr.get('month_year'),
+                "cmte_id": condition.get('CMTE_ID'),
+                "amount": qr.get('total'),
+            }
+
             response["return_format"].append(res)
             strdate = datetime.datetime.strftime(qr.get('month_year'),'%Y-%m-%d')
             months_added.append(strdate)
-    
+
         months_left = set_all_months.difference(months_added)
-    
+
         for month in months_left:
             response['return_format'].append({"month_year": month,
                                               "cmte_id": condition.get('CMTE_ID'),
                                               "amount": 0})
-    
+
         return response
-        
+
 class ContributorsByEmployer(Resource):
     @staticmethod
     def get_employers(cycle, cmte_id=None, topk=10, real_nom=False):
-        
+
         start = datetime.datetime(int(cycle)-1 , 1, 1)
         end = datetime.datetime(int(cycle)+1, 1 , 1, )
 
         condition = {'month_year': {'$gte': start, '$lt': end} }
-        
+
         if cmte_id:
             condition['CMTE_ID'] = cmte_id
-            
-        query_results = db.pac_contributors.group(                                       
-                                                    ['EMPLOYER'],
-                                                     condition,
-                                                    {"total" : 0 },
-                                                    'function(curr, result) {result.total += curr.TRANSACTION_AMT}')
-                                    
+
+        query_results = db.pac_contributors.group(
+            ['EMPLOYER'],
+            condition,
+            {"total": 0},
+            'function(curr, result) {result.total += curr.TRANSACTION_AMT}'
+        )
+
         query_results = sorted(query_results, reverse=True, key=lambda x: x['total'])[:topk]
-        
+
         response = {"return_format": [],
                     "description": "this endpoint will return contribution to PACS by employer over election cycle"}
 
         for qr in query_results:
 
-            res = {    
-                        "employer": qr.get('EMPLOYER'),
-                        "cmte_id": condition.get('CMTE_ID'),
-                        "amount": qr.get('total'),
-                    }
-             
+            res = {
+                "employer": qr.get('EMPLOYER'),
+                "cmte_id": condition.get('CMTE_ID'),
+                "amount": qr.get('total'),
+            }
+
             response["return_format"].append(res)
-        
+
         return response
 
 # API ROUTING

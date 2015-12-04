@@ -1,29 +1,84 @@
 angular.module('myApp')
 
-    .directive('customChart', function(){
+    .directive('candidateSelector', function(){
         return {
             restrict: 'E',
             replace: true,
-            template: '<div class="chart"></div>',
-            scope:{
-                height: '=',
-                width: '=',
-                data: '=',
-                watch: '=',
-                chartType: '='
+            scope: {
+                candidateJson: '=',
+                cycle: "=",
+                party: "=",
+                candidate: "=",
+                partyIndex: "@"
             },
-            link: function(scope, element, attrs){
-                var chart = d3.custom[scope.chartType]()
-                    .height(scope.height)
-                    .width(scope.width);
 
-                var chartEl = d3.select(element[0]);
-                scope.$watch('watch', function (newValue, oldValue) {
-                    if (newValue){
-                        chartEl.datum(scope.data).call(chart);
+            link:
+                function(scope, element, attrs) {
+                    scope.ddOptions = {};
+
+                    function getParties(json, cycle) {
+                        return Object.keys(json[cycle]);
                     }
-                });
-            }
+
+                    function getCandiates(json, cycle, party) {
+                        return json[cycle][party].map(function (candidate) {
+                            return candidate.name;
+                        });
+                    }
+
+                    function getCandidate(json, cycle, party, candidateIndex) {
+                        return json[cycle][party][candidateIndex];
+                    }
+
+
+                    scope.updateParties = function () {
+                        var parties = getParties(scope.candidateJson, scope.cycle);
+                        scope.ddOptions.parties = parties;
+                        scope.ddOptions.party = parties[+scope.partyIndex];
+                    };
+
+                    scope.updateCandidates = function () {
+                        var candidates = getCandiates(scope.candidateJson, scope.cycle, scope.ddOptions.party);
+                        var candidateIndex = 0;
+                        scope.ddOptions.candidates = candidates;
+                        scope.ddOptions.candidate = candidates[candidateIndex];
+                        scope.updateCandidate();
+                    };
+
+                    scope.updateCandidate = function () {
+
+                        scope.candidate = getCandidate(
+                            scope.candidateJson,
+                            scope.cycle,
+                            scope.ddOptions.party,
+                            scope.ddOptions.candidates.indexOf(scope.ddOptions.candidate)
+                        );
+                        //scope.candidate.committee = {};
+                    };
+
+                    scope.$watchGroup(['candidateJson','cycle'], function () {
+                        if (scope.cycle) {
+                            scope.updateParties();
+                            scope.updateCandidates();
+                        }
+                    });
+                },
+
+            template:
+            '<div>'+
+                '<div class="form-group">' +
+                    '<label for="partySelector">Select Party</label>' +
+                    '<select id="partySelector" ng-model="ddOptions.party" ng-change="updateCandidates()"' +
+                    'ng-options="p for p in ddOptions.parties" class="form-control">' +
+                    '</select>' +
+                '</div>' +
+                '<div class="form-group">' +
+                    '<label for="candidateSelector">Select Candidate</label>' +
+                    '<select id="candidateSelector" ng-model="ddOptions.candidate" ng-change="updateCandidate(c.value)"' +
+                    'ng-options="c for c in ddOptions.candidates" class="form-control">' +
+                    '</select>' +
+                '</div>' +
+            '</div>'
         }
     })
 
@@ -131,7 +186,7 @@ angular.module('myApp')
             template:
             '<div class="panel panel-default">'+
                 '<div class="panel-heading">'+
-                    '<h3 class="panel-title">Top Contributors to {{outsideGroup.committee_name}}</h3>'+
+                    '<h3 class="panel-title">Top {{scope.topk}} Contributors to {{outsideGroup.committee_name}}</h3>'+
                 '</div>'+
                 '<div class="panel-body">'+
                     'Click on a row in the Outside Groups table above to select a group to view top contributors to.<br><br>'+
@@ -166,28 +221,31 @@ angular.module('myApp')
                 '</table>'+
             '</div>'
         }
-    }]);
+    }])
 
+    .directive('customChart', function(){
+        return {
+            restrict: 'E',
+            replace: true,
+            template: '<div class="chart"></div>',
+            scope:{
+                height: '=',
+                width: '=',
+                data: '=',
+                watch: '=',
+                chartType: '='
+            },
+            link: function(scope, element, attrs){
+                var chart = d3.custom[scope.chartType]()
+                    .height(scope.height)
+                    .width(scope.width);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                var chartEl = d3.select(element[0]);
+                scope.$watch('watch', function (newValue, oldValue) {
+                    if (newValue){
+                        chartEl.datum(scope.data).call(chart);
+                    }
+                });
+            }
+        }
+    });
