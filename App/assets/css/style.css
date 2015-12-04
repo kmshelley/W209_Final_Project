@@ -43,16 +43,16 @@ body {
 }
 
 .bar:hover {
-    fill: #bb140e;
+    fill: #ff0500;
 }
 
 
 .d3-tip {
     line-height: 0.5;
-    font-size: 9px;
+    font-size: 10px;
     font-weight: bold;
     padding: 5px;
-    background: rgba(125, 125, 125, 0.8);
+    background: rgba(150, 150, 150, 0.8);
     color: #fff;
     border-radius: 2px;
 }
@@ -64,7 +64,7 @@ body {
     font-size: 8px;
     width: 100%;
     line-height: 1;
-    color: rgba(125, 125, 125, 0.8);
+    color: rgba(150, 150, 150, 0.8);
     content: "\25BC";
     position: absolute;
     text-align: center;
@@ -96,7 +96,7 @@ body {
     padding: 70px 0;
 }
 .module-top {
-    padding: 0 0 70px 0;
+    padding: 20px 0 70px 0;
 }
 
 /* Sections dividers */
@@ -122,14 +122,14 @@ body {
 
 
 .bs-docs-nav {
-    border-color: #7D7D7D;
-    background-color: #7D7D7D;
+    border-color: #4b4b4b;
+    background-color: #4b4b4b;
     box-shadow: 0 1px 0 rgba(255, 255, 255, .1);
     text-shadow: 0 -1px 0 rgba(0, 0, 0, .15)
 }
 
 .bs-docs-nav .navbar-collapse {
-    border-color: #7D7D7D
+    border-color: #4b4b4b
 }
 
 .bs-docs-nav .navbar-brand {
@@ -146,17 +146,17 @@ body {
 }
 
 .bs-docs-nav .navbar-nav > .active > a, .bs-docs-nav .navbar-nav > .active > a:hover {
-    background-color: #7D7D7D;
+    background-color: #4b4b4b;
     color: #fff
 }
 
 .bs-docs-nav .navbar-toggle {
-    border-color: #7D7D7D
+    border-color: #4b4b4b
 }
 
 .bs-docs-nav .navbar-toggle:hover {
-    border-color: #7D7D7D;
-    background-color: #7D7D7D
+    border-color: #4b4b4b;
+    background-color: #4b4b4b
 }
 
 
@@ -168,7 +168,7 @@ body {
     text-shadow: 0 1px 0 rgba(0, 0, 0, .15)
 }
 
-.bs-header h1 {
+.bs-header h1, .bs-header h4 {
     color: #fff
 }
 
@@ -200,8 +200,8 @@ body {
 }
 
 .bs-docs-home, .bs-header {
-    color: #fff;
-    background: #7D7D7D;
+    color: #c8c8c8;
+    background: #4b4b4b;
     padding-bottom: 20px
 }
 
@@ -229,19 +229,19 @@ body {
 
 .bs-sidebar .nav > li > a:focus, .bs-sidebar .nav > li > a:hover {
     padding-right: 14px;
-    color: #bb140e;
+    color: #ff0500;
     text-decoration: none;
     background-color: transparent;
-    border-right: 1px solid #bb140e
+    border-right: 1px solid #ff0500
 }
 
 .bs-sidebar .nav > .active:focus > a, .bs-sidebar .nav > .active:hover > a,
 .bs-sidebar .nav > .active > a {
     padding-right: 13px;
     font-weight: 700;
-    color: #bb140e;
+    color: #ff0500;
     background-color: transparent;
-    border-right: 2px solid #bb140e
+    border-right: 2px solid #ff0500
 }
 
 .bs-sidebar .nav .nav {

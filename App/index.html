@@ -24,7 +24,7 @@
     <div class="container">
         <div class="col-md-12">
             <section id="top" class="module-small">
-                <h1>The Price of A US Presidential Election</h1>
+                <h1>The Price of a US Presidential Election</h1>
                 <h4>Visualization by Tom Kunicki, Charles Maalouf, Janak Mayer & Katherine Shelley</h4>
 
                 <p>The purpose of this visualization is to walk the viewer through the complicated
@@ -45,13 +45,27 @@
         <div class="col-md-2 hidden-sm hidden-xs">
             <div>
                 <div class="bs-sidebar hidden-print" role="complementary" data-offset-top="-100" bs-affix="">
-                    <ul class="nav bs-sidenav" bs-scrollspy-list>
+                    <ul class="nav bs-sidenav" bs-scrollspy-list="">
 
-                        <li data-target="#top"><a href="#top">Top</a></li>
-                        <li data-target="#view-over-time"><a href="#view-over-time">The View Over Time</a></li>
-                        <li data-target="#current-cycle"><a href="#current-cycle">{{model.cycle}} Election Cycle</a></li>
-                        <li data-target="#candidate_committees"><a href="#candidate_committees">Candidate Committees</a></li>
-                        <li data-target="#outside_groups"><a href="#outside_groups">Outside Groups</a></li>
+                        <li><a href="#top">Top</a></li>
+                        <li><a href="#view-over-time">The View Over Time</a></li>
+                        <li><a href="#current-cycle">{{model.cycle}} Election Cycle</a></li>
+                        <li><a href="#candidate_committees">Candidate Committees</a>
+                        <ul class="nav">
+                            <li><a href="#monthly-receipts">Monthly Receipts and Expenditures</a></li>
+                            <li><a href="#contributions-by-size">Contributions by Size</a></li>
+                            <li><a href="#contributions-by-state-county">Contributions by State/County</a></li>
+                            <li><a href="#top-employers">Top Employers of Campaign Contributors</a></li>
+                        </ul>
+                        </li>
+                        <li><a href="#outside_groups">Outside Groups</a>
+                        <ul class="nav">
+                            <li><a href="#top-outside-groups">Top Outside Groups</a></li>
+                            <li><a href="#top-contributors">Top Contributors</a></li>
+                            <li><a href="#outside-contributions-by-state-county">Contributions by State/County??</a></li>
+                            <li><a href="#outside-over-tiime">Fundraising Over Time??</a></li>
+                        </ul>
+                        </li>
 
                     </ul>
                 </div>
@@ -64,8 +78,13 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <h2>The View Over Time</h2>
-                        <p>Here we can put our visualization of total fundraising or spending over time in different cycles.</p>
-                        <p>We can either use the viz to select a cycle, or a dropdown like the one below.</p>
+                        <div class="spacer"></div>
+
+                        <div class="well well-lg" style="padding: 150px 20px;">
+                            <p>Here, if have enough historical data, we can put in Katherine's visualization of total
+                                fundraising or spending over time in different cycles.</p>
+                            <p>We can either use the viz to select candidates, or just a dropdown like the one below.</p>
+                        </div>
 
                     </div>
                 </div>
@@ -85,26 +104,34 @@
 
 
             <div class="divider-d"></div>
-            <section id="current-cycle" class="module-small" target="_blank">
+            <section id="current-cycle" class="module-small">
 
                 <div class="row">
 
                     <div class="col-xs-12">
                         <h2>{{model.cycle}} Election Cycle:</h2>
+                        <div class="spacer"></div>
 
-                        <p>Here we can put a visualization of total fundraising or spending by candidate in the {{model.cycle}}
-                            election.</p>
-                        <p>We can either use the viz to select candidates, or dropdowns like the one below.</p>
+                        <div class="well well-lg" style="padding: 150px 20px;">
+                            <p>Here, if we want and we have time, we
+                            can add a visualization of total fundraising or spending for all candidates, color-segmented
+                            by candidate, in the {{model.cycle}} election.</p>
+                            <p>We can either use the viz to select candidates, or just dropdowns like the one below.</p>
+                        </div>
+
+
 
                         <h3>Select Candidates to Compare</h3>
                     </div>
                     <div class="col-xs-4">
-                        <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle" party="model.party" candidate="model.candidates[0]" party-index="1"></candidate-selector>
+                        <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle" party="model.party"
+                                            candidate="model.candidates[0]" party-index="1"></candidate-selector>
                         <p><strong>Candidate ID: </strong>{{model.candidates[0].candidate_ids[0]}}</p>
                         <p><strong>Committee ID: </strong>{{model.candidates[0].committees[0].committee_id}}</p>
                     </div>
                     <div class="col-xs-4 col-xs-offset-2">
-                        <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle" party="model.party" candidate="model.candidates[1]" party-index="0"></candidate-selector>
+                        <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle" party="model.party"
+                                            candidate="model.candidates[1]" party-index="0"></candidate-selector>
                         <p><strong>Candidate ID: </strong>{{model.candidates[1].candidate_ids[0]}}</p>
                         <p><strong>Committee ID: </strong>{{model.candidates[1].committees[0].committee_id}}</p>
 
@@ -116,8 +143,43 @@
             <section id="candidate_committees" class="module-small">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h2>Candidate Committee Receipts and Expenditures</h2>
+                        <h2>Candidate Campaign Committees</h2>
+                        <div class="spacer"></div>
                     </div>
+
+                    <div class="col-xs-12"><h4 id="monthly-receipts">Monthly Receipts and Expenditures</h4></div>
+                    <div class="col-xs-6">
+                        <div class="well well-lg" style="padding: 250px 20px;">Monthly Receipts and Expenditures horizontal bar chart here</div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="well well-lg" style="padding: 250px 20px;">Monthly Receipts and Expenditures horizontal bar chart here</div>
+                    </div>
+
+                    <div class="col-xs-12"><h4 id="contributions-by-size">Contributions by Size</h4></div>
+                    <div class="col-xs-6">
+                        <div class="well well-lg" style="padding: 75px 20px;">Contributions by Size segmented bar here</div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="well well-lg" style="padding: 75px 20px;">Contributions by Size segmented bar here</div>
+                    </div>
+
+                    <div class="col-xs-12"><h4 id="contributions-by-state-county">Contributions by State/County</h4></div>
+                    <div class="col-xs-6">
+                        <div class="well well-lg" style="padding: 250px 20px;">Choropleth chart of contributions by state/county here</div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="well well-lg" style="padding: 250px 20px;">Choropleth chart of contributions by state/county here</div>
+                    </div>
+
+                    <div class="col-xs-12"><h4 id="top-employers">Top Employers of Campaign Contributors</h4></div>
+                    <div class="col-xs-6">
+                        <div class="well well-lg" style="padding: 250px 20px;">Table of contributions by top k employers here</div>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <div class="well well-lg" style="padding: 250px 20px;">Table of contributions by top k employers here</div>
+                    </div>
+
                 </div>
             </section>
 
@@ -133,17 +195,23 @@
 
                         <p>While outside groups have always played outsized role in American politics, their influence has
                             increased dramatically since 2010. In that year, the United States Supreme Court
-                            ruled in Citizens United v. FEC, that the first amendment prohibited the government from restricting
+                            ruled in <em>Citizens United v. FEC</em> that the first amendment prohibited the government from restricting
                             independent political expenditures - that is expenditures made by outside groups not coordinating
-                            their activities with a candidate.</p>
+                            their activities with a political candidate.</p>
 
                         <p>Contributions to candidates and their committees are strictly regulated and capped at a
                             relatively low level - in the 2015-2016 election cycle, an individual can give a maximum of $2,700
                             to any candidate committee, or a maximum of $5,000 to a traditional Political Action Committee
                             (PAC). The aftermath of Citizens United, however was to see a proliferation of
-                            "independent-expenditure-only Political Action Committees", also known as Super-PACs. Contributions
+                            "independent-expenditure-only Political Action Committees", also known as SuperPACs. Contributions
                             to these groups are entirely uncapped, enabling the wealthiest Americans to have an outized voice in
                             recent elections.</p>
+
+                        <p>To date, since the era of SuperPAC's began, SuperPAC fundraising has been dominated by the Republican side of
+                            politics. While Obama in 2012 had a highly funded SuperPAC, <em>Priorities USA Action</em>, it served
+                            almost entirely as a vehicle to fund attacks against Mitt Romney, rather than by which to promote Obama's
+                            candidacy. Pro-democratic outside groups are still relatively more likely to be small-donor traditional PACs
+                            run by organizations like trade unions, rather than SuperPACs.</p>
 
                         <div class="spacer"></div>
                     </div>
@@ -151,7 +219,7 @@
 
                 <div class="row">
                     <div class="col-xs-12">
-                        <h4>Top Outside Groups</h4>
+                        <h4 id="top-outside-groups">Top Outside Groups</h4>
                     </div>
                     <div class="col-xs-6">
                         <outside-groups candidate="model.candidates[0]" cycle="model.cycle" outside-group="model.outsideGroups[0]"></outside-groups>
@@ -160,11 +228,9 @@
                     <div class="col-xs-6">
                         <outside-groups candidate="model.candidates[1]" cycle="model.cycle" outside-group="model.outsideGroups[1]"></outside-groups>
                     </div>
-                </div>
 
-                <div class="row">
                     <div class="col-xs-12">
-                        <h4>Top Outside Group Contributors</h4>
+                        <h4 id="top-contributors">Top Outside Group Contributors</h4>
                     </div>
 
                     <div class="col-xs-6">
@@ -173,6 +239,24 @@
 
                     <div class="col-xs-6">
                         <group-donors outside-group="model.outsideGroups[1]" cycle="model.cycle"></group-donors>
+                    </div>
+
+
+                    <div class="col-xs-12"><h4 id="outside-contributions-by-state-county">Contributions by State/County?</h4></div>
+                    <div class="col-xs-6">
+                        <div class="well well-lg" style="padding: 250px 20px;">Choropleth chart of contributions by state/county here??</div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="well well-lg" style="padding: 250px 20px;">Choropleth chart of contributions by state/county here??</div>
+                    </div>
+
+                    <div class="col-xs-12"><h4 id="outside-over-tiime">Total Fundraising Over Time??</h4></div>
+                    <div class="col-xs-6">
+                        <div class="well well-lg" style="padding: 250px 20px;">Chart of contributions over time here???</div>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <div class="well well-lg" style="padding: 250px 20px;">Chart of contributions over time here???</div>
                     </div>
                 </div>
 
