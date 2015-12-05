@@ -12,6 +12,13 @@ d3.custom.segmentedBar = function () {
         colors = colorbrewer.Blues[5],
         categories = {"0":"$200 and under", "200": "$200 - $499", "500":"$500 - $999", "1000":"$1000 - $1999","2000":"$2000+" };
 
+        var tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-10, 0])
+            .html(function(d) {
+                return "<strong>"+ categories[dCategory(d)] +": </strong><span style='color:#000000'>$" + Math.round(dVal(d)/10000)/100 + " mm </span>";
+            });
+
     function chart(selection) {
         selection.each(function(data) {
 
@@ -31,7 +38,6 @@ d3.custom.segmentedBar = function () {
 
             //update the color scale
             colorScale.domain(d3.map(data,dCategory).keys());
-            console.log(colorScale.domain());
 
             //**** FORMAT THE DATA FOR SEGMENTED CHART ***
             data.sort(function(a,b) { return +dCategory(a) - +dCategory(b); });
@@ -56,6 +62,9 @@ d3.custom.segmentedBar = function () {
             svg .attr("width", w)
                 .attr("height", h);
 
+            svg.call(tip);
+
+
             //**** BARS -- CENTER TO RIGHT ****
             var bar = g.selectAll("bar.seg").data(data);
             var legend = g.selectAll("legend").data(data);
@@ -72,7 +81,9 @@ d3.custom.segmentedBar = function () {
                 .attr("height", bar_height)
                 .attr("y", hcenter)
                 .attr("width", function(d) { return wScale(d.x1) - wScale(d.x0); })
-                .style("fill",function(d) { return colorScale(dCategory(d)); });
+                .style("fill",function(d) { return colorScale(dCategory(d)); })
+                .on("mouseover", tip.show)
+                .on("mouseout", tip.hide);
 
             legend
                 .enter() // return the selection of data with no elements yet bound
