@@ -23,14 +23,14 @@ body {
 
 
 .axis {
-  font: 10px sans-serif;
+    font: 10px sans-serif;
 }
 
 .axis path,
 .axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
 }
 
 .x.axis path {
@@ -43,8 +43,28 @@ body {
 }
 
 .bar:hover {
-    fill: #ff0500;
+    fill: #000000;
 }
+
+
+.loc {
+    fill: none;
+    stroke: #f5f5f5;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 .d3-tip {
@@ -229,19 +249,19 @@ body {
 
 .bs-sidebar .nav > li > a:focus, .bs-sidebar .nav > li > a:hover {
     padding-right: 14px;
-    color: #ff0500;
+    color: #000000;
     text-decoration: none;
     background-color: transparent;
-    border-right: 1px solid #ff0500
+    border-right: 1px solid #000000
 }
 
 .bs-sidebar .nav > .active:focus > a, .bs-sidebar .nav > .active:hover > a,
 .bs-sidebar .nav > .active > a {
     padding-right: 13px;
     font-weight: 700;
-    color: #ff0500;
+    color: #000000;
     background-color: transparent;
-    border-right: 2px solid #ff0500
+    border-right: 2px solid #000000
 }
 
 .bs-sidebar .nav .nav {

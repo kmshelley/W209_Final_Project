@@ -356,13 +356,13 @@ api.add_resource(TopContributorsToPACs,
                  '/top_pacs/<string:cmte_id>/<int:cycle>/<int:topk>/<string:real_nom>/')
 
 api.add_resource(ContributorsByGeography,
-                 '/contributors/<string:cmte_id>/<int:cycle>/<string:aggregation_level>/')
+                 '/contributors/by_geo/<string:cmte_id>/<int:cycle>/<string:aggregation_level>/')
 
 api.add_resource(MonthlyCommitteeTimeSeries,
                  '/top_pacs/<string:cmte_id>/<int:cycle>/<string:real_nom>/')
 
 api.add_resource(ContributorsByEmployer,
-                 '/contributors/<string:cmte_id>/<int:cycle>/<int:topk>/<string:real_nom>/')
+                 '/contributors/by_employer/<string:cmte_id>/<int:cycle>/<int:topk>/<string:real_nom>/')
 
 # MONGO_DB
 host = "data.enalytica.com"

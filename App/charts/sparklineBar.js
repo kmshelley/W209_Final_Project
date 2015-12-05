@@ -21,7 +21,7 @@ d3.custom.sparklineBar = function (){
         .attr('class', 'd3-tip')
         .offset([-10, 0])
         .html(function(d) {
-            return "<strong>"+ datePrintFormat(parseDate(d.date)) +": </strong><span style='color:#ff0500'>$" + Math.round(d.value/10000)/100 + " mm</span>";
+            return "<strong>"+ datePrintFormat(parseDate(d.date)) +": </strong><span style='color:#000000'>$" + Math.round(d.value/10000)/100 + " mm</span>";
         });
 
     function chart(selection){

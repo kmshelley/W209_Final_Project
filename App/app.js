@@ -12,20 +12,16 @@ angular.module('myApp', ['mgcrea.ngStrap'])
         };
 
         // Initialize by getting json objects for candidate and map
-        vizAPI.get_map_json()  // load map json first
-            .success(function(us){
-                $scope.model.mapData = topojson.feature(us, us.objects.counties).features;
 
-                vizAPI.get_candiates()  // then load the candidates json
-                    .success(function(json){
-                        $scope.model.candidateJson = json;
+        vizAPI.get_candiates()
+            .success(function(json){
+                $scope.model.candidateJson = json;
 
-                        var cycles = Object.keys($scope.model.candidateJson);
-                        var cycleIndex = cycles.length - 2; // using 2012 as default for the moment
-                        $scope.model.cycles = cycles;
-                        $scope.model.cycle = cycles[cycleIndex];
+                var cycles = Object.keys($scope.model.candidateJson);
+                var cycleIndex = cycles.length - 2; // using 2012 as default for the moment
+                $scope.model.cycles = cycles;
+                $scope.model.cycle = cycles[cycleIndex];
 
-                    });
             });
 
     }])
@@ -61,8 +57,12 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             return $http.get(BASE_URL+'/top_pacs/'+ committee_id +'/'+cycle +'/'+topk +'/'+real_nom +'/');
         };
 
-        factory.get_map_json = function() {
+        factory.get_county_json = function() {
             return $http.get('./data/us.json');
+        };
+
+        factory.get_state_json = function() {
+            return $http.get('./data/states.json');
         };
 
         factory.get_by_employer = function(committee_id, cycle) {
@@ -84,9 +84,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             scope: {
                 candidateJson: '=',
                 cycle: "=",
-                party: "=",
                 candidate: "=",
-                partyIndex: "@"
+                partyIndex: "="
             },
 
             link:
@@ -130,7 +129,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                             scope.ddOptions.party,
                             scope.ddOptions.candidates.indexOf(scope.ddOptions.candidate)
                         );
-                        //scope.candidate.committee = {};
+                        scope.candidate.party = scope.ddOptions.party; // Temporary fix to put into candidate json
                     };
 
                     scope.$watchGroup(['candidateJson','cycle'], function () {
@@ -301,6 +300,135 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             '</div>'
         }
     }])
+
+    .directive('choropleth', ['vizAPI', function(vizAPI){
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                candidate: '=',
+                cycle: '=',
+                height: '=',
+                width: '=',
+                scale: '='
+            },
+
+            link:
+                function(scope, element, attrs){
+
+                    var data = {};
+                    var parties = {
+                        Democrats: colorbrewer.Blues[9],
+                        Republicans: colorbrewer.Reds[9]
+                    };
+                    var f_to_c = {state: 'State', fips: 'County'};
+
+                    vizAPI.get_county_json()
+                        .success(function(us){
+                            data['fips'] = topojson.feature(us, us.objects.counties).features;
+                        });
+                    vizAPI.get_state_json()
+                        .success(function(us){
+                            data['state'] = topojson.feature(us, us.objects.cb_2014_us_state_500k).features;
+                        });
+
+                    var chartEl = d3.select(element[0]);
+
+                    scope.state_fips = 'state';
+
+                    scope.$watchGroup(['candidate','state_fips'], function() {
+                        if (Object.keys(scope.candidate).length){
+
+                            var chart = d3.custom['choropleth']()
+                                .height(scope.height)
+                                .width(scope.width)
+                                .scale(scope.scale)
+                                .colors(parties[scope.candidate.party]);
+
+                            scope.state_county = f_to_c[scope.state_fips];
+
+                            vizAPI.contributors_by_geo(scope.candidate.committees[0].committee_id, scope.cycle, scope.state_fips)
+                                .success(function(json){
+                                    var map = d3.map(); //defines a mapping from locations to values
+                                    json.forEach(function(d){ map.set(d.location, d.amount); });
+                                    data[scope.state_fips].forEach(function(loc){ loc.properties["total"] = map.get(loc.id); });
+                                    chartEl.datum(data[scope.state_fips]).call(chart);
+                                })
+                        }
+                    });
+                },
+
+            template:
+            '<div>' +
+                'Contributions > $200 to {{candidate.committees[0].name}} by {{state_county}} <br><br>' +
+                '<div class="btn-toolbar">'+
+                    '<div class="btn-group btn-group-xs" ng-model="state_fips" bs-radio-group>'+
+                        '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="state">State</label>' +
+                        '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="fips">County</label>' +
+                    '</div>'+
+                '</div>'+
+                '<div class="chart"></div>' +
+            '</div>'
+        }
+    }])
+
+    .directive('contributionsBySize', ['vizAPI', function(vizAPI){
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                candidate: '=',
+                cycle: '=',
+                height: '=',
+                width: '='
+            },
+
+            link:
+                function(scope, element, attrs){
+                    var parties = {
+                        Democrats: colorbrewer.Blues[7].slice(2),
+                        Republicans: colorbrewer.Reds[7].slice(2)
+                    };
+
+                    var chartEl = d3.select(element[0]);
+
+                    scope.$watch('candidate', function() {
+                        if (Object.keys(scope.candidate).length){
+
+                            var chart = d3.custom['segmentedBar']()
+                                .h(scope.height)
+                                .w(scope.width)
+                                .bar_height(20)
+                                .colors(parties[scope.candidate.party]);
+
+                            vizAPI.contributors_by_size(scope.candidate.committees[0].committee_id, scope.cycle)
+                                .success(function(json){
+                                    chartEl.datum(json).call(chart);
+                                });
+                        }
+                    });
+                },
+
+            template:
+            '<div>' +
+                'Contributions to {{candidate.committees[0].name}} by Size' +
+                '<div class="chart"></div>' +
+            '</div>'
+        }
+    }])
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     .directive('customChart', function(){
         return {

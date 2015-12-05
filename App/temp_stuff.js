@@ -2,7 +2,7 @@
             //    .success(function(json){
             //        console.log(json);
             //    });
-
+            //
             //vizAPI.contributors_by_state()
             //    .success(function(json){
             //        json = json.filter(function(d){
@@ -16,7 +16,7 @@
             //        $scope.mapData.forEach(function(loc){ loc.properties["total"] = mapData.get(loc.id); });
             //        $scope.mapUpdated = true;
             //    });
-
+            //
             //vizAPI.contributors_by_geo($scope.candidate.committees[0].committee_id, $scope.cycle, 'fips')
             //    .success(function(json){
             //        //defines a mapping from locations to values

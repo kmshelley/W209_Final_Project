@@ -54,8 +54,8 @@
                         <ul class="nav">
                             <li><a href="#monthly-receipts">Monthly Receipts and Expenditures</a></li>
                             <li><a href="#contributions-by-size">Contributions by Size</a></li>
-                            <li><a href="#contributions-by-state-county">Contributions by State/County</a></li>
-                            <li><a href="#top-employers">Top Employers of Campaign Contributors</a></li>
+                            <li><a href="#contributions-by-state-county">Contributions >$200 by State/County</a></li>
+                            <li><a href="#top-employers">Top Employers of > $200 Campaign Contributors</a></li>
                         </ul>
                         </li>
                         <li><a href="#outside_groups">Outside Groups</a>
@@ -124,13 +124,13 @@
                         <h3>Select Candidates to Compare</h3>
                     </div>
                     <div class="col-xs-4">
-                        <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle" party="model.party"
+                        <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle"
                                             candidate="model.candidates[0]" party-index="1"></candidate-selector>
                         <p><strong>Candidate ID: </strong>{{model.candidates[0].candidate_ids[0]}}</p>
                         <p><strong>Committee ID: </strong>{{model.candidates[0].committees[0].committee_id}}</p>
                     </div>
                     <div class="col-xs-4 col-xs-offset-2">
-                        <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle" party="model.party"
+                        <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle"
                                             candidate="model.candidates[1]" party-index="0"></candidate-selector>
                         <p><strong>Candidate ID: </strong>{{model.candidates[1].candidate_ids[0]}}</p>
                         <p><strong>Committee ID: </strong>{{model.candidates[1].committees[0].committee_id}}</p>
@@ -157,21 +157,21 @@
 
                     <div class="col-xs-12"><h4 id="contributions-by-size">Contributions by Size</h4></div>
                     <div class="col-xs-6">
-                        <div class="well well-lg" style="padding: 75px 20px;">Contributions by Size segmented bar here</div>
+                        <contributions-by-size candidate="model.candidates[0]" cycle="model.cycle" height="100" width="460"></contributions-by-size>
                     </div>
                     <div class="col-xs-6">
-                        <div class="well well-lg" style="padding: 75px 20px;">Contributions by Size segmented bar here</div>
+                        <contributions-by-size candidate="model.candidates[1]" cycle="model.cycle" height="100" width="460"></contributions-by-size>
                     </div>
 
-                    <div class="col-xs-12"><h4 id="contributions-by-state-county">Contributions by State/County</h4></div>
+                    <div class="col-xs-12"><h4 id="contributions-by-state-county">Individual Contributions > $200 by State or County</h4></div>
                     <div class="col-xs-6">
-                        <div class="well well-lg" style="padding: 250px 20px;">Choropleth chart of contributions by state/county here</div>
+                        <choropleth candidate="model.candidates[0]" cycle="model.cycle" height="460" width="460" scale="650"></choropleth>
                     </div>
                     <div class="col-xs-6">
-                        <div class="well well-lg" style="padding: 250px 20px;">Choropleth chart of contributions by state/county here</div>
+                        <choropleth candidate="model.candidates[1]" cycle="model.cycle" height="460" width="460" scale="650"></choropleth>
                     </div>
 
-                    <div class="col-xs-12"><h4 id="top-employers">Top Employers of Campaign Contributors</h4></div>
+                    <div class="col-xs-12"><h4 id="top-employers">Top Employers of >$200 Campaign Contributors</h4></div>
                     <div class="col-xs-6">
                         <div class="well well-lg" style="padding: 250px 20px;">Table of contributions by top k employers here</div>
                     </div>
@@ -196,8 +196,8 @@
                         <p>While outside groups have always played outsized role in American politics, their influence has
                             increased dramatically since 2010. In that year, the United States Supreme Court
                             ruled in <em>Citizens United v. FEC</em> that the first amendment prohibited the government from restricting
-                            independent political expenditures - that is expenditures made by outside groups not coordinating
-                            their activities with a political candidate.</p>
+                            independent political expenditures - that is contributions to and expenditures made by outside groups
+                            not coordinating their activities with a political candidate.</p>
 
                         <p>Contributions to candidates and their committees are strictly regulated and capped at a
                             relatively low level - in the 2015-2016 election cycle, an individual can give a maximum of $2,700
