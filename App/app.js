@@ -46,7 +46,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
         };
 
         factory.contributors_by_geo = function(committee_id, cycle, geo_agg, real_nom) {
-            return $http.get(BASE_URL+'/contributors/'+ committee_id +'/'+cycle +'/'+ geo_agg+'/');
+            return $http.get(BASE_URL+'/contributors/by_geo/'+ committee_id +'/'+cycle +'/'+ geo_agg+'/');
         };
 
         factory.topPACS = function(candidate_id, cycle, for_against, topk, real_nom) {
