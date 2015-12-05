@@ -190,19 +190,19 @@ class TopContributorsToPACs(Resource):
         response = []
         for qr in query_results:
 
-            res = {
-                "contributor_zip": qr.get('ZIP_CODE'),
-                "city": qr['list'][0].get('CITY'),
-                "state": qr['list'][0].get('STATE'),
-                "fips_county": qr['list'][0].get('COUNTY'),
-                "total_spend": qr.get('TRANSACTION_AMT_total'),
-                "contributor_name": qr.get('NAME'),
-                "employer": qr['list'][0].get('EMPLOYER'),
-                "occupation": qr['list'][0].get('OCCUPATION'),
-                "committee_name": qr['list'][0].get('Committee Name'),
-                "pac_committee_id": qr['list'][0].get('CMTE_ID'),
-                "monthly": []
-            }
+            res = {    
+                        "contributor_zip": qr.get('ZIP_CODE'),
+                        "city": qr['list'][0].get('CITY'),
+                        "state": qr['list'][0].get('STATE'),
+                        "fips_county": qr['list'][0].get('COUNTY'),
+                        "county_name": qr['list'][0].get('county'),
+                        "total_spend": qr.get('TRANSACTION_AMT_total'),
+                        "contributor_name": qr.get('NAME'),
+                        "employer": qr['list'][0].get('EMPLOYER'),
+                        "occupation": qr['list'][0].get('OCCUPATION'),
+                        "committee_name": qr['list'][0].get('Committee Name'),
+                        "pac_committee_id": qr['list'][0].get('CMTE_ID'),
+                        "monthly": []}
 
             set_all_months = set([datetime.datetime.strftime(start+relativedelta(months=m), '%Y-%m-%d') for m in range(24)])
             months_added = []
@@ -222,15 +222,16 @@ class TopContributorsToPACs(Resource):
 
         return response
 
+
 class ContributorsByGeography(Resource):
     @staticmethod
     def get(cycle, cmte_id=None, aggregation_level='fips'):
     
-        geo_level = 'COUNTY'
+        geo_level = ['COUNTY', 'county','STATE']
         if aggregation_level == 'zip_code':
-            geo_level = 'ZIP_CODE'
+            geo_level = ['ZIP_CODE', 'county','STATE']
         elif aggregation_level == 'state':
-            geo_level = 'STATE'
+            geo_level = ['STATE']
         
         start = datetime.datetime(int(cycle)-1, 1, 1)
         end = datetime.datetime(int(cycle)+1, 1, 1)
@@ -240,25 +241,29 @@ class ContributorsByGeography(Resource):
         if cmte_id:
             condition['CMTE_ID'] = cmte_id
             
-        query_results = db.pac_contributors.group(
-            [geo_level],
-            condition,
-            {"total": 0},
-            'function(curr, result) {result.total += curr.TRANSACTION_AMT}'
-        )
+            
+        query_results = db.pac_contributors.group(                                       
+                               geo_level,
+                               condition,
+                               { "total" : 0 },
+                               'function(curr, result) {result.total += curr.TRANSACTION_AMT}')
+                                    
 
         response = []
         for qr in query_results:
 
-            res = {
-                "level": geo_level,
-                "cmte_id": condition.get('CMTE_ID'),
-                "location": str(int(qr.get(geo_level))) if geo_level in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level),
-                "amount": qr.get('total'),
-            }
+            res = {    
+                        "level": geo_level[0],
+                        "cmte_id": condition.get('CMTE_ID'),
+                        "location_id": str(int(qr.get(geo_level[0]))) if geo_level[0] in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level[0]),
+                        "name": qr.get(geo_level[1]) if geo_level[0] in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level[0]),
+                        "state": qr.get(geo_level[-1]), 
+                        "amount": qr.get('total'),
+                    }
             response.append(res)
         
         return response
+
 
 class MonthlyCommitteeTimeSeries(Resource):
     @staticmethod
