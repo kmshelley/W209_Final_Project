@@ -227,11 +227,11 @@ class ContributorsByGeography(Resource):
     @staticmethod
     def get(cycle, cmte_id=None, aggregation_level='fips'):
     
-        geo_level = ['COUNTY', 'county','STATE']
+        geo_level = ['COUNTY', 'county','state']
         if aggregation_level == 'zip_code':
-            geo_level = ['ZIP_CODE', 'county','STATE']
+            geo_level = ['ZIP_CODE', 'county','state']
         elif aggregation_level == 'state':
-            geo_level = ['STATE']
+            geo_level = ['state']
         
         start = datetime.datetime(int(cycle)-1, 1, 1)
         end = datetime.datetime(int(cycle)+1, 1, 1)
