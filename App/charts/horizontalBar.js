@@ -128,7 +128,7 @@ d3.custom.horizontalBar = function () {
 
             //**** BARS -- CENTER TO RIGHT ****
             //stacked bars, center to right
-            g.selectAll("bar.right.stacked")
+            g.selectAll(".bar.right.stacked")
                 .data(rightData)
                 .enter()
                 .append("rect")
@@ -146,7 +146,7 @@ d3.custom.horizontalBar = function () {
 
             //**** BARS -- CENTER TO LEFT ****
             //stacked bars, center to right
-            g.selectAll("bar.left.stacked")
+            g.selectAll(".bar.left.stacked")
                 .data(leftData)
                 .enter()
                 .append("rect")
@@ -172,40 +172,46 @@ d3.custom.horizontalBar = function () {
             svg.select(".x.right.axis")
                 .call(xRightAxis);
 
-            g.selectAll("y.labels")
+            g.selectAll(".y.labels")
                 .data(data)
                 .enter() // return the selection of data with no elements yet bound
-                .append("g")
-                .attr("class", "y labels")
                 .append("text")
+                .attr("class", "y labels");
+
+            svg.selectAll(".y.labels")
+                .data(data)
                 .text(function(d){
                     if(yValue(d).getMonth()==0){ return monthYrFormat(yValue(d)); }
                     else{ return monthFormat(yValue(d)) }
                 })
                 .attr("x", center)
                 .attr("y", function(d) { return yScale(yValue(d)) + yScale.rangeBand(); })
-                //.attr("transform", "translate(0," + margin.top + ")")
                 .style("text-anchor", "middle")
                 .style("font-size","10px");
 
-            svg.selectAll("receipts.label")
+            svg.selectAll(".receipts.label")
                 .data([data])
                 .enter() // return the selection of data with no elements yet bound
-                .append("g")
-                .attr("class", "receipts label")
                 .append("text")
+                .attr("class", "receipts label")
+;
+
+            svg.selectAll(".receipts.label")
+                .data([data])
                 .text("Receipts")
                 .attr("x", margin.left)
                 .attr("y", 10)
                 .style("text-anchor", "start")
                 .style("font-size","10px");
 
-            svg.selectAll("disbursements.label")
+            svg.selectAll(".disbursements.label")
                 .data([data])
                 .enter() // return the selection of data with no elements yet bound
-                .append("g")
-                .attr("class", "disbursements label")
                 .append("text")
+                .attr("class", "disbursements label")
+
+            svg.selectAll(".disbursements.label")
+                .data([data])
                 .text("Disbursements")
                 .attr("x", width)
                 .attr("y", 10)
