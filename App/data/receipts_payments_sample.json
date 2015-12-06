@@ -1,0 +1,372 @@
+[
+  {
+    "date": "1/1/2011",
+    "data": [
+      {
+        "data": {
+          "expenditures": 868.3355176,
+          "receipts": 25131.69781
+        },
+        "cte_id": "C00431445",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 76208.68521,
+          "receipts": 10113.31418
+        },
+        "cte_id": "C00431445",
+        "name": "Main PAC"
+      },
+      {
+        "data": {
+          "expenditures": 257.6527364,
+          "receipts": 21206.11333
+        },
+        "cte_id": "C00431171",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 8431.507833,
+          "receipts": 47590.5664
+        },
+        "cte_id": "C00431171",
+        "name": "Main PAC"
+      }
+    ]
+  },
+  {
+    "date": "2/1/2011",
+    "data": [
+      {
+        "data": {
+          "expenditures": 2061.02627,
+          "receipts": 82461.34336
+        },
+        "cte_id": "C00431445",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 5288.603021,
+          "receipts": 45829.19389
+        },
+        "cte_id": "C00431445",
+        "name": "Main PAC"
+      },
+      {
+        "data": {
+          "expenditures": 31573.15344,
+          "receipts": 47878.52192
+        },
+        "cte_id": "C00431171",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 34298.60368,
+          "receipts": 35498.61317
+        },
+        "cte_id": "C00431171",
+        "name": "Main PAC"
+      }
+    ]
+  },
+  {
+    "date": "3/1/2011",
+    "data": [
+      {
+        "data": {
+          "expenditures": 8672.291043,
+          "receipts": 7345.224526
+        },
+        "cte_id": "C00431445",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 27910.11401,
+          "receipts": 11461.72513
+        },
+        "cte_id": "C00431445",
+        "name": "Main PAC"
+      },
+      {
+        "data": {
+          "expenditures": 42161.58207,
+          "receipts": 10704.9725
+        },
+        "cte_id": "C00431171",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 44253.20296,
+          "receipts": 38739.48394
+        },
+        "cte_id": "C00431171",
+        "name": "Main PAC"
+      }
+    ]
+  },
+  {
+    "date": "4/1/2011",
+    "data": [
+      {
+        "data": {
+          "expenditures": 35446.72555,
+          "receipts": 75976.02595
+        },
+        "cte_id": "C00431445",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 44694.93075,
+          "receipts": 7499.007396
+        },
+        "cte_id": "C00431445",
+        "name": "Main PAC"
+      },
+      {
+        "data": {
+          "expenditures": 51680.63744,
+          "receipts": 1117.001377
+        },
+        "cte_id": "C00431171",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 48407.25899,
+          "receipts": 11225.9829
+        },
+        "cte_id": "C00431171",
+        "name": "Main PAC"
+      }
+    ]
+  },
+  {
+    "date": "5/1/2011",
+    "data": [
+      {
+        "data": {
+          "expenditures": 15001.28354,
+          "receipts": 52499.19812
+        },
+        "cte_id": "C00431445",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 38677.28787,
+          "receipts": 19272.90368
+        },
+        "cte_id": "C00431445",
+        "name": "Main PAC"
+      },
+      {
+        "data": {
+          "expenditures": 23050.69282,
+          "receipts": 10080.82256
+        },
+        "cte_id": "C00431171",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 16887.70279,
+          "receipts": 7266.826198
+        },
+        "cte_id": "C00431171",
+        "name": "Main PAC"
+      }
+    ]
+  },
+  {
+    "date": "6/1/2011",
+    "data": [
+      {
+        "data": {
+          "expenditures": 28546.55302,
+          "receipts": 60487.05788
+        },
+        "cte_id": "C00431445",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 13885.23353,
+          "receipts": 57809.34119
+        },
+        "cte_id": "C00431445",
+        "name": "Main PAC"
+      },
+      {
+        "data": {
+          "expenditures": 7130.873175,
+          "receipts": 19558.55988
+        },
+        "cte_id": "C00431171",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 5312.602265,
+          "receipts": 109.2170448
+        },
+        "cte_id": "C00431171",
+        "name": "Main PAC"
+      }
+    ]
+  },
+  {
+    "date": "7/1/2011",
+    "data": [
+      {
+        "data": {
+          "expenditures": 14914.47884,
+          "receipts": 12256.22924
+        },
+        "cte_id": "C00431445",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 19686.26346,
+          "receipts": 32344.98608
+        },
+        "cte_id": "C00431445",
+        "name": "Main PAC"
+      },
+      {
+        "data": {
+          "expenditures": 4962.038832,
+          "receipts": 32.32656157
+        },
+        "cte_id": "C00431171",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 14094.70959,
+          "receipts": 2045.913538
+        },
+        "cte_id": "C00431171",
+        "name": "Main PAC"
+      }
+    ]
+  },
+  {
+    "date": "8/1/2011",
+    "data": [
+      {
+        "data": {
+          "expenditures": 42759.89081,
+          "receipts": 32833.98461
+        },
+        "cte_id": "C00431445",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 22558.89382,
+          "receipts": 58933.97671
+        },
+        "cte_id": "C00431445",
+        "name": "Main PAC"
+      },
+      {
+        "data": {
+          "expenditures": 31449.26102,
+          "receipts": 31071.23178
+        },
+        "cte_id": "C00431171",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 28094.9206,
+          "receipts": 50470.80827
+        },
+        "cte_id": "C00431171",
+        "name": "Main PAC"
+      }
+    ]
+  },
+  {
+    "date": "9/1/2011",
+    "data": [
+      {
+        "data": {
+          "expenditures": 54990.15793,
+          "receipts": 13104.48907
+        },
+        "cte_id": "C00431445",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 18624.96655,
+          "receipts": 69833.3056
+        },
+        "cte_id": "C00431445",
+        "name": "Main PAC"
+      },
+      {
+        "data": {
+          "expenditures": 18783.15098,
+          "receipts": 69887.18352
+        },
+        "cte_id": "C00431171",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 70010.39497,
+          "receipts": 83203.31901
+        },
+        "cte_id": "C00431171",
+        "name": "Main PAC"
+      }
+    ]
+  },
+  {
+    "date": "10/1/2011",
+    "data": [
+      {
+        "data": {
+          "expenditures": 746.0306671,
+          "receipts": 997.4261184
+        },
+        "cte_id": "C00431445",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 1712.922062,
+          "receipts": 10476.10227
+        },
+        "cte_id": "C00431445",
+        "name": "Main PAC"
+      },
+      {
+        "data": {
+          "expenditures": 96659.3121,
+          "receipts": 46788.37338
+        },
+        "cte_id": "C00431171",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 94292.77976,
+          "receipts": 16782.79561
+        },
+        "cte_id": "C00431171",
+        "name": "Main PAC"
+      }
+    ]
+  }
+]
