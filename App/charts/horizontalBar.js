@@ -1,5 +1,4 @@
-function horizontalBar() {
-//d3.custom.horizontalBar = function () {
+d3.custom.horizontalBar = function () {
     var margin = {top: 20, right: 30, bottom: 20, left: 30, middle: 25},
         w = 760,
         h = 360,
