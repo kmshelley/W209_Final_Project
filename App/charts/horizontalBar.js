@@ -88,11 +88,11 @@ d3.custom.horizontalBar = function () {
             // place the y-axis in the middle of the chart
             //bars that grow from center to left
             xLeftScale
-                .domain([0,d3.max(leftData, xTotal)])
+                .domain([0,d3.max(leftData.concat(rightData), xTotal)])
                 .range([center_left,0]);
             //bars that grow from center to right
             xRightScale
-                .domain([0,d3.max(rightData, xTotal)])
+                .domain([0,d3.max(leftData.concat(rightData), xTotal)])
                 .range([center_right,width]);
 
             // Update the y-scale.
