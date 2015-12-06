@@ -1,0 +1,924 @@
+{
+  "1988": {
+    "Republicans": [
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "RON PAUL 2012 PRESIDENTIAL CAMPAIGN COMMITTEE INC.",
+            "committee_id": "C00495820"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "RON PAUL 2008 PRESIDENTIAL CAMPAIGN COMMITTEE",
+            "committee_id": "C00432914"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "RON PAUL FOR PRESIDENT",
+            "committee_id": "C00213686"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "BIDEN FOR PRESIDENT, INC.",
+            "committee_id": "C00431916"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "BIDEN FOR PRESIDENT",
+            "committee_id": "C00213652"
+          }
+        ],
+        "name": "PAUL, RON",
+        "short_name": "Ron Paul",
+        "candidate_ids": [
+          "P80000748"
+        ]
+      }
+    ],
+    "Democrats": [
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "BIDEN FOR PRESIDENT, INC.",
+            "committee_id": "C00431916"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "BIDEN FOR PRESIDENT",
+            "committee_id": "C00213652"
+          }
+        ],
+        "name": "BIDEN, JOSEPH R JR",
+        "short_name": "Joe Biden",
+        "candidate_ids": [
+          "P80000722",
+          "P60012143",
+          "P60012135",
+          "P60012465"
+        ]
+      }
+    ]
+  },
+  "2000": {
+    "Republicans": [
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "KASICH FOR AMERICA",
+            "committee_id": "C00581876"
+          }
+        ],
+        "name": "KASICH, JOHN R",
+        "short_name": "John Kasich",
+        "candidate_ids": [
+          "P60003670"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "MCCAIN-PALIN 2008 INC",
+            "committee_id": "C00453928"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "MCCAIN 2000 INC",
+            "committee_id": "C00342154"
+          }
+        ],
+        "name": "MCCAIN, JOHN S.",
+        "short_name": "John McCain",
+        "candidate_ids": [
+          "P80002801"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "RUDY GIULIANI PRESIDENTIAL COMMITTEE INC",
+            "committee_id": "C00430512"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "ALAN KEYES FOR PRESIDENT 2008",
+            "committee_id": "C00452532"
+          }
+        ],
+        "name": "GIULIANI, RUDOLPH W.",
+        "short_name": "Rudy Giuliani",
+        "candidate_ids": [
+          "P00003251"
+        ]
+      }
+    ],
+    "Democrats": [
+      
+    ]
+  },
+  "2004": {
+    "Republicans": [
+      
+    ],
+    "Democrats": [
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "FOR DARREL REECE HUNTER AS UNITED STATES PRESIDENT",
+            "committee_id": "C00391441"
+          }
+        ],
+        "name": "HUNTER, DARRELL REECE",
+        "short_name": "Darrell Hunter",
+        "candidate_ids": [
+          "P40003022"
+        ]
+      }
+    ]
+  },
+  "2008": {
+    "Republicans": [
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "GILMORE FOR AMERICA LLC",
+            "committee_id": "C00582668"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "JIM GILMORE FOR PRESIDENT",
+            "committee_id": "C00431288"
+          }
+        ],
+        "name": "GILMORE, JAMES S III",
+        "short_name": "Jim Gilmore",
+        "candidate_ids": [
+          "P80003379"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "HUCKABEE FOR PRESIDENT, INC.",
+            "committee_id": "C00577981"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "HUCKABEE FOR PRESIDENT, INC.",
+            "committee_id": "C00431809"
+          }
+        ],
+        "name": "HUCKABEE, MIKE",
+        "short_name": "Mike Huckabee",
+        "candidate_ids": [
+          "P80003478"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "RON PAUL 2012 PRESIDENTIAL CAMPAIGN COMMITTEE INC.",
+            "committee_id": "C00495820"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "RON PAUL 2008 PRESIDENTIAL CAMPAIGN COMMITTEE",
+            "committee_id": "C00432914"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "RON PAUL FOR PRESIDENT",
+            "committee_id": "C00213686"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "OBAMA FOR AMERICA",
+            "committee_id": "C00431445"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "BIDEN FOR PRESIDENT, INC.",
+            "committee_id": "C00431916"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "BIDEN FOR PRESIDENT",
+            "committee_id": "C00213652"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "CHRIS DODD FOR PRESIDENT INC",
+            "committee_id": "C00431379"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "EDWARDS FOR PRESIDENT",
+            "committee_id": "C00384073"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "JOHN EDWARDS FOR PRESIDENT",
+            "committee_id": "C00431205"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "KUCINICH FOR PRESIDENT INC.",
+            "committee_id": "C00385146"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "KUCINICH FOR PRESIDENT 2008",
+            "committee_id": "C00430975"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "RICHARDSON FOR PRESIDENT, INC.",
+            "committee_id": "C00431577"
+          }
+        ],
+        "name": "PAUL, RON",
+        "short_name": "Ron Paul",
+        "candidate_ids": [
+          "P80000748"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "MCCAIN-PALIN 2008 INC",
+            "committee_id": "C00453928"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "MCCAIN 2000 INC",
+            "committee_id": "C00342154"
+          }
+        ],
+        "name": "MCCAIN, JOHN S.",
+        "short_name": "John McCain",
+        "candidate_ids": [
+          "P80002801"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "RUDY GIULIANI PRESIDENTIAL COMMITTEE INC",
+            "committee_id": "C00430512"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "DNC PRESIDENT REPLACEMENT 2008  ELECTION - DRH",
+            "committee_id": "C00457069"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "D R HUNTER FOR US PRESIDENT CAMPAIGN",
+            "committee_id": "C00439158"
+          }
+        ],
+        "name": "GIULIANI, RUDOLPH W.",
+        "short_name": "Rudy Giuliani",
+        "candidate_ids": [
+          "P00003251"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "HUNTER FOR PRESIDENT INC.",
+            "committee_id": "C00431411"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "RON PAUL 2012 PRESIDENTIAL CAMPAIGN COMMITTEE INC.",
+            "committee_id": "C00495820"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "RON PAUL 2008 PRESIDENTIAL CAMPAIGN COMMITTEE",
+            "committee_id": "C00432914"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "RON PAUL FOR PRESIDENT",
+            "committee_id": "C00213686"
+          }
+        ],
+        "name": "HUNTER, DUNCAN",
+        "short_name": "Duncan Hunter",
+        "candidate_ids": [
+          "P80003395"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "ROMNEY FOR PRESIDENT, INC.",
+            "committee_id": "C00431171"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "ALAN KEYES FOR PRESIDENT 2008",
+            "committee_id": "C00452532"
+          }
+        ],
+        "name": "ROMNEY, MITT / PAUL D. RYAN",
+        "short_name": "Mitt Romney",
+        "candidate_ids": [
+          "P80003353"
+        ]
+      },
+      {
+        "committees": [
+          
+        ],
+        "name": "THOMPSON, FRED DALTON",
+        "short_name": "Fred Thompson",
+        "candidate_ids": [
+          "P00003186"
+        ]
+      }
+    ],
+    "Democrats": [
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "HILLARY FOR AMERICA",
+            "committee_id": "C00575795"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "HILLARY CLINTON FOR PRESIDENT",
+            "committee_id": "C00431569"
+          }
+        ],
+        "name": "CLINTON, HILLARY RODHAM",
+        "short_name": "Hillary Clinton",
+        "candidate_ids": [
+          "P00003392"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "OBAMA FOR AMERICA",
+            "committee_id": "C00431445"
+          }
+        ],
+        "name": "OBAMA, BARACK / JOSEPH R. BIDEN",
+        "short_name": "Barack Obama",
+        "candidate_ids": [
+          "P80003338"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "BIDEN FOR PRESIDENT, INC.",
+            "committee_id": "C00431916"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "BIDEN FOR PRESIDENT",
+            "committee_id": "C00213652"
+          }
+        ],
+        "name": "BIDEN, JOSEPH R JR",
+        "short_name": "Joe Biden",
+        "candidate_ids": [
+          "P80000722",
+          "P60012143",
+          "P60012135",
+          "P60012465"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "CHRIS DODD FOR PRESIDENT INC",
+            "committee_id": "C00431379"
+          }
+        ],
+        "name": "DODD, CHRISTOPHER J",
+        "short_name": "Chris Dodd",
+        "candidate_ids": [
+          "P80003387"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "EDWARDS FOR PRESIDENT",
+            "committee_id": "C00384073"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "JOHN EDWARDS FOR PRESIDENT",
+            "committee_id": "C00431205"
+          }
+        ],
+        "name": "EDWARDS, JOHN",
+        "short_name": "John Edwards",
+        "candidate_ids": [
+          "P40002347"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "KUCINICH FOR PRESIDENT INC.",
+            "committee_id": "C00385146"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "KUCINICH FOR PRESIDENT 2008",
+            "committee_id": "C00430975"
+          }
+        ],
+        "name": "KUCINICH, DENNIS J",
+        "short_name": "Dennis Kucinich",
+        "candidate_ids": [
+          "P40002545"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "RICHARDSON FOR PRESIDENT, INC.",
+            "committee_id": "C00431577"
+          }
+        ],
+        "name": "RICHARDSON, BILL",
+        "short_name": "Bill Richardson",
+        "candidate_ids": [
+          "P80003411"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "DNC PRESIDENT REPLACEMENT 2008  ELECTION - DRH",
+            "committee_id": "C00457069"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "D R HUNTER FOR US PRESIDENT CAMPAIGN",
+            "committee_id": "C00439158"
+          }
+        ],
+        "name": "HUNTER, D R",
+        "short_name": "Darrell Hunter",
+        "candidate_ids": [
+          "P80004831"
+        ]
+      }
+    ]
+  },
+  "2016": {
+    "Republicans": [
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "JEB 2016, INC.",
+            "committee_id": "C00579458"
+          }
+        ],
+        "name": "BUSH, JEB",
+        "short_name": "Jeb Bush",
+        "candidate_ids": [
+          "P60008059"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "CARSON AMERICA EXPLORATORY COMMITTEE",
+            "committee_id": "C00573519"
+          }
+        ],
+        "name": "CARSON, BENJAMIN S SR MD",
+        "short_name": "Ben Carson",
+        "candidate_ids": [
+          "P60005915"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "CHRIS CHRISTIE FOR PRESIDENT INC",
+            "committee_id": "C00580399"
+          }
+        ],
+        "name": "CHRISTIE, CHRISTOPHER J",
+        "short_name": "Chris Christie",
+        "candidate_ids": [
+          "P60008521"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "CARLY FOR PRESIDENT",
+            "committee_id": "C00577312"
+          }
+        ],
+        "name": "FIORINA, CARLY",
+        "short_name": "Carly Fiorina",
+        "candidate_ids": [
+          "P60007242"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "GILMORE FOR AMERICA LLC",
+            "committee_id": "C00582668"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "JIM GILMORE FOR PRESIDENT",
+            "committee_id": "C00431288"
+          }
+        ],
+        "name": "GILMORE, JAMES S III",
+        "short_name": "Jim Gilmore",
+        "candidate_ids": [
+          "P80003379",
+          "P60009255"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "LINDSEY GRAHAM 2016",
+            "committee_id": "C00578757"
+          }
+        ],
+        "name": "GRAHAM, LINDSEY O",
+        "short_name": "Lindsey Graham",
+        "candidate_ids": [
+          "P60007697"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "HUCKABEE FOR PRESIDENT, INC.",
+            "committee_id": "C00577981"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "HUCKABEE FOR PRESIDENT, INC.",
+            "committee_id": "C00431809"
+          }
+        ],
+        "name": "HUCKABEE, MIKE",
+        "short_name": "Mike Huckabee",
+        "candidate_ids": [
+          "P80003478"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "KASICH FOR AMERICA",
+            "committee_id": "C00581876"
+          }
+        ],
+        "name": "KASICH, JOHN R",
+        "short_name": "John Kasich",
+        "candidate_ids": [
+          "P60003670"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "RAND PAUL FOR PRESIDENT, INC.",
+            "committee_id": "C00575449"
+          }
+        ],
+        "name": "PAUL, RAND",
+        "short_name": "Rand Paul",
+        "candidate_ids": [
+          "P40003576"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "MARCO RUBIO FOR PRESIDENT",
+            "committee_id": "C00458844"
+          }
+        ],
+        "name": "RUBIO, MARCO",
+        "short_name": "Marco Rubio",
+        "candidate_ids": [
+          "P60006723"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "SANTORUM FOR PRESIDENT 2016",
+            "committee_id": "C00578492"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "RICK SANTORUM FOR PRESIDENT, INC. (2012)",
+            "committee_id": "C00496034"
+          }
+        ],
+        "name": "SANTORUM, RICHARD J.",
+        "short_name": "Rick Santorum",
+        "candidate_ids": [
+          "P20002721"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "DONALD J. TRUMP FOR PRESIDENT, INC.",
+            "committee_id": "C00580100"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "RAND PAUL FOR PRESIDENT, INC.",
+            "committee_id": "C00575449"
+          }
+        ],
+        "name": "TRUMP, DONALD J",
+        "short_name": "Donald Trump",
+        "candidate_ids": [
+          "P80001571"
+        ]
+      }
+    ],
+    "Democrats": [
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "HILLARY FOR AMERICA",
+            "committee_id": "C00575795"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "HILLARY CLINTON FOR PRESIDENT",
+            "committee_id": "C00431569"
+          }
+        ],
+        "name": "CLINTON, HILLARY RODHAM",
+        "short_name": "Hillary Clinton",
+        "candidate_ids": [
+          "P00003392"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "O'MALLEY FOR PRESIDENT",
+            "committee_id": "C00578658"
+          }
+        ],
+        "name": "O'MALLEY, MARTIN JOSEPH",
+        "short_name": "Martin O'Malley",
+        "candidate_ids": [
+          "P60007671"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "Principal campaign committee",
+            "name": "BERNIE 2016",
+            "committee_id": "C00577130"
+          }
+        ],
+        "name": "SANDERS, BERNARD",
+        "short_name": "Bernie Sanders",
+        "candidate_ids": [
+          "P60007168"
+        ]
+      }
+
+    ]
+  },
+  "2012": {
+    "Republicans": [
+      {
+        "committees": [
+          {
+            "type": "PRESIDENTIAL - PRINCIPAL CAMPAIGN COMMITTEE",
+            "name": "ROMNEY FOR PRESIDENT INC.",
+            "committee_id": "C00431171"
+          }
+        ],
+        "name": "ROMNEY, MITT / PAUL D. RYAN",
+        "short_name": "Mitt Romney",
+        "candidate_ids": [
+          "P80003353"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "PRESIDENTIAL - PRINCIPAL CAMPAIGN COMMITTEE",
+            "name": "RICK SANTORUM FOR PRESIDENT, INC. (2012)",
+            "committee_id": "C00496034"
+          }
+        ],
+        "name": "SANTORUM, RICHARD J.",
+        "short_name": "Rick Santorum",
+        "candidate_ids": [
+          "P20002721"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "PRESIDENTIAL - PRINCIPAL CAMPAIGN COMMITTEE",
+            "name": "NEWT 2012",
+            "committee_id": "C00496497"
+          }
+        ],
+        "name": "GINGRICH, NEWTON L",
+        "short_name": "Newt Gingrich",
+        "candidate_ids": [
+          
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "PRESIDENTIAL - PRINCIPAL CAMPAIGN COMMITTEE",
+            "name": "RON PAUL 2012 PRESIDENTIAL CAMPAIGN COMMITTEE INC.",
+            "committee_id": "C00495820"
+          }
+        ],
+        "name": "PAUL, RON",
+        "short_name": "Ron Paul",
+        "candidate_ids": [
+          "P80000748"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "PRESIDENTIAL - PRINCIPAL CAMPAIGN COMMITTEE",
+            "name": "JON HUNTSMAN FOR PRESIDENT INC.",
+            "committee_id": "C00498444"
+          }
+        ],
+        "name": "HUNTSMAN, JON",
+        "short_name": "Jon Huntsman",
+        "candidate_ids": [
+          "P20003067"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "PRESIDENTIAL - PRINCIPAL CAMPAIGN COMMITTEE",
+            "name": "PERRY FOR PRESIDENT INC",
+            "committee_id": "C00500587"
+          }
+        ],
+        "name": "PERRY, JAMES R (RICK)",
+        "short_name": "Rick Perry",
+        "candidate_ids": [
+          "P20003281"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "PRESIDENTIAL - PRINCIPAL CAMPAIGN COMMITTEE",
+            "name": "BACHMANN FOR PRESIDENT",
+            "committee_id": "C00497511"
+          },
+          {
+            "type": "PRESIDENTIAL - AUTHORIZED BY A CANDIDATE",
+            "name": "MICHELEBACHMANN.COM",
+            "committee_id": "C00410118"
+          }
+        ],
+        "name": "BACHMANN, MICHELE",
+        "short_name": "Michele Bachmann",
+        "candidate_ids": [
+          "P20002978",
+          "H6MN06074"
+        ]
+      },
+      {
+        "committees": [
+          {
+            "type": "PRESIDENTIAL - PRINCIPAL CAMPAIGN COMMITTEE",
+            "name": "FRIENDS OF HERMAN CAIN INC",
+            "committee_id": "C00496067"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "RON PAUL 2012 PRESIDENTIAL CAMPAIGN COMMITTEE INC.",
+            "committee_id": "C00495820"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "RON PAUL 2008 PRESIDENTIAL CAMPAIGN COMMITTEE",
+            "committee_id": "C00432914"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "RON PAUL FOR PRESIDENT",
+            "committee_id": "C00213686"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "SANTORUM FOR PRESIDENT 2016",
+            "committee_id": "C00578492"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "RICK SANTORUM FOR PRESIDENT, INC. (2012)",
+            "committee_id": "C00496034"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "OBAMA FOR AMERICA",
+            "committee_id": "C00431445"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "ROMNEY FOR PRESIDENT, INC.",
+            "committee_id": "C00431171"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "ALAN KEYES FOR PRESIDENT 2008",
+            "committee_id": "C00452532"
+          }
+        ],
+        "name": "CAIN, HERMAN",
+        "short_name": "Herman Cain",
+        "candidate_ids": [
+          "P00003608"
+        ]
+      }
+    ],
+    "Democrats": [
+      {
+        "committees": [
+          {
+            "type": "PRESIDENTIAL - PRINCIPAL CAMPAIGN COMMITTEE",
+            "name": "OBAMA FOR AMERICA",
+            "committee_id": "C00431445"
+          },
+          {
+            "type": "Principal campaign committee",
+            "name": "OBAMA FOR AMERICA",
+            "committee_id": "C00431445"
+          }
+        ],
+        "name": "OBAMA, BARACK / JOSEPH R. BIDEN",
+        "short_name": "Barack Obama",
+        "candidate_ids": [
+          "P80003338"
+        ]
+      }
+    ]
+  }
+}

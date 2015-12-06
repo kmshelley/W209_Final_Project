@@ -11,8 +11,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             candidateJson: null
         };
 
-        // Initialize by getting json objects for candidate and map
-
+        // Initialize by getting json object for candidate
         vizAPI.get_candiates()
             .success(function(json){
                 $scope.model.candidateJson = json;
@@ -93,7 +92,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                     function getCandiates(json, cycle, party) {
                         return json[cycle][party].map(function (candidate) {
-                            return candidate.name;
+                            return candidate.CAND_NAME;
                         });
                     }
 
@@ -124,7 +123,6 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                             scope.ddOptions.party,
                             scope.ddOptions.candidates.indexOf(scope.ddOptions.candidate)
                         );
-                        scope.candidate.party = scope.ddOptions.party; // Temporary fix to put into candidate json
                     };
 
                     scope.$watchGroup(['candidateJson','cycle'], function () {
@@ -172,7 +170,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                     scope.real_nominal = 'nominal';
                     scope.$watchGroup(['candidate','for_against', 'topk'], function() {
                         if (Object.keys(scope.candidate).length){
-                            vizAPI.topPACS(scope.candidate.candidate_ids[0], scope.cycle, scope.for_against,
+                            vizAPI.topPACS(scope.candidate.CAND_ID, scope.cycle, scope.for_against,
                                 scope.topk, scope.real_nominal)
                                 .success(function(json){
                                     scope.topGroups = json;
@@ -324,8 +322,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                     var data = {};
                     var parties = {
-                        Democrats: colorbrewer.Blues[9].slice(1),
-                        Republicans: colorbrewer.Reds[9].slice(1)
+                        Democrat: colorbrewer.Blues[9].slice(1),
+                        Republican: colorbrewer.Reds[9].slice(1)
                     };
                     var f_to_c = {state: 'State', fips: 'County'};
 
@@ -349,11 +347,11 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                                 .height(scope.height)
                                 .width(scope.width)
                                 .scale(scope.scale)
-                                .colors(parties[scope.candidate.party]);
+                                .colors(parties[scope.candidate.CAND_PTY_AFFILIATION]);
 
                             scope.state_county = f_to_c[scope.state_fips];
 
-                            vizAPI.contributors_by_geo(scope.candidate.committees[0].committee_id, scope.cycle, scope.state_fips)
+                            vizAPI.contributors_by_geo(scope.candidate.Principal.id, scope.cycle, scope.state_fips)
                                 .success(function(json){
                                     var map = d3.map(); //a hash to define mapping from locations to values
                                     json.forEach(function(d){ map.set(d.location_id, {'total': d.amount, 'name': d.name}); });
@@ -394,8 +392,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             link:
                 function(scope, element, attrs){
                     var parties = {
-                        Democrats: colorbrewer.Blues[7].slice(2),
-                        Republicans: colorbrewer.Reds[7].slice(2)
+                        Democrat: colorbrewer.Blues[7].slice(2),
+                        Republican: colorbrewer.Reds[7].slice(2)
                     };
 
                     var chartEl = d3.select(element[0]);
@@ -407,9 +405,9 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                                 .h(scope.height)
                                 .w(scope.width)
                                 .bar_height(20)
-                                .colors(parties[scope.candidate.party]);
+                                .colors(parties[scope.candidate.CAND_PTY_AFFILIATION]);
 
-                            vizAPI.contributors_by_size(scope.candidate.committees[0].committee_id, scope.cycle)
+                            vizAPI.contributors_by_size(scope.candidate.Principal.id, scope.cycle)
                                 .success(function(json){
                                     chartEl.datum(json).call(chart);
                                 });
@@ -440,8 +438,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             link:
                 function(scope, element, attrs){
                     var parties = {
-                        Democrats: colorbrewer.Blues[5].slice(1),
-                        Republicans: colorbrewer.Reds[5].slice(1)
+                        Democrat: colorbrewer.Blues[5].slice(1),
+                        Republican: colorbrewer.Reds[5].slice(1)
                     };
 
                     var chartEl = d3.select(element[0]);
@@ -452,8 +450,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                             var chart = d3.custom['horizontalBar']()
                                 .h(scope.height)
                                 .w(scope.width)
-                                .rcolors(parties[scope.candidate.party])
-                                .lcolors(parties[scope.candidate.party]);
+                                .rcolors(parties[scope.candidate.CAND_PTY_AFFILIATION])
+                                .lcolors(parties[scope.candidate.CAND_PTY_AFFILIATION]);
 
                             vizAPI.get_receipts_expenditures_by_candidate()
                                 .success(function(json){
