@@ -4,6 +4,8 @@ d3.custom.choropleth = function () {
         height = 500,
         scale = 1000,
         yValue = function(d) { return d.properties.total; }, //*********NEED TO MAKE THIS MORE GENERIC
+        yName = function(d) { return d.properties.name; }, //*********NEED TO MAKE THIS MORE GENERIC
+
         formatValue = d3.format(".2s"),
         formatCurrency = function(d) { return "$" + formatValue(d); },
         colors = colorbrewer.Greens[7];
@@ -21,7 +23,7 @@ d3.custom.choropleth = function () {
     var tip = d3.tip()
         .attr('class', 'd3-tip')
         .html(function(d) {
-            return "<strong>"+ d.name +": </strong><span style='color:#000000'>$" + format(yValue(d)) + "</span>";
+            return "<strong>"+ yName(d) +": </strong><span style='color:#000000'>$" + format(yValue(d)) + "</span>";
         });
 
     function chart(selection) {

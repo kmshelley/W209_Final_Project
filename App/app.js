@@ -349,10 +349,11 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                             vizAPI.contributors_by_geo(scope.candidate.committees[0].committee_id, scope.cycle, scope.state_fips)
                                 .success(function(json){
-                                    console.log(json);
-                                    var map = d3.map(); //defines a mapping from locations to values
-                                    json.forEach(function(d){ map.set(d.location_id, d.amount); });
-                                    data[scope.state_fips].forEach(function(loc){ loc.properties["total"] = map.get(loc.id); });
+                                    var map = d3.map(); //a hash to define mapping from locations to values
+                                    json.forEach(function(d){ map.set(d.location_id, {'total': d.amount, 'name': d.name}); });
+                                    data[scope.state_fips].forEach(function(loc){
+                                        if (map.get(loc.id)){ loc.properties = map.get(loc.id); }
+                                    });
                                     chartEl.datum(data[scope.state_fips]).call(chart);
                                 })
                         }
