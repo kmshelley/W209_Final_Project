@@ -1,61 +1,61 @@
 d3.custom.horizontalBar = function () {
-    var margin = {top: 20, right: 30, bottom: 20, left: 30, middle: 25},
+    var margin = {top: 20, right: 10, bottom: 20, left: 10, middle: 25},
         w = 760,
         h = 360,
-        width = w - margin.left - margin.height,
-        height = h - margin.top - margin.bottom,
-        left = margin.left,
-        right = (w - margin.right),
-        center = w/2,
-        center_right = center + margin.middle/2,
-        center_left = center - margin.middle/2,
-		
         monthFormat = d3.time.format("%b"),
         formatValue = d3.format(".2s"),
         formatCurrency = function(d) { return "$" + formatValue(d); },
-		
-		/*
-			INPUT DATA FORMAT
-			[
-				{'date': date, 
-				 'data': [
-							{'cte_id': 'C00431445', name:'Obama For America', data: {"reciepts": amount, "expenditures": amount}},
-							{'cte_id': 'C00495861', name:'Priorities USA Action', data: {"reciepts": amount, "expenditures": amount}},
-							{'cte_id': 'C00010603', name:'DNC Services Corp', data: {"reciepts": amount, "expenditures": amount}}
-						]
-				}
-			]
-		*/
-		//functions to access data
-		xData = function(d) { return d.data; }, //access data for stacked bar mapping
-		xName = function(d) { return d.name; },
-		xLeftValue = function(d) { return +d.data.receipts; }, 	
-		xRightValue = function(d) { return +d.data.expenditures; }, 
+
+    /*
+     INPUT DATA FORMAT
+     [
+     {'date': date,
+     'data': [
+     {'cte_id': 'C00431445', name:'Obama For America', data: {"reciepts": amount, "expenditures": amount}},
+     {'cte_id': 'C00495861', name:'Priorities USA Action', data: {"reciepts": amount, "expenditures": amount}},
+     {'cte_id': 'C00010603', name:'DNC Services Corp', data: {"reciepts": amount, "expenditures": amount}}
+     ]
+     }
+     ]
+     */
+    //functions to access data
+        xData = function(d) { return d.data; }, //access data for stacked bar mapping
+        xName = function(d) { return d.name; },
+        xLeftValue = function(d) { return +d.data.receipts; },
+        xRightValue = function(d) { return +d.data.expenditures; },
         yValue = function(d) { return new Date(d.date); },
-		
-		xLeft = function(d) { return d.left; },
+
+        xLeft = function(d) { return d.left; },
         xRight = function(d) { return d.right; },
-		xTotal = function(d) { return d.x1; }, 
-		
+        xTotal = function(d) { return d.x1; },
+
         xLeftScale = d3.scale.linear(),
         xRightScale = d3.scale.linear(),
         yScale = d3.scale.ordinal(),
-        xLeftAxis = d3.svg.axis().scale(xLeftScale).orient("top").tickSize(6, 0).tickFormat(formatCurrency),
-        xRightAxis = d3.svg.axis().scale(xRightScale).orient("top").tickSize(6, 0).tickFormat(formatCurrency),
-        yAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(0, 0).tickFormat(monthFormat)
-		
-		rcolors = colorbrewer.Blues[5],
-		lcolors = colorbrewer.Reds[5];
+        xLeftAxis = d3.svg.axis().scale(xLeftScale).orient("top").tickSize(6, 0).ticks(4).tickFormat(formatCurrency),
+        xRightAxis = d3.svg.axis().scale(xRightScale).orient("top").tickSize(6, 0).ticks(4).tickFormat(formatCurrency),
+        yAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(0, 0).tickFormat(monthFormat),
+
+        rcolors = colorbrewer.Blues[5],
+        lcolors = colorbrewer.Reds[5];
 
     function chart(selection) {
         selection.each(function(data) {
-	
-			//**** FORMAT THE DATA FOR STACKED CHARTS ***
+
+            var         width = w - margin.left - margin.height,
+                height = h - margin.top - margin.bottom,
+                left = margin.left,
+                right = (w - margin.right),
+                center = w/2,
+                center_right = center + margin.middle/2,
+                center_left = center - margin.middle/2;
+
+            //**** FORMAT THE DATA FOR STACKED CHARTS ***
             //map the data to best format for update-able stacked bar chart
             data.forEach(function(d) {
                 var lx0 = 0;
-				y = yValue(d)
-				
+                y = yValue(d)
+
                 d.left = xData(d).map(function(dt) {
                     return {name: xName(dt), y: y, x0: lx0, x1: lx0 += +xLeftValue(dt)};
                 });
@@ -70,13 +70,13 @@ d3.custom.horizontalBar = function () {
             var rightVals = data.map(function(d){ return xRight(d); });
             var leftData = [].concat.apply([], leftVals);
             var rightData = [].concat.apply([], rightVals);
-			
-			//update color scales
-			var rfields = d3.map(rightData, function(d){return d.name;}).keys()
-			var lfields = d3.map(leftData, function(d){return d.name;}).keys()
-			rcolorScale = d3.scale.ordinal().range(rcolors).domain(rfields); //scale for right colors
-			lcolorScale = d3.scale.ordinal().range(lcolors).domain(lfields); //scale for left colors
-			
+
+            //update color scales
+            var rfields = d3.map(rightData, function(d){return d.name;}).keys()
+            var lfields = d3.map(leftData, function(d){return d.name;}).keys()
+            rcolorScale = d3.scale.ordinal().range(rcolors).domain(rfields); //scale for right colors
+            lcolorScale = d3.scale.ordinal().range(lcolors).domain(lfields); //scale for left colors
+
             //********
 
             // place the y-axis in the middle of the chart
@@ -124,7 +124,7 @@ d3.custom.horizontalBar = function () {
 
             //**** BARS -- CENTER TO RIGHT ****
             var bar_r = g.selectAll("bar.right").data(data)
-			
+
             //stacked bars, center to right
             var bar_r_stacked = g.selectAll("bar.right.stacked").data(rightData)
 
@@ -143,7 +143,7 @@ d3.custom.horizontalBar = function () {
 
             //**** BARS -- CENTER TO LEFT ****
             var bar_l = g.selectAll("bar.left").data(data)
-			
+
             //stacked bars, center to right
             var bar_l_stacked = g.selectAll("bar.left.stacked").data(leftData)
 
@@ -205,7 +205,7 @@ d3.custom.horizontalBar = function () {
         return this;
     };
 
-	chart.lcolors = function(_x) {
+    chart.lcolors = function(_x) {
         if (!arguments.length) return lcolors;
         lcolors = _x;
         return this;
