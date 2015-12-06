@@ -318,8 +318,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                     var data = {};
                     var parties = {
-                        Democrats: colorbrewer.Blues[9],
-                        Republicans: colorbrewer.Reds[9]
+                        Democrats: colorbrewer.Blues[9].slice(1),
+                        Republicans: colorbrewer.Reds[9].slice(1)
                     };
                     var f_to_c = {state: 'State', fips: 'County'};
 
@@ -349,8 +349,9 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                             vizAPI.contributors_by_geo(scope.candidate.committees[0].committee_id, scope.cycle, scope.state_fips)
                                 .success(function(json){
+                                    console.log(json);
                                     var map = d3.map(); //defines a mapping from locations to values
-                                    json.forEach(function(d){ map.set(d.location, d.amount); });
+                                    json.forEach(function(d){ map.set(d.location_id, d.amount); });
                                     data[scope.state_fips].forEach(function(loc){ loc.properties["total"] = map.get(loc.id); });
                                     chartEl.datum(data[scope.state_fips]).call(chart);
                                 })
