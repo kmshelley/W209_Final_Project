@@ -18,12 +18,10 @@ d3.custom.choropleth = function () {
         .labelFormat(formatCurrency)
         .useClass(false);
 
-    var format = d3.format(",.0f");
-
     var tip = d3.tip()
         .attr('class', 'd3-tip')
         .html(function(d) {
-            return "<strong>"+ yName(d) +": </strong><span style='color:#000000'>$" + format(yValue(d)) + "</span>";
+            return "<strong>"+ yName(d) +": </strong><span style='color:#000000'>" + formatCurrency(yValue(d)) + "</span>";
         });
 
     function chart(selection) {

@@ -165,6 +165,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
             link:
                 function(scope, element, attrs){
+                    var formatValue = d3.format(".2s"),
+                        formatCurrency = function(d) { return "$" + formatValue(d); };
                     scope.for_against = 'for';
                     scope.topk = 5;
                     scope.real_nominal = 'nominal';
@@ -174,7 +176,11 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                                 scope.topk, scope.real_nominal)
                                 .success(function(json){
                                     scope.topGroups = json;
-                                    scope.outsideGroup = group = scope.topGroups[0]
+                                    scope.topGroups.forEach(function (d) {
+                                        d.total_spend_formatted = formatCurrency(+d.total_spend);
+                                    });
+                                    scope.outsideGroup = group = scope.topGroups[0];
+
                                 });
                         }
                     });
@@ -222,7 +228,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                     '</tr>'+
                     '<tr ng-repeat="group in topGroups" ng-click="selectPAC(group)">'+
                         '<td class="vert-align">{{ group.committee_name }}</td>'+
-                        '<td class="vert-align">{{ group.total_spend/1000000 | currency }} mm</td>'+
+                        '<td class="vert-align">{{ group.total_spend_formatted }}</td>'+
                         '<td class="vert-align">{{ group.for_against }}</td>'+
                         '<td class="vert-align">' +
                             '<custom-chart chart-type="\'sparklineBar\'"height=25 width=150 data="group.monthly" watch="group.monthly"></custom-chart>' +
@@ -244,6 +250,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
             link:
                 function(scope, element, attrs){
+                    var formatValue = d3.format(".2s"),
+                        formatCurrency = function(d) { return "$" + formatValue(d); };
                     scope.topk = 5;
                     scope.real_nominal = 'nominal';
                     scope.$watchGroup(['outsideGroup','topk'], function() {
@@ -251,6 +259,9 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                             vizAPI.topContributorsToPACs(scope.outsideGroup.pac_committee_id, scope.cycle, scope.topk, scope.real_nominal)
                                 .success(function(json){
                                     scope.outsideGroup.contributors = json;
+                                    scope.outsideGroup.contributors.forEach(function (d) {
+                                        d.total_spend_formatted = formatCurrency(+d.total_spend);
+                                    });
                                 });
                         }
                     });
@@ -286,7 +297,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                     '</tr>'+
                         '<tr ng-repeat="contributor in outsideGroup.contributors">'+
                             '<td class="vert-align">{{ contributor.contributor_name }}</td>'+
-                            '<td class="vert-align">{{ contributor.total_spend/1000000 | currency }} mm</td>'+
+                            '<td class="vert-align">{{ contributor.total_spend_formatted }}</td>'+
                             '<td class="vert-align">' +
                                 '<custom-chart chart-type="\'sparklineBar\'" height=25 width=150 data="contributor.monthly" watch="contributor.monthly"></custom-chart>' +
                             '</td>'+

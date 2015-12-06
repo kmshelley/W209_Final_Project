@@ -10,13 +10,15 @@ d3.custom.segmentedBar = function () {
         dCategory = function (d) { return d.size; },
         wScale = d3.scale.linear(),
         colors = colorbrewer.Blues[5],
+        formatValue = d3.format(".2s"),
+        formatCurrency = function(d) { return "$" + formatValue(d); },
         categories = {"0":"$200 and under", "200": "$200 - $499", "500":"$500 - $999", "1000":"$1000 - $1999","2000":"$2000+" };
 
         var tip = d3.tip()
             .attr('class', 'd3-tip')
             .offset([-10, 0])
             .html(function(d) {
-                return "<strong>"+ categories[dCategory(d)] +": </strong><span style='color:#000000'>$" + Math.round(dVal(d)/10000)/100 + " mm </span>";
+                return "<strong>"+ categories[dCategory(d)] +": </strong><span style='color:#000000'>"+ formatCurrency(dVal(d))+"</span>";
             });
 
     function chart(selection) {

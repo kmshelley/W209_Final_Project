@@ -3,7 +3,9 @@ d3.custom.sparklineBar = function (){
     var margin = {top: 0, right: 0, bottom: 2, left: 0},
         width = 940 - margin.left - margin.right,
         height = 300 - margin.top - margin.bottom,
-        markerWidth = 2, markerHeight = 1;
+        markerWidth = 2, markerHeight = 1,
+        formatValue = d3.format(".2s"),
+        formatCurrency = function(d) { return "$" + formatValue(d); };
 
     var datePrintFormat = d3.time.format('%b %Y');
     var	parseDate = d3.time.format("%Y-%m-%d").parse;
@@ -21,7 +23,7 @@ d3.custom.sparklineBar = function (){
         .attr('class', 'd3-tip')
         .offset([-10, 0])
         .html(function(d) {
-            return "<strong>"+ datePrintFormat(parseDate(d.date)) +": </strong><span style='color:#000000'>$" + Math.round(d.value/10000)/100 + " mm</span>";
+            return "<strong>"+ datePrintFormat(parseDate(d.date)) +": </strong><span style='color:#000000'>"+ formatCurrency((d.value))+"</span>";
         });
 
     function chart(selection){

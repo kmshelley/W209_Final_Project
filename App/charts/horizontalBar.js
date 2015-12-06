@@ -44,7 +44,7 @@ d3.custom.horizontalBar = function () {
             .attr('class', 'd3-tip')
             .offset([-5, 0])
             .html(function(d) {
-                return "<strong>"+ monthYrFormat(d.y)+": </strong><span style='color:#000000'>"+ d.name+" - $" + Math.round(d.x1/10000)/100 + " mm</span>";
+                return "<strong>"+ monthYrFormat(d.y)+": </strong><span style='color:#000000'>"+ d.name+" - " + formatCurrency (d.x1)+"</span>";
         });
 
     function chart(selection) {
