@@ -1,8 +1,9 @@
 d3.custom.horizontalBar = function () {
-    var margin = {top: 20, right: 10, bottom: 20, left: 10, middle: 25},
+    var margin = {top: 40, right: 20, bottom: 20, left: 20, middle: 35},
         w = 760,
         h = 360,
         monthFormat = d3.time.format("%b"),
+        monthYrFormat = d3.time.format("%b '%y"),
         formatValue = d3.format(".2s"),
         formatCurrency = function(d) { return "$" + formatValue(d); },
 
@@ -39,14 +40,19 @@ d3.custom.horizontalBar = function () {
         rcolors = colorbrewer.Blues[5],
         lcolors = colorbrewer.Reds[5];
 
+        var tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-5, 0])
+            .html(function(d) {
+                return "<strong>"+ monthYrFormat(d.y)+": </strong><span style='color:#000000'>"+ d.name+" - $" + Math.round(d.x1/10000)/100 + " mm</span>";
+        });
+
     function chart(selection) {
         selection.each(function(data) {
 
-            var         width = w - margin.left - margin.height,
+            var width = w - margin.left - margin.right,
                 height = h - margin.top - margin.bottom,
-                left = margin.left,
-                right = (w - margin.right),
-                center = w/2,
+                center = width/2,
                 center_right = center + margin.middle/2,
                 center_left = center - margin.middle/2;
 
@@ -54,7 +60,7 @@ d3.custom.horizontalBar = function () {
             //map the data to best format for update-able stacked bar chart
             data.forEach(function(d) {
                 var lx0 = 0;
-                y = yValue(d)
+                y = yValue(d);
 
                 d.left = xData(d).map(function(dt) {
                     return {name: xName(dt), y: y, x0: lx0, x1: lx0 += +xLeftValue(dt)};
@@ -72,8 +78,8 @@ d3.custom.horizontalBar = function () {
             var rightData = [].concat.apply([], rightVals);
 
             //update color scales
-            var rfields = d3.map(rightData, function(d){return d.name;}).keys()
-            var lfields = d3.map(leftData, function(d){return d.name;}).keys()
+            var rfields = d3.map(rightData, function(d){return d.name;}).keys();
+            var lfields = d3.map(leftData, function(d){return d.name;}).keys();
             rcolorScale = d3.scale.ordinal().range(rcolors).domain(rfields); //scale for right colors
             lcolorScale = d3.scale.ordinal().range(lcolors).domain(lfields); //scale for left colors
 
@@ -83,24 +89,20 @@ d3.custom.horizontalBar = function () {
             //bars that grow from center to left
             xLeftScale
                 .domain([0,d3.max(leftData, xTotal)])
-                .range([center_left,left]);
+                .range([center_left,0]);
             //bars that grow from center to right
             xRightScale
                 .domain([0,d3.max(rightData, xTotal)])
-                .range([center_right,right]);
+                .range([center_right,width]);
 
             // Update the y-scale.
             yScale
                 .domain(data.map(yValue))
-                .rangeBands([margin.top,h - margin.bottom],0.1);
+                .rangeBands([0,height],0.1);
 
             var svg = d3.select(this)
                 .selectAll("svg")
                 .data([data]);
-
-            // Update the inner dimensions.
-            svg.select("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             // Enter actions: these are applied to data selections with no elements existing yet
             // As a result, they are performed on 'g', which is an enter selection:
@@ -110,25 +112,24 @@ d3.custom.horizontalBar = function () {
                 .append("g");
 
             //add the axes
-            g.append("g").attr("class", "x left axis");
-            g.append("g").attr("class", "x right axis");
-            g.append("g").attr("class", "y labels");
+            svg.append("g").attr("class", "x left axis");
+            svg.append("g").attr("class", "x right axis");
+
 
             // Update the outer dimensions.
             svg .attr("width", w)
                 .attr("height", h);
+
+            svg.call(tip);
 
             // Update the inner dimensions.
             svg.selectAll("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             //**** BARS -- CENTER TO RIGHT ****
-            var bar_r = g.selectAll("bar.right").data(data)
-
             //stacked bars, center to right
-            var bar_r_stacked = g.selectAll("bar.right.stacked").data(rightData)
-
-            bar_r_stacked
+            g.selectAll("bar.right.stacked")
+                .data(rightData)
                 .enter()
                 .append("rect")
                 .attr("class","bar right stacked");
@@ -139,49 +140,77 @@ d3.custom.horizontalBar = function () {
                 .attr("height", yScale.rangeBand())
                 .attr("y", function(d) { return yScale(d.y); })
                 .attr("width", function(d) { return xRightScale(d.x1) - xRightScale(d.x0); })
-                .style("fill",function(d){ return rcolorScale(d.name); });
+                .style("fill",function(d){ return rcolorScale(d.name); })
+                .on("mouseover", tip.show)
+                .on("mouseout", tip.hide);
 
             //**** BARS -- CENTER TO LEFT ****
-            var bar_l = g.selectAll("bar.left").data(data)
-
             //stacked bars, center to right
-            var bar_l_stacked = g.selectAll("bar.left.stacked").data(leftData)
-
-            bar_l_stacked
+            g.selectAll("bar.left.stacked")
+                .data(leftData)
                 .enter()
                 .append("rect")
                 .attr("class","bar left stacked");
 
             svg.selectAll(".bar.left.stacked")
                 .data(leftData)
-                //.enter().append("rect")
                 .attr("x", function(d) { return xLeftScale(d.x1); })
                 .attr("height", yScale.rangeBand())
                 .attr("y", function(d) { return yScale(d.y); })
                 .attr("width", function(d) { return xLeftScale(d.x0) - xLeftScale(d.x1); })
-                .style("fill",function(d){ return lcolorScale(d.name); });
+                .style("fill",function(d){ return lcolorScale(d.name); })
+                .on("mouseover", tip.show)
+                .on("mouseout", tip.hide);
 
 
             //**** AXES ****
             // Update the x-axes.
             svg.select(".x.left.axis")
-                .attr("transform", "translate(0," + margin.top + ")")
                 .call(xLeftAxis);
 
             // Update the x-axes.
             svg.select(".x.right.axis")
-                .attr("transform", "translate(0," + margin.top + ")")
                 .call(xRightAxis);
 
-            var labels = g.selectAll("y.labels").data(data)
-            labels
+            g.selectAll("y.labels")
+                .data(data)
                 .enter() // return the selection of data with no elements yet bound
+                .append("g")
+                .attr("class", "y labels")
                 .append("text")
-                .text(function(d){ return monthFormat(yValue(d)); })
-                .attr("x",center)
-                .attr("y", function(d) { return yScale(yValue(d)); })
-                .attr("transform", "translate(0," + margin.top + ")")
-                .style("text-anchor", "middle");
+                .text(function(d){
+                    if(yValue(d).getMonth()==0){ return monthYrFormat(yValue(d)); }
+                    else{ return monthFormat(yValue(d)) }
+                })
+                .attr("x", center)
+                .attr("y", function(d) { return yScale(yValue(d)) + yScale.rangeBand(); })
+                //.attr("transform", "translate(0," + margin.top + ")")
+                .style("text-anchor", "middle")
+                .style("font-size","10px");
+
+            svg.selectAll("receipts.label")
+                .data([data])
+                .enter() // return the selection of data with no elements yet bound
+                .append("g")
+                .attr("class", "receipts label")
+                .append("text")
+                .text("Receipts")
+                .attr("x", margin.left)
+                .attr("y", 10)
+                .style("text-anchor", "start")
+                .style("font-size","10px");
+
+            svg.selectAll("disbursements.label")
+                .data([data])
+                .enter() // return the selection of data with no elements yet bound
+                .append("g")
+                .attr("class", "disbursements label")
+                .append("text")
+                .text("Disbursements")
+                .attr("x", width)
+                .attr("y", 10)
+                .style("text-anchor", "end")
+                .style("font-size","10px");
 
 
         });

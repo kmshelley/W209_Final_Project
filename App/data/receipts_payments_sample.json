@@ -24,7 +24,7 @@
           "receipts": 21206.11333
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -32,7 +32,7 @@
           "receipts": 47590.5664
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -61,7 +61,7 @@
           "receipts": 47878.52192
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -69,7 +69,7 @@
           "receipts": 35498.61317
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -98,7 +98,7 @@
           "receipts": 10704.9725
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -106,7 +106,7 @@
           "receipts": 38739.48394
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -135,7 +135,7 @@
           "receipts": 1117.001377
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -143,7 +143,7 @@
           "receipts": 11225.9829
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -172,7 +172,7 @@
           "receipts": 10080.82256
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -180,7 +180,7 @@
           "receipts": 7266.826198
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -209,7 +209,7 @@
           "receipts": 19558.55988
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -217,7 +217,7 @@
           "receipts": 109.2170448
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -246,7 +246,7 @@
           "receipts": 32.32656157
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -254,7 +254,7 @@
           "receipts": 2045.913538
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -283,7 +283,7 @@
           "receipts": 31071.23178
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -291,7 +291,7 @@
           "receipts": 50470.80827
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -320,7 +320,7 @@
           "receipts": 69887.18352
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -328,7 +328,7 @@
           "receipts": 83203.31901
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -357,7 +357,7 @@
           "receipts": 46788.37338
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -365,7 +365,81 @@
           "receipts": 16782.79561
         },
         "cte_id": "C00431171",
+        "name": "Outside"
+      }
+    ]
+  },
+    {
+    "date": "11/1/2011",
+    "data": [
+      {
+        "data": {
+          "expenditures": 746.0306671,
+          "receipts": 997.4261184
+        },
+        "cte_id": "C00431445",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 1712.922062,
+          "receipts": 10476.10227
+        },
+        "cte_id": "C00431445",
         "name": "Main PAC"
+      },
+      {
+        "data": {
+          "expenditures": 96659.3121,
+          "receipts": 46788.37338
+        },
+        "cte_id": "C00431171",
+        "name": "SuperPac"
+      },
+      {
+        "data": {
+          "expenditures": 94292.77976,
+          "receipts": 16782.79561
+        },
+        "cte_id": "C00431171",
+        "name": "Outside"
+      }
+    ]
+  },
+    {
+    "date": "12/1/2011",
+    "data": [
+      {
+        "data": {
+          "expenditures": 746.0306671,
+          "receipts": 997.4261184
+        },
+        "cte_id": "C00431445",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 1712.922062,
+          "receipts": 10476.10227
+        },
+        "cte_id": "C00431445",
+        "name": "Main PAC"
+      },
+      {
+        "data": {
+          "expenditures": 96659.3121,
+          "receipts": 46788.37338
+        },
+        "cte_id": "C00431171",
+        "name": "SuperPac"
+      },
+      {
+        "data": {
+          "expenditures": 94292.77976,
+          "receipts": 16782.79561
+        },
+        "cte_id": "C00431171",
+        "name": "Outside"
       }
     ]
   },
@@ -394,7 +468,7 @@
           "receipts": 21206.11333
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -402,7 +476,7 @@
           "receipts": 47590.5664
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -431,7 +505,7 @@
           "receipts": 47878.52192
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -439,7 +513,7 @@
           "receipts": 35498.61317
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -468,7 +542,7 @@
           "receipts": 10704.9725
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -476,7 +550,7 @@
           "receipts": 38739.48394
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -505,7 +579,7 @@
           "receipts": 1117.001377
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -513,7 +587,7 @@
           "receipts": 11225.9829
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -542,7 +616,7 @@
           "receipts": 10080.82256
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -550,7 +624,7 @@
           "receipts": 7266.826198
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -579,7 +653,7 @@
           "receipts": 19558.55988
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -587,7 +661,7 @@
           "receipts": 109.2170448
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -616,7 +690,7 @@
           "receipts": 32.32656157
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -624,7 +698,7 @@
           "receipts": 2045.913538
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -653,7 +727,7 @@
           "receipts": 31071.23178
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -661,7 +735,7 @@
           "receipts": 50470.80827
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -690,7 +764,7 @@
           "receipts": 69887.18352
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -698,7 +772,7 @@
           "receipts": 83203.31901
         },
         "cte_id": "C00431171",
-        "name": "Main PAC"
+        "name": "Outside"
       }
     ]
   },
@@ -727,7 +801,7 @@
           "receipts": 46788.37338
         },
         "cte_id": "C00431171",
-        "name": "Principal Comm"
+        "name": "SuperPac"
       },
       {
         "data": {
@@ -735,7 +809,81 @@
           "receipts": 16782.79561
         },
         "cte_id": "C00431171",
+        "name": "Outside"
+      }
+    ]
+  },
+  {
+    "date": "11/1/2012",
+    "data": [
+      {
+        "data": {
+          "expenditures": 746.0306671,
+          "receipts": 997.4261184
+        },
+        "cte_id": "C00431445",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 1712.922062,
+          "receipts": 10476.10227
+        },
+        "cte_id": "C00431445",
         "name": "Main PAC"
+      },
+      {
+        "data": {
+          "expenditures": 96659.3121,
+          "receipts": 46788.37338
+        },
+        "cte_id": "C00431171",
+        "name": "SuperPac"
+      },
+      {
+        "data": {
+          "expenditures": 94292.77976,
+          "receipts": 16782.79561
+        },
+        "cte_id": "C00431171",
+        "name": "Outside"
+      }
+    ]
+  },
+  {
+    "date": "12/1/2012",
+    "data": [
+      {
+        "data": {
+          "expenditures": 746.0306671,
+          "receipts": 997.4261184
+        },
+        "cte_id": "C00431445",
+        "name": "Principal Comm"
+      },
+      {
+        "data": {
+          "expenditures": 1712.922062,
+          "receipts": 10476.10227
+        },
+        "cte_id": "C00431445",
+        "name": "Main PAC"
+      },
+      {
+        "data": {
+          "expenditures": 96659.3121,
+          "receipts": 46788.37338
+        },
+        "cte_id": "C00431171",
+        "name": "SuperPac"
+      },
+      {
+        "data": {
+          "expenditures": 94292.77976,
+          "receipts": 16782.79561
+        },
+        "cte_id": "C00431171",
+        "name": "Outside"
       }
     ]
   }

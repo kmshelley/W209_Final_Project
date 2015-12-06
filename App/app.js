@@ -429,8 +429,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             link:
                 function(scope, element, attrs){
                     var parties = {
-                        Democrats: colorbrewer.Blues[7].slice(2),
-                        Republicans: colorbrewer.Reds[7].slice(2)
+                        Democrats: colorbrewer.Blues[5].slice(1),
+                        Republicans: colorbrewer.Reds[5].slice(1)
                     };
 
                     var chartEl = d3.select(element[0]);
@@ -440,7 +440,9 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                             var chart = d3.custom['horizontalBar']()
                                 .h(scope.height)
-                                .w(scope.width);
+                                .w(scope.width)
+                                .rcolors(parties[scope.candidate.party])
+                                .lcolors(parties[scope.candidate.party]);
 
                             vizAPI.get_receipts_expenditures_by_candidate()
                                 .success(function(json){
