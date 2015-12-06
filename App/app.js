@@ -37,10 +37,6 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             return $http.get('./data/candidates.json');
         };
 
-        factory.contributors_by_state = function() {
-            return $http.get('./data/sched_a_by_cand+state_2007-2015_to_pg500.json');
-        };
-
 		factory.contributors_by_size = function(committee_id, cycle) {
             return $http.get(BASE_URL+'/schedule_a/by_size/' + committee_id + '/' + cycle);
         };
@@ -69,9 +65,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             return $http.get(BASE_URL+'/schedule_a/by_employer/'+ committee_id +'/'+cycle);
         };
 
-		//Added by Katherine -- for loading horizontal +/- bar charts for receipts/disp by candidate
-		factory.get_receipts_dispersments_by_candidate = function(candidate_id, cycle) {
-            return $http.get('./data/payments_receipts_sample.json');
+        factory.get_receipts_expenditures_by_candidate = function(candidate_id, cycle) {
+            return $http.get('./data/receipts_payments_sample.json');
         };
 
         return factory;
@@ -420,7 +415,47 @@ angular.module('myApp', ['mgcrea.ngStrap'])
     }])
 
 
+    .directive('monthlyRevEx', ['vizAPI', function(vizAPI){
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                candidate: '=',
+                cycle: '=',
+                height: '=',
+                width: '='
+            },
 
+            link:
+                function(scope, element, attrs){
+                    var parties = {
+                        Democrats: colorbrewer.Blues[7].slice(2),
+                        Republicans: colorbrewer.Reds[7].slice(2)
+                    };
+
+                    var chartEl = d3.select(element[0]);
+
+                    scope.$watch('candidate', function() {
+                        if (Object.keys(scope.candidate).length){
+
+                            var chart = d3.custom['horizontalBar']()
+                                .h(scope.height)
+                                .w(scope.width);
+
+                            vizAPI.get_receipts_expenditures_by_candidate()
+                                .success(function(json){
+                                    chartEl.datum(json).call(chart);
+                                });
+                        }
+                    });
+                },
+
+            template:
+            '<div>' +
+                '<div class="chart"></div>' +
+            '</div>'
+        }
+    }])
 
 
 
