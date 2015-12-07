@@ -175,7 +175,7 @@ class OutsideTopContributors(Resource):
 
             query_results = db.pac_contributors.group(
                 ['NAME', 'ZIP_CODE', 'TRANSACTION_AMT_total'],
-                {'CMTE_ID': cmte_id, 'TRANSACTION_AMT_total': {'$gte': 5000},'month_year': {'$gte': start, '$lt': end}},
+                {'CMTE_ID': cmte_id, 'TRANSACTION_AMT_total': {'$gte': 0},'month_year': {'$gte': start, '$lt': end}},
                 {'list': []},
                 'function(obj, prev) {prev.list.push(obj)}'
             )
