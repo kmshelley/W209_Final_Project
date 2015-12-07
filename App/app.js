@@ -466,8 +466,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                                     chartEl.datum([json, scope.domainMax, scope.pos]).call(chart);
 
-                                    var formatValue = d3.format(".4s"),
-                                        formatCurrency = function(d) { return "$" + formatValue(d); };
+                                    var formatValue = d3.format("0,000"),
+                                        formatCurrency = function(d) { return "$" + formatValue(Math.round(d/10000)/100) + "M"; };
 
                                     scope.receipts = formatCurrency(d3.sum(json.map(function(d) {
                                         return d3.sum(d.data.map(function(d) { return d.data.receipts }))
