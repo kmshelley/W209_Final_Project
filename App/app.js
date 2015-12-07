@@ -462,8 +462,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                                     var chart = d3.custom['horizontalBar']()
                                         .h(scope.height)
                                         .w(scope.width)
-                                        .rcolors(colors)
-                                        .lcolors(colors);
+                                        .colors(colors);
 
                                     chartEl.datum([json, scope.domainMax, scope.pos]).call(chart);
 

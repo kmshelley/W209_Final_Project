@@ -22,10 +22,8 @@ d3.custom.horizontalBar = function () {
         xRightScale = d3.scale.linear(),
         yScale = d3.scale.ordinal(),
         xLeftAxis = d3.svg.axis().scale(xLeftScale).orient("top").tickSize(6, 0).ticks(4).tickFormat(formatCurrency),
-        xRightAxis = d3.svg.axis().scale(xRightScale).orient("top").tickSize(6, 0).ticks(4).tickFormat(formatCurrency),
-
-        rcolors = colorbrewer.Blues[5],
-        lcolors = colorbrewer.Reds[5];
+        xRightAxis = d3.svg.axis().scale(xRightScale).orient("top").tickSize(6, 0).ticks(4).tickFormat(formatCurrency);
+        colors = colorbrewer.Blues[5];
 
         var tip = d3.tip()
             .attr('class', 'd3-tip')
@@ -72,15 +70,9 @@ d3.custom.horizontalBar = function () {
             var rightData = [].concat.apply([], rightVals);
 
             //update color scales
-            var rfields = d3.map(rightData, function(d){return d.name;}).keys();
-            var lfields = d3.map(leftData, function(d){return d.name;}).keys();
-            rcolorScale = d3.scale.ordinal().range(rcolors).domain(rfields); //scale for right colors
-            lcolorScale = d3.scale.ordinal().range(lcolors).domain(lfields); //scale for left colors
+            var fields = d3.map(rightData.concat(leftData), function(d){return d.name;}).keys();
+            var color = d3.scale.ordinal().range(colors).domain(fields);
 
-			
-			/*legend
-				.scale(lcolorScale)
-				.shapeWidth(w/lfields.length - 10);// set the legend colors*/
             //********
 
             // place the y-axis in the middle of the chart
@@ -150,7 +142,7 @@ d3.custom.horizontalBar = function () {
                 .data(rightData)
                 .attr("y", function(d) { return yScale(d.y); })
                 .attr("width", function(d) { return xRightScale(d.x1) - xRightScale(d.x0); })
-                .style("fill",function(d){ return rcolorScale(d.name); })
+                .style("fill",function(d){ return color(d.name); })
                 .on("mouseover", tip.show)
                 .on("mouseout", tip.hide);
 
@@ -175,7 +167,7 @@ d3.custom.horizontalBar = function () {
                 .attr("y", function(d) { return yScale(d.y); })
                 .data(leftData)
                 .attr("width", function(d) { return xLeftScale(d.x0) - xLeftScale(d.x1); })
-                .style("fill",function(d){ return lcolorScale(d.name); })
+                .style("fill",function(d){ return color(d.name); })
                 .on("mouseover", tip.show)
                 .on("mouseout", tip.hide);
 
@@ -233,13 +225,39 @@ d3.custom.horizontalBar = function () {
                 .style("text-anchor", "end")
                 .style("font-size","10px");
 
-			/*svg.append("g")
-				.attr("class", "legend")
-				.attr("transform", "translate(0," + h + ")");
 
-			svg.select(".legend")
-				.call(legend);*/
-				
+            g.selectAll(".legend")
+                .data(color.domain().slice().reverse())
+                .exit()
+                .remove();
+
+            var legend = g.selectAll(".legend")
+                .data(color.domain().slice().reverse())
+                .enter()
+                .append("g")
+                .attr("class", "legend")
+                .attr("transform", function(d, i) { return "translate(0," + (5 + (i * 20)) + ")"; });
+
+            legend.append("rect")
+                .attr("x", width - 18)
+                .attr("width", 18)
+                .attr("height", 18);
+
+            g.selectAll(".legend rect")
+                .data(color.domain().slice().reverse())
+                .style("fill", color);
+
+            legend.append("text")
+                .attr("x", width - 24)
+                .attr("y", 9)
+                .attr("dy", ".35em");
+
+            g.selectAll(".legend text")
+                .data(color.domain().slice().reverse())
+                .style("text-anchor", "end")
+                .style("font-size","10px")
+                .text(function(d) { return d; });
+
         });
     }
 
@@ -255,18 +273,11 @@ d3.custom.horizontalBar = function () {
         return this;
     };
 
-    chart.rcolors = function(_x) {
-        if (!arguments.length) return rcolors;
-        rcolors = _x;
+    chart.colors = function(_x) {
+        if (!arguments.length) return colors;
+        colors = _x;
         return this;
     };
-
-    chart.lcolors = function(_x) {
-        if (!arguments.length) return lcolors;
-        lcolors = _x;
-        return this;
-    };
-
 
     return chart;
 };
