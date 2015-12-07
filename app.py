@@ -299,7 +299,7 @@ class MonthlyCommitteeTimeSeries(Resource):
 
 class ContributorsByEmployer(Resource):
     @staticmethod
-    def get_employers(cycle, cmte_id=None, topk=10, real_nom=False):
+    def get(cycle, cmte_id=None, topk=10, real_nom=False):
 
         start = datetime.datetime(int(cycle)-1 , 1, 1)
         end = datetime.datetime(int(cycle)+1, 1 , 1, )
