@@ -162,11 +162,11 @@ class OutsideTopContributors(Resource):
     @staticmethod
     def get(cmte_id, cycle, real_nom=False, topk=10):
         
-        cached = db.cached_pac_contributors.find({'cmte_id': cmte_id, 
-                                                  'cycle': cycle})
+        cached = list(db.cached_pac_contributors.find({'cmte_id': cmte_id, 
+                                                  'cycle': cycle}))
         
-        if cached:
-            return list(cached)[0]['data'][:topk]
+        if len(cached)>0:
+            return cached[0]['data'][:topk]
         
         else:
         
