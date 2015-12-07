@@ -20,6 +20,48 @@ d3.custom.segmentedBar = function () {
             .html(function(d) {
                 return "<strong>"+ categories[dCategory(d)] +": </strong><span style='color:#000000'>"+ formatCurrency(dVal(d))+"</span>";
             });
+    
+    var alpha = 0.5,
+        spacing = 10;
+
+    function relax(element) {
+	    again = false;
+	    element.each(function (d, i) {
+		a = this;
+		da = d3.select(a);
+		x1 = da.attr("x");
+		element.each(function (d, j) {
+		    b = this;
+		    // a & b are the same element and don't collide.
+		    if (a == b) return;
+		    db = d3.select(b);
+		    // a & b are on opposite sides of the chart and
+		    // don't collide
+		    if (da.attr("y") != db.attr("y")) return;
+		    // Now let's calculate the distance between
+		    // these elements. 
+		    x2 = db.attr("x");
+		    deltaX = x1 - x2;
+		    // If spacing is greater than our specified spacing,
+		    // they don't collide.
+		    if (Math.abs(deltaX) > spacing) return;
+		    
+		    // If the labels collide, we'll push each 
+		    // of the two labels up and down a little bit.
+		    again = true;
+		    sign = deltaX > 0 ? 1 : -1;
+		    adjust = sign * alpha;
+		    da.attr("x",+x1 + adjust);
+		    db.attr("x",+x2 - adjust);
+		});
+	    });
+	    // Adjust our line leaders here
+	    // so that they follow the labels. 
+	    if(again) {
+		setTimeout(relax,20)
+	    }
+	};
+
 
     function chart(selection) {
         selection.each(function(data) {
@@ -105,6 +147,8 @@ d3.custom.segmentedBar = function () {
                 })
                 .style("fill",function(d) { return colorScale(dCategory(d)); })
                 .style("font-size","10px");
+            
+            //relax(<*what do we pass here?*>);
 
         });
     }
