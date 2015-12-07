@@ -25,10 +25,17 @@ d3.custom.choropleth = function () {
         });
 
     function chart(selection) {
-        selection.each(function(data) {
+        selection.each(function(d) {
+            var data = d[0];
+            var domainMax = d[1];
+            var pos = d[2];
+
+            domainMax[pos] = d3.max(data,yValue);
+            var maxes = Object.keys(domainMax).map(function (key) { return domainMax[key]; });
+            var dMax = d3.max(maxes);
 
             projection.scale(scale).translate([width / 2, height / 3]);
-            quantize.domain([0,d3.max(data,yValue)/1]).range(colors);
+            quantize.domain([0,dMax]).range(colors);
             legend.scale(quantize);
 
             var svg = d3.select(this)

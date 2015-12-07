@@ -35,7 +35,10 @@ d3.custom.horizontalBar = function () {
         });
 
     function chart(selection) {
-        selection.each(function(data) {
+        selection.each(function(d) {
+            var data = d[0];
+            var domainMax = d[1];
+            var pos = d[2];
 
             var width = w - margin.left - margin.right,
                 height = h - margin.top - margin.bottom,
@@ -74,12 +77,16 @@ d3.custom.horizontalBar = function () {
 
             // place the y-axis in the middle of the chart
             //bars that grow from center to left
+            domainMax[pos] = d3.max(leftData.concat(rightData), xTotal);
+            var maxes = Object.keys(domainMax).map(function (key) { return domainMax[key]; });
+            var dMax = d3.max(maxes);
+
             xLeftScale
-                .domain([0,d3.max(leftData.concat(rightData), xTotal)])
+                .domain([0, dMax])
                 .range([center_left,0]);
             //bars that grow from center to right
             xRightScale
-                .domain([0,d3.max(leftData.concat(rightData), xTotal)])
+                .domain([0, dMax])
                 .range([center_right,width]);
 
             // Update the y-scale.

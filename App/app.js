@@ -8,7 +8,9 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             candidates: [{},{}],
             outsideGroups: [{},{}],
             mapData: null,
-            candidateJson: null
+            candidateJson: null,
+            monthlyRevEx: {'left': 0, 'right': 0},
+            choropleth: {'left': 0, 'right': 0}
         };
 
         // Initialize by getting json object for candidate
@@ -193,7 +195,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             template:
             '<div class="panel panel-default">'+
                 '<div class="panel-heading">'+
-                    '<h3 class="panel-title">Top {{topk}} Outside Groups Spending {{for_against}} {{candidate.short_name}}</h3>'+
+                    '<h3 class="panel-title">Top {{topk}} Outside Groups Spending {{for_against}} {{candidate.CAND_NAME}}</h3>'+
                 '</div>'+
                 '<div class="panel-body">'+
                     '<div class="btn-toolbar">'+
@@ -201,7 +203,6 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                         '<div class="btn-group btn-group-xs" ng-model="for_against" bs-radio-group>'+
                             '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="for">For</label>' +
                             '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="against">Against</label>' +
-                            '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="both">Both</label>' +
                         '</div>'+
 
                         '<div class="btn-group btn-group-xs" ng-model="topk" bs-radio-group>'+
@@ -209,12 +210,6 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                             '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="10">10</label>' +
                             '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="20">20</label>' +
                         '</div>'+
-
-                        '<div class="btn-group btn-group-xs" ng-model="real_nominal" bs-radio-group>'+
-                            '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="real">$ Real 2015</label>' +
-                            '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="nominal">$ Nominal</label>' +
-                        '</div>'+
-
                     '</div>'+
                 '</div>'+
 
@@ -272,7 +267,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             template:
             '<div class="panel panel-default">'+
                 '<div class="panel-heading">'+
-                    '<h3 class="panel-title">Top {{scope.topk}} Contributors to {{outsideGroup.committee_name}}</h3>'+
+                    '<h3 class="panel-title">Top {{topk}} Contributors to {{outsideGroup.committee_name}}</h3>'+
                 '</div>'+
                 '<div class="panel-body">'+
                     'Click on a row in the Outside Groups table above to select a group to view top contributors to.<br><br>'+
@@ -282,11 +277,6 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                             '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="5">Top 5</label>' +
                             '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="10">10</label>' +
                             '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="20">20</label>' +
-                        '</div>'+
-
-                        '<div class="btn-group btn-group-xs" ng-model="real_nominal" bs-radio-group>'+
-                            '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="real">$ Real 2015</label>' +
-                            '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="nominal">$ Nominal</label>' +
                         '</div>'+
                     '</div>'+
                 '</div>'+
@@ -318,7 +308,9 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                 cycle: '=',
                 height: '=',
                 width: '=',
-                scale: '='
+                scale: '=',
+                domainMax: "=",
+                pos: "="
             },
 
             link:
@@ -344,7 +336,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                     scope.state_fips = 'state';
 
-                    scope.$watchGroup(['candidate','state_fips'], function() {
+                    scope.$watchGroup(['candidate','state_fips', 'domainMax.left', 'domainMax.right'], function() {
                         if (Object.keys(scope.candidate).length){
 
                             var chart = d3.custom['choropleth']()
@@ -362,7 +354,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                                     data[scope.state_fips].forEach(function(loc){
                                         if (map.get(loc.id)){ loc.properties = map.get(loc.id); }
                                     });
-                                    chartEl.datum(data[scope.state_fips]).call(chart);
+                                    chartEl.datum([data[scope.state_fips], scope.domainMax, scope.pos]).call(chart);
                                 })
                         }
                     });
@@ -370,7 +362,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
             template:
             '<div>' +
-                'Contributions > $200 to {{candidate.committees[0].name}} by {{state_county}} <br><br>' +
+                'Contributions > $200 to {{candidate.Principal.name}} by {{state_county}} <br><br>' +
                 '<div class="btn-toolbar">'+
                     '<div class="btn-group btn-group-xs" ng-model="state_fips" bs-radio-group>'+
                         '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="state">State</label>' +
@@ -421,7 +413,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
             template:
             '<div>' +
-                'Contributions to {{candidate.committees[0].name}} by Size' +
+                'Contributions to {{candidate.Principal.name}} by Size' +
                 '<div class="chart"></div>' +
             '</div>'
         }
@@ -436,7 +428,9 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                 candidate: '=',
                 cycle: '=',
                 height: '=',
-                width: '='
+                width: '=',
+                domainMax: "=",
+                pos: "="
             },
 
             link:
@@ -452,21 +446,16 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                         return cols[party].reverse();
                     }
-                    var chartEl = d3.select(element[0]);
+                    var chartEl = d3.select(element[0]).selectAll(".chart");
 
-                    scope.$watch('candidate', function() {
-                        if (Object.keys(scope.candidate).length){
+                    scope.$watchGroup(['candidate', 'domainMax.left', 'domainMax.right'], function() {
+                        if (Object.keys(scope.candidate).length && scope.domainMax){
 
                             function supporting(d){ if (d){return d.id} }
                             var ctte_ids = [scope.candidate.Principal.id].concat(scope.candidate.Supporting.map(supporting)).toString()
 
-
-
-
                             vizAPI.get_receipts_disbursements_by_committees(ctte_ids, scope.cycle)
                                 .success(function(json){
-
-                                    //console.log(json);
 
                                     var colors = getColors(scope.candidate.CAND_PTY_AFFILIATION, json[0].data.length);
 
@@ -476,7 +465,19 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                                         .rcolors(colors)
                                         .lcolors(colors);
 
-                                    chartEl.datum(json).call(chart);
+                                    chartEl.datum([json, scope.domainMax, scope.pos]).call(chart);
+
+                                    var formatValue = d3.format(".4s"),
+                                        formatCurrency = function(d) { return "$" + formatValue(d); };
+
+                                    scope.receipts = formatCurrency(d3.sum(json.map(function(d) {
+                                        return d3.sum(d.data.map(function(d) { return d.data.receipts }))
+                                    })));
+                                    scope.expenditures = formatCurrency(d3.sum(json.map(function(d) {
+                                        return d3.sum(d.data.map(function(d) { return d.data.expenditures }))
+                                    })));
+
+
                                 });
                         }
                     });
@@ -484,7 +485,13 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
             template:
             '<div>' +
-                '<div class="chart"></div>' +
+            '<div style="padding: 15px 0;"> Monthy Fundraising and Spending by {{candidate.CAND_NAME}}\'s Principal Committee and Affiliated Groups</div>' +
+            '<div class="chart" ></div>' +
+                '<div style="padding: 15px 25px; font-size: 16px">' +
+                    '<span>Total Raised: <strong>{{receipts}}</strong></span>' +
+                    '<span class="pull-right">Total Spent: <strong>{{expenditures}}</strong></span>' +
+                '</div>' +
+
             '</div>'
         }
     }])
