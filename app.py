@@ -391,16 +391,16 @@ api.add_resource(ScheduleAByEmployer, '/schedule_a/by_employer/<string:committee
 api.add_resource(TopPACs, '/top_pacs/<string:candidate_id>/<int:cycle>/<string:for_against>/<int:topk>/<string:real_nom>/')
 
 api.add_resource(TopContributorsToPACs,
-                 '/top_pacs/<string:cmte_id>/<int:cycle>/<int:topk>/<string:real_nom>/')
+                 '/top_pacs/<string:cmte_id>/<int:cycle>/<string:topk>/<string:real_nom>/')
 
 api.add_resource(ContributorsByGeography,
-                 '/contributors/by_geo/<string:cmte_id>/<int:cycle>/<string:aggregation_level>/')
+                 '/contributors/by_geo/<string:cmte_id>/<string:cycle>/<string:aggregation_level>/')
 
 api.add_resource(MonthlyCommitteeTimeSeries,
-                 '/top_pacs/<string:cmte_id>/<int:cycle>/<string:real_nom>/')
+                 '/top_pacs/<string:cmte_id>/<string:cycle>/<string:real_nom>/')
 
 api.add_resource(ContributorsByEmployer,
-                 '/contributors/by_employer/<string:cmte_id>/<int:cycle>/<int:topk>/<string:real_nom>/')
+                 '/contributors/by_employer/<string:cmte_id>/<string:cycle>/<int:topk>/<string:real_nom>/')
                  
 api.add_resource(CommiteeMonthlyFinances, '/com_fins/<string:cmte_ids>/<int:cycle>/')
                  
