@@ -83,7 +83,7 @@
 						the amount and source of campaign finances. The FEC is responsible for enforcing federal campaign finance laws, and candidates and 
 						fundraising committees are required to report all receipts and expenditures. However, with the various laws regulating the frequency, source, 
 						and amount of funds different groups can contribute, the real picture of just <em>how much</em> money is spent becomes easily obscured. 
-						With this visualization we seek to better understand both the sources of federal campaign finance, and their impact.</p>
+						With this visualization we seek to better understand both the sources of federal campaign funding, and their impact.</p>
 							
                         <div class="spacer"></div>
 
@@ -184,7 +184,7 @@
 
                     <div class="col-xs-12">
 						<h4 id="monthly-receipts">Monthly Fundraising and Spending</h4>
-						<p>These charts show total monthly fundraising and spending by candidate committee, primary single-candidate Super PAC, and representing
+						<p>These charts show total monthly fundraising and spending by candidate committee, the candidate's primary Super PAC, and
 						National Committee.</p>
 					</div>
                     <div class="col-xs-6">
@@ -194,7 +194,11 @@
                         <monthly-rev-ex candidate="model.candidates[1]" cycle="model.cycle" height="300" width="460" domain-max="model.monthlyRevEx" pos="'right'"></monthly-rev-ex>
                     </div>
 
-                    <div class="col-xs-12"><h4 id="contributions-by-size">Contributions by Size</h4></div>
+                    <div class="col-xs-12">
+						<h4 id="contributions-by-size">Contributions by Size</h4>
+						<p>These charts show all individual contributions given to the candidate committee 
+						broken down by the size of contribution.</p>
+					</div>
                     <div class="col-xs-6">
                         <contributions-by-size candidate="model.candidates[0]" cycle="model.cycle" height="100" width="460"></contributions-by-size>
                     </div>
@@ -202,7 +206,11 @@
                         <contributions-by-size candidate="model.candidates[1]" cycle="model.cycle" height="100" width="460"></contributions-by-size>
                     </div>
 
-                    <div class="col-xs-12"><h4 id="contributions-by-state-county">Individual Contributions > $200 by State or County</h4></div>
+                    <div class="col-xs-12">
+						<h4 id="contributions-by-state-county">Individual Contributions > $200 by State or County</h4>
+						<p>These maps show all contributions greater than $200 reported to the FEC by the candidate committees. 
+						Use the buttons to toggle between state and county level data.</p>
+					</div>
                     <div class="col-xs-6">
                         <choropleth candidate="model.candidates[0]" cycle="model.cycle" height="460" width="460" scale="650" domain-max="model.choropleth" pos="'left'"></choropleth>
                     </div>

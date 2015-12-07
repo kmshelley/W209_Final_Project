@@ -34,6 +34,10 @@ d3.custom.horizontalBar = function () {
                 return "<strong>"+ monthYrFormat(d.y)+": </strong><span style='color:#000000'>"+ d.name+" - " + formatCurrency (d.x1)+"</span>";
         });
 
+		/*var legend = d3.legend.color()
+			.useClass(false)
+			.orient("horizontal");*/
+		
     function chart(selection) {
         selection.each(function(d) {
             var data = d[0];
@@ -73,6 +77,10 @@ d3.custom.horizontalBar = function () {
             rcolorScale = d3.scale.ordinal().range(rcolors).domain(rfields); //scale for right colors
             lcolorScale = d3.scale.ordinal().range(lcolors).domain(lfields); //scale for left colors
 
+			
+			/*legend
+				.scale(lcolorScale)
+				.shapeWidth(w/lfields.length - 10);// set the legend colors*/
             //********
 
             // place the y-axis in the middle of the chart
@@ -106,7 +114,7 @@ d3.custom.horizontalBar = function () {
                 .append("g");
 
             //add the axes
-            gEnter.append("g").attr("class", "x left axis");
+			gEnter.append("g").attr("class", "x left axis");
             gEnter.append("g").attr("class", "x right axis");
 
 
@@ -225,7 +233,13 @@ d3.custom.horizontalBar = function () {
                 .style("text-anchor", "end")
                 .style("font-size","10px");
 
+			/*svg.append("g")
+				.attr("class", "legend")
+				.attr("transform", "translate(0," + h + ")");
 
+			svg.select(".legend")
+				.call(legend);*/
+				
         });
     }
 
