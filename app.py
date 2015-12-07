@@ -212,44 +212,52 @@ class TopContributorsToPACs(Resource):
 
 class ContributorsByGeography(Resource):
     @staticmethod
-    def get(cycle, cmte_id=None, aggregation_level='fips'):
-    
-        geo_level = ['COUNTY', 'county','state']
-        if aggregation_level == 'zip_code':
-            geo_level = ['ZIP_CODE', 'county','state']
-        elif aggregation_level == 'state':
-            geo_level = ['state']
+    def get(cycle, cmte_id, aggregation_level='fips'):
         
-        start = datetime.datetime(int(cycle)-1, 1, 1)
-        end = datetime.datetime(int(cycle)+1, 1, 1)
-
-        condition = {'month_year': {'$gte': start, '$lt': end}}
+        cached = db.cached_pac_geography.find_one({'cmte_id': cmte_id, 
+                                             'cycle': cycle, 
+                                             'aggregation_level':aggregation_level})
         
-        if cmte_id:
-            condition['CMTE_ID'] = cmte_id
-            
-            
-        query_results = db.pac_contributors.group(                                       
-                               geo_level,
-                               condition,
-                               { "total" : 0 },
-                               'function(curr, result) {result.total += curr.TRANSACTION_AMT}')
-                                    
-
-        response = []
-        for qr in query_results:
-
-            res = {    
-                        "level": geo_level[0],
-                        "cmte_id": condition.get('CMTE_ID'),
-                        "location_id": str(int(qr.get(geo_level[0]))) if geo_level[0] in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level[0]),
-                        "name": qr.get(geo_level[1]) if geo_level[0] in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level[0]),
-                        "state": qr.get(geo_level[-1]), 
-                        "amount": qr.get('total'),
-                    }
-            response.append(res)
+        if cached:
+            return cached['data']
         
-        return response
+        else:
+            geo_level = ['COUNTY', 'county','state']
+            if aggregation_level == 'zip_code':
+                geo_level = ['ZIP_CODE', 'county','state']
+            elif aggregation_level == 'state':
+                geo_level = ['state']
+
+            start = datetime.datetime(int(cycle)-1, 1, 1)
+            end = datetime.datetime(int(cycle)+1, 1, 1)
+
+            condition = {'month_year': {'$gte': start, '$lt': end}}
+
+            if cmte_id:
+                condition['CMTE_ID'] = cmte_id
+
+
+            query_results = db.pac_contributors.group(                                       
+                                   geo_level,
+                                   condition,
+                                   { "total" : 0 },
+                                   'function(curr, result) {result.total += curr.TRANSACTION_AMT}')
+
+
+            response = []
+            for qr in query_results:
+
+                res = {    
+                            "level": geo_level[0],
+                            "cmte_id": condition.get('CMTE_ID'),
+                            "location_id": str(int(qr.get(geo_level[0]))) if geo_level[0] in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level[0]),
+                            "name": qr.get(geo_level[1]) if geo_level[0] in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level[0]),
+                            "state": qr.get(geo_level[-1]), 
+                            "amount": qr.get('total'),
+                        }
+                response.append(res)
+
+            return response
 
 
 class MonthlyCommitteeTimeSeries(Resource):
