@@ -107,19 +107,6 @@ class ScheduleAByEmployer(Resource):
         return data
 
 
-class MonthlyTotals(Resource):
-    @staticmethod
-    def get(committee_id, cycle, real_nom):
-        return {'description': 'this endpoint will return the %s monthly total receipt and disbursement data'
-                               'for committee %s in the %d cycle' % (real_nom, committee_id, cycle),
-                'return_format': {
-                    'monthly_raised': [{'date %Y-%m-%d': 'amount'}, {'date %Y-%m-%d': 'amount'}],
-                    'monthly_spent': [{'date %Y-%m-%d': 'amount'}, {'date %Y-%m-%d': 'amount'}],
-                    'total_raised': 'float total raised in millions across cycle',
-                    'total_spent': 'float total spent in millions across cycle'
-                }}
-
-
 class TopPACs(Resource):
     @staticmethod
     def get(candidate_id, cycle, for_against, real_nom=False, topk=10):
@@ -351,11 +338,8 @@ class CommiteeMonthlyFinances(Resource):
     @staticmethod
     def get(cmte_ids, cycle):
 
-        ids = cmte_ids.split("-")
-        start = datetime.datetime(int(cycle)-1, 1, 1)
-        end = datetime.datetime(int(cycle)+1, 1, 1)
-
-        query_results = db.cmte_finances.find({'cmte_id': {"$in" : ids}, 'cycle': cycle})
+        ids = cmte_ids.split(",")
+        query_results = db.cmte_finances.find({'cmte_id': {"$in": ids}, 'cycle': cycle})
 
         response = []
         query_results = list(query_results)
@@ -385,8 +369,6 @@ api.add_resource(ScheduleAByState, '/schedule_a/by_state/<string:committee_id>/<
 api.add_resource(ScheduleAByZip, '/schedule_a/by_zip/<string:committee_id>/<int:cycle>/')
 api.add_resource(ScheduleAByEmployer, '/schedule_a/by_employer/<string:committee_id>/<int:cycle>/')
 
-api.add_resource(MonthlyTotals, '/monthly_totals/<string:committee_id>/<int:cycle>/<string:real_nom>/')
-
 # FIX PARAMS OF ALL 3 API's
 api.add_resource(TopPACs, '/top_pacs/<string:candidate_id>/<int:cycle>/<string:for_against>/<int:topk>/<string:real_nom>/')
 
@@ -402,8 +384,7 @@ api.add_resource(MonthlyCommitteeTimeSeries,
 api.add_resource(ContributorsByEmployer,
                  '/contributors/by_employer/<string:cmte_id>/<int:cycle>/<int:topk>/<string:real_nom>/')
                  
-api.add_resource(CommiteeMonthlyFinances,
-                 '/com_fins/<string:cmte_id>/<int:cycle>/')
+api.add_resource(CommiteeMonthlyFinances, '/com_fins/<string:cmte_ids>/<int:cycle>/')
                  
 
 # MONGO_DB
