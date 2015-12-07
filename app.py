@@ -161,54 +161,61 @@ class TopPACs(Resource):
 class TopContributorsToPACs(Resource):
     @staticmethod
     def get(cmte_id, cycle, real_nom=False, topk=10):
+        
+        cached = db.cached_pac_contributors.find({'cmte_id': cmte_id, 
+                                                  'cycle': cycle})
+        
+        if cached:
+            return list(cached)[0]['data'][:topk]
+        
+        else:
+        
+            start = datetime.datetime(int(cycle)-1, 1, 1)
+            end = datetime.datetime(int(cycle)+1, 1, 1)
 
-        start = datetime.datetime(int(cycle)-1, 1, 1)
-        end = datetime.datetime(int(cycle)+1, 1, 1)
+            query_results = db.pac_contributors.group(
+                ['NAME', 'ZIP_CODE', 'TRANSACTION_AMT_total'],
+                {'CMTE_ID': cmte_id, 'TRANSACTION_AMT_total': {'$gte': 5000},'month_year': {'$gte': start, '$lt': end}},
+                {'list': []},
+                'function(obj, prev) {prev.list.push(obj)}'
+            )
 
-        query_results = db.pac_contributors.group(
-            ['NAME', 'ZIP_CODE', 'TRANSACTION_AMT_total'],
-            {'CMTE_ID': cmte_id, 'month_year': {'$gte': start, '$lt': end}},
-            {'list': []},
-            'function(obj, prev) {prev.list.push(obj)}'
-        )
+            query_results = sorted(query_results, key=lambda k: k['TRANSACTION_AMT_total'] , reverse=True)[:topk]
 
-        query_results = sorted(query_results, key=lambda k: k['TRANSACTION_AMT_total'] , reverse=True)[:topk]
+            response = []
+            for qr in query_results:
 
-        response = []
-        for qr in query_results:
+                res = {    
+                            "contributor_zip": qr.get('ZIP_CODE'),
+                            "city": qr['list'][0].get('CITY'),
+                            "state": qr['list'][0].get('STATE'),
+                            "fips_county": qr['list'][0].get('COUNTY'),
+                            "county_name": qr['list'][0].get('county'),
+                            "total_spend": qr.get('TRANSACTION_AMT_total'),
+                            "contributor_name": qr.get('NAME'),
+                            "employer": qr['list'][0].get('EMPLOYER'),
+                            "occupation": qr['list'][0].get('OCCUPATION'),
+                            "committee_name": qr['list'][0].get('Committee Name'),
+                            "pac_committee_id": qr['list'][0].get('CMTE_ID'),
+                            "monthly": []}
 
-            res = {    
-                        "contributor_zip": qr.get('ZIP_CODE'),
-                        "city": qr['list'][0].get('CITY'),
-                        "state": qr['list'][0].get('STATE'),
-                        "fips_county": qr['list'][0].get('COUNTY'),
-                        "county_name": qr['list'][0].get('county'),
-                        "total_spend": qr.get('TRANSACTION_AMT_total'),
-                        "contributor_name": qr.get('NAME'),
-                        "employer": qr['list'][0].get('EMPLOYER'),
-                        "occupation": qr['list'][0].get('OCCUPATION'),
-                        "committee_name": qr['list'][0].get('Committee Name'),
-                        "pac_committee_id": qr['list'][0].get('CMTE_ID'),
-                        "monthly": []}
+                set_all_months = set([datetime.datetime.strftime(start+relativedelta(months=m), '%Y-%m-%d') for m in range(24)])
+                months_added = []
 
-            set_all_months = set([datetime.datetime.strftime(start+relativedelta(months=m), '%Y-%m-%d') for m in range(24)])
-            months_added = []
+                for month in qr['list']:
+                    strdate = datetime.datetime.strftime(month.get('month_year'),'%Y-%m-%d')
+                    res['monthly'].append({'date': strdate, 'value': month.get('TRANSACTION_AMT')})
+                    months_added.append(strdate)
 
-            for month in qr['list']:
-                strdate = datetime.datetime.strftime(month.get('month_year'),'%Y-%m-%d')
-                res['monthly'].append({'date': strdate, 'value': month.get('TRANSACTION_AMT')})
-                months_added.append(strdate)
+                months_left = set_all_months.difference(months_added)
 
-            months_left = set_all_months.difference(months_added)
+                for month in months_left:
+                    res['monthly'].append({'date': month, 'value': 0})
 
-            for month in months_left:
-                res['monthly'].append({'date': month, 'value': 0})
+                res['monthly'] = sorted(res['monthly'], key=lambda k: k['date'])
+                response.append(res)
 
-            res['monthly'] = sorted(res['monthly'], key=lambda k: k['date'])
-            response.append(res)
-
-        return response
-
+            return response
 
 class ContributorsByGeography(Resource):
     @staticmethod
@@ -384,16 +391,16 @@ api.add_resource(ScheduleAByEmployer, '/schedule_a/by_employer/<string:committee
 api.add_resource(TopPACs, '/top_pacs/<string:candidate_id>/<int:cycle>/<string:for_against>/<int:topk>/<string:real_nom>/')
 
 api.add_resource(TopContributorsToPACs,
-                 '/top_pacs/<string:cmte_id>/<int:cycle>/<int:topk>/<string:real_nom>/')
+                 '/top_pacs/<string:cmte_id>/<int:cycle>/<string:topk>/<string:real_nom>/')
 
 api.add_resource(ContributorsByGeography,
-                 '/contributors/by_geo/<string:cmte_id>/<int:cycle>/<string:aggregation_level>/')
+                 '/contributors/by_geo/<string:cmte_id>/<string:cycle>/<string:aggregation_level>/')
 
 api.add_resource(MonthlyCommitteeTimeSeries,
-                 '/top_pacs/<string:cmte_id>/<int:cycle>/<string:real_nom>/')
+                 '/top_pacs/<string:cmte_id>/<string:cycle>/<string:real_nom>/')
 
 api.add_resource(ContributorsByEmployer,
-                 '/contributors/by_employer/<string:cmte_id>/<int:cycle>/<int:topk>/<string:real_nom>/')
+                 '/contributors/by_employer/<string:cmte_id>/<string:cycle>/<int:topk>/<string:real_nom>/')
                  
 api.add_resource(CommiteeMonthlyFinances, '/com_fins/<string:cmte_ids>/<int:cycle>/')
                  
