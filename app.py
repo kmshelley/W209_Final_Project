@@ -345,7 +345,40 @@ class ContributorsByEmployer(Resource):
             response["return_format"].append(res)
 
         return response
+        
+        
+class CommiteeMonthlyFinances(Resource):
+    @staticmethod
+    def get(cmte_ids, cycle):
 
+        ids = cmte_ids.split("-")
+        start = datetime.datetime(int(cycle)-1, 1, 1)
+        end = datetime.datetime(int(cycle)+1, 1, 1)
+
+        query_results = db.cmte_finances.find({'cmte_id': {"$in" : ids}, 'cycle': cycle})
+
+        response = []
+        query_results = list(query_results)
+        
+        if len(query_results) > 0:
+            all_months = query_results[0]['date']
+
+            for idx, month in enumerate(all_months):
+                doc = {'date': month, 'data': []}
+
+                for cid in query_results:
+                    cdoc = {'cte_id': cid.get('name','nan'), 
+                            'name': cid.get('cmte_name','nan'), 
+                            'data': {"receipts": cid['receipts'][idx], 
+                                     "expenditures": cid['expenditures'][idx]}
+                            }
+
+                    doc['data'].append(cdoc)
+
+                response.append(doc)
+        
+        return response
+        
 # API ROUTING
 api.add_resource(ScheduleABySize, '/schedule_a/by_size/<string:committee_id>/<int:cycle>/')
 api.add_resource(ScheduleAByState, '/schedule_a/by_state/<string:committee_id>/<int:cycle>/')
@@ -368,6 +401,10 @@ api.add_resource(MonthlyCommitteeTimeSeries,
 
 api.add_resource(ContributorsByEmployer,
                  '/contributors/by_employer/<string:cmte_id>/<int:cycle>/<int:topk>/<string:real_nom>/')
+                 
+api.add_resource(CommiteeMonthlyFinances,
+                 '/com_fins/<string:cmte_id>/<int:cycle>/')
+                 
 
 # MONGO_DB
 host = "data.enalytica.com"
