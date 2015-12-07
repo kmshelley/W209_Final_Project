@@ -107,7 +107,7 @@ class ScheduleAByEmployer(Resource):
         return data
 
 
-class TopPACs(Resource):
+class OutsideForAgainst(Resource):
     @staticmethod
     def get(candidate_id, cycle, for_against, real_nom=False, topk=10):
         convert_for_against = {'for': '24E', 'against': '24A'}
@@ -158,7 +158,7 @@ class TopPACs(Resource):
         return response
 
 
-class TopContributorsToPACs(Resource):
+class OutsideTopContributors(Resource):
     @staticmethod
     def get(cmte_id, cycle, real_nom=False, topk=10):
         
@@ -267,7 +267,7 @@ class ContributorsByGeography(Resource):
             return response
 
 
-class MonthlyCommitteeTimeSeries(Resource):
+class OutsideMonthlyTimeSeries(Resource):
     @staticmethod
     def get(cycle, cmte_id=None, real_nom=False):
 
@@ -387,22 +387,26 @@ api.add_resource(ScheduleAByState, '/schedule_a/by_state/<string:committee_id>/<
 api.add_resource(ScheduleAByZip, '/schedule_a/by_zip/<string:committee_id>/<int:cycle>/')
 api.add_resource(ScheduleAByEmployer, '/schedule_a/by_employer/<string:committee_id>/<int:cycle>/')
 
-# FIX PARAMS OF ALL 3 API's
-api.add_resource(TopPACs, '/top_pacs/<string:candidate_id>/<string:cycle>/<string:for_against>/<int:topk>/<string:real_nom>/')
 
-api.add_resource(TopContributorsToPACs,
-                 '/top_pacs/<string:cmte_id>/<string:cycle>/<int:topk>/<string:real_nom>/')
+
+
+
+
+api.add_resource(OutsideForAgainst, '/outside/for-against/<string:candidate_id>/<string:cycle>/<string:for_against>/<int:topk>/<string:real_nom>/')
+
+api.add_resource(OutsideTopContributors,
+                 '/outside/top-contributors/<string:cmte_id>/<string:cycle>/<int:topk>/<string:real_nom>/')
 
 api.add_resource(ContributorsByGeography,
                  '/contributors/by_geo/<string:cmte_id>/<string:cycle>/<string:aggregation_level>/')
 
-api.add_resource(MonthlyCommitteeTimeSeries,
-                 '/top_pacs/<string:cmte_id>/<string:cycle>/<string:real_nom>/')
+api.add_resource(OutsideMonthlyTimeSeries,
+                 '/outside/timeseries/<string:cmte_id>/<string:cycle>/<string:real_nom>/')
 
 api.add_resource(ContributorsByEmployer,
                  '/contributors/by_employer/<string:cmte_id>/<string:cycle>/<int:topk>/<string:real_nom>/')
                  
-api.add_resource(CommiteeMonthlyFinances, '/com_fins/<string:cmte_ids>/<int:cycle>/')
+api.add_resource(CommiteeMonthlyFinances, '/com_fins/<string:cmte_ids>/<string:cycle>/')
                  
 
 # MONGO_DB
