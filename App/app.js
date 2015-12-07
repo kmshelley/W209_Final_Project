@@ -64,8 +64,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             return $http.get(BASE_URL+'/schedule_a/by_employer/'+ committee_id +'/'+cycle);
         };
 
-        factory.get_receipts_expenditures_by_candidate = function(candidate_id, cycle) {
-            return $http.get('./data/receipts_payments_sample.json');
+        factory.get_receipts_disbursements_by_committees = function(committee_ids, cycle) {
+            return $http.get(BASE_URL+'/com_fins/'+ committee_ids +'/'+cycle);
         };
 
         return factory;
@@ -447,13 +447,16 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                     scope.$watch('candidate', function() {
                         if (Object.keys(scope.candidate).length){
 
+                            function supporting(d){ if (d){return d.id} }
+                            var ctte_ids = [scope.candidate.Principal.id].concat(scope.candidate.Supporting.map(supporting)).reverse().toString()
+
                             var chart = d3.custom['horizontalBar']()
                                 .h(scope.height)
                                 .w(scope.width)
                                 .rcolors(parties[scope.candidate.CAND_PTY_AFFILIATION])
                                 .lcolors(parties[scope.candidate.CAND_PTY_AFFILIATION]);
 
-                            vizAPI.get_receipts_expenditures_by_candidate()
+                            vizAPI.get_receipts_disbursements_by_committees(ctte_ids, scope.cycle)
                                 .success(function(json){
                                     chartEl.datum(json).call(chart);
                                 });

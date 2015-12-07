@@ -339,10 +339,14 @@ class CommiteeMonthlyFinances(Resource):
     def get(cmte_ids, cycle):
 
         ids = cmte_ids.split(",")
-        query_results = db.cmte_finances.find({'cmte_id': {"$in": ids}, 'cycle': cycle})
+
+        print {'cmte_id': {"$in": ids}, 'cycle': cycle}
+        query_results = db.cmte_finances.find({'cmte_id': {"$in": ids}, 'cycle': str(cycle)})
 
         response = []
         query_results = list(query_results)
+
+        print query_results
         
         if len(query_results) > 0:
             all_months = query_results[0]['date']
