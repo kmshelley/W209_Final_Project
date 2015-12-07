@@ -44,12 +44,12 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             return $http.get(BASE_URL+'/contributors/by_geo/'+ committee_id +'/'+cycle +'/'+ geo_agg+'/');
         };
 
-        factory.topPACS = function(candidate_id, cycle, for_against, topk, real_nom) {
-            return $http.get(BASE_URL+'/top_pacs/'+ candidate_id +'/'+cycle +'/'+ for_against+'/'+topk +'/'+real_nom +'/');
+        factory.outsideForAgainst = function(candidate_id, cycle, for_against, topk, real_nom) {
+            return $http.get(BASE_URL+'/outside/for-against/'+ candidate_id +'/'+cycle +'/'+ for_against+'/'+topk +'/'+real_nom +'/');
         };
 
-        factory.topContributorsToPACs = function(committee_id, cycle, topk, real_nom) {
-            return $http.get(BASE_URL+'/top_pacs/'+ committee_id +'/'+cycle +'/'+topk +'/'+real_nom +'/');
+        factory.outsideTopContributors = function(committee_id, cycle, topk, real_nom) {
+            return $http.get(BASE_URL+'/outside/top-contributors/'+ committee_id +'/'+cycle +'/'+topk +'/'+real_nom +'/');
         };
 
         factory.get_county_json = function() {
@@ -171,7 +171,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                     scope.real_nominal = 'nominal';
                     scope.$watchGroup(['candidate','for_against', 'topk'], function() {
                         if (Object.keys(scope.candidate).length){
-                            vizAPI.topPACS(scope.candidate.CAND_ID, scope.cycle, scope.for_against,
+                            vizAPI.outsideForAgainst(scope.candidate.CAND_ID, scope.cycle, scope.for_against,
                                 scope.topk, scope.real_nominal)
                                 .success(function(json){
                                     scope.topGroups = json;
@@ -255,7 +255,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                     scope.real_nominal = 'nominal';
                     scope.$watchGroup(['outsideGroup','topk'], function() {
                         if (Object.keys(scope.outsideGroup).length){
-                            vizAPI.topContributorsToPACs(scope.outsideGroup.pac_committee_id, scope.cycle, scope.topk, scope.real_nominal)
+                            vizAPI.outsideTopContributors(scope.outsideGroup.pac_committee_id, scope.cycle, scope.topk, scope.real_nominal)
                                 .success(function(json){
                                     scope.outsideGroup.contributors = json;
                                     scope.outsideGroup.contributors.forEach(function (d) {
