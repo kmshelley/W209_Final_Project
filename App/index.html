@@ -29,7 +29,7 @@
 
                 <p>The purpose of this visualization is to walk the viewer through the complicated
                     world of Presidential campaign financing in the United States.
-                    All data in this visualization comes from the Federal Election Commision (www.fec.gov).
+                    All data in this visualization comes from the <a href=www.fec.gov>Federal Election Commision</a> (FEC).
                     Each section delves into a different area of campaign financing, with interactive features that
                     allow for filtering and summarizing in order to enhance understanding.</p>
 
@@ -78,6 +78,13 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <h2>The View Over Time</h2>
+						
+						<p>It's no secret in the United States that it takes a lot of money to win an election. What is not well understood, is 
+						the amount and source of campaign finances. The FEC is responsible for enforcing federal campaign finance laws, and candidates and 
+						fundraising committees are required to report all receipts and expenditures. However, with the various laws regulating the frequency, source, 
+						and amount of funds different groups can contribute, the real picture of just <em>how much</em> money is spent becomes easily obscured. 
+						With this visualization we seek to better understand both the sources of federal campaign finance, and their impact.</p>
+							
                         <div class="spacer"></div>
 
                         <div class="well well-lg" style="padding: 150px 20px;">
@@ -144,10 +151,42 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <h2>Candidate Campaign Committees</h2>
+						
+						<p>The funds that finance American elections come from various groups and special interests, 
+						and each kind of organization follows different laws enforced by the FEC.</p>
+						
+						<p>A <b>candidate committee</b> is a group organized by a particular candidate to support their nomination 
+						and election to office. Candidate committees are limited by federal law to a maximum of $2,000 to other 
+						candidate committees per election, and $5,000 to PACs per year. Candidate committees are allowed unlimited 
+						transfers of funds to National Party Committees.</p>
+						
+						<p>A <b>National Party Committee</b> such as the Democratic National Committee (DNC) or Republican National Committee (RNC), 
+						is the official fundraising organization of a political party. Registered with the FEC, National Party Committees are 
+						limited to contributions of $5,000 per election to a candidate committee, and $5,000 annually to other committees.<p>
+						
+						<p>A <b>Political Action Committee</b>, or PAC, is a group formed for the purpose of raising and spending money to support or 
+						oppose the election of candidates. Dating back to 1944, PACs can legally contribute money directly to a candidate's 
+						committee, national party committee, or other PACs. Federal law limits the contirbution of PACs to $5,000 to a candidate 
+						committee per election, $5,000 annually to other PACs, and $15,000 annually to a party committee.</p>
+						
+						<p>A <b>Super PAC</b> is a special kind of PAC that makes no direct contributions to candidates or committees, instead financing 
+						advertising and other campaign materials independently. Because they are not directly related to a candidate or 
+						political committee, Super PACs are not required to follow FEC restrictions on the amount of money raised or spent for the purposes of 
+						an election. Legalized by the Supreme Court in 2010, Super PACs and their unlimited funds have changed the playing field of 
+						American politics. Super PACs have become a popular vehicle for outside fundraising; while not allowed to officially support a 
+						particular candidate, so-called single-candidate Super PACs focus almost exclusively on the election of a single individual.</p>
+						
+						<p>The following charts show the breakdown of candidates' fundraising totals across the last three presidential elections, 
+						and how different types of fundraising committees, sizes of contributions, and locations of donors all play a role in making or breaking 
+						a candidate.</p>
                         <div class="spacer"></div>
                     </div>
 
-                    <div class="col-xs-12"><h4 id="monthly-receipts">Monthly Fundraising and Spending</h4></div>
+                    <div class="col-xs-12">
+						<h4 id="monthly-receipts">Monthly Fundraising and Spending</h4>
+						<p>These charts show total monthly fundraising and spending by candidate committee, primary single-candidate Super PAC, and representing
+						National Committee.</p>
+					</div>
                     <div class="col-xs-6">
                         <monthly-rev-ex candidate="model.candidates[0]" cycle="model.cycle" height="300" width="460" domain-max="model.monthlyRevEx" pos="'left'"></monthly-rev-ex>
                     </div>
@@ -201,17 +240,16 @@
 
                         <p>Contributions to candidates and their committees are strictly regulated and capped at a
                             relatively low level - in the 2015-2016 election cycle, an individual can give a maximum of $2,700
-                            to any candidate committee, or a maximum of $5,000 to a traditional Political Action Committee
-                            (PAC). The aftermath of Citizens United, however was to see a proliferation of
-                            "independent-expenditure-only Political Action Committees", also known as SuperPACs. Contributions
-                            to these groups are entirely uncapped, enabling the wealthiest Americans to have an outized voice in
-                            recent elections.</p>
+                            to any candidate committee, or a maximum of $5,000 to a traditional PAC. The aftermath of Citizens United, 
+							however was to see a proliferation of "independent-expenditure-only Political Action Committees", 
+							also known as Super PACs. Contributions to these groups are entirely uncapped, enabling the wealthiest 
+							Americans to have an outized voice in recent elections.</p>
 
-                        <p>To date, since the era of SuperPAC's began, SuperPAC fundraising has been dominated by the Republican side of
-                            politics. While Obama in 2012 had a highly funded SuperPAC, <em>Priorities USA Action</em>, it served
+                        <p>To date, since the era of Super PACs began, Super PAC fundraising has been dominated by the Republican side of
+                            politics. While Obama in 2012 had a highly funded Super PAC, <em>Priorities USA Action</em>, it served
                             almost entirely as a vehicle to fund attacks against Mitt Romney, rather than by which to promote Obama's
                             candidacy. Pro-democratic outside groups are still relatively more likely to be small-donor traditional PACs
-                            run by organizations like trade unions, rather than SuperPACs.</p>
+                            run by organizations like trade unions, rather than Super PACs.</p>
 
                         <div class="spacer"></div>
                     </div>
