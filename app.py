@@ -79,11 +79,11 @@ class ScheduleAByZip(Resource):
 
 class ScheduleAByEmployer(Resource):
     @staticmethod
-    def get(committee_id, cycle):
+    def get(committee_id, cycle, topk):
         params = {
             'cycle': cycle,
             'sort': '-total',
-            'per_page': 50
+            'per_page': 100
         }
 
         data = []
@@ -102,7 +102,7 @@ class ScheduleAByEmployer(Resource):
                                       u'HOMEMAKER/HOMEMAKER',u'SELF-EMPLOYED/INVESTOR',u'SELF/DOCTOR']:
                 i += 1
                 data.append(r)
-            if i == 10:
+            if i == topk:
                 break
         return data
 
@@ -385,7 +385,7 @@ class CommiteeMonthlyFinances(Resource):
 api.add_resource(ScheduleABySize, '/schedule_a/by_size/<string:committee_id>/<int:cycle>/')
 api.add_resource(ScheduleAByState, '/schedule_a/by_state/<string:committee_id>/<int:cycle>/')
 api.add_resource(ScheduleAByZip, '/schedule_a/by_zip/<string:committee_id>/<int:cycle>/')
-api.add_resource(ScheduleAByEmployer, '/schedule_a/by_employer/<string:committee_id>/<int:cycle>/')
+api.add_resource(ScheduleAByEmployer, '/schedule_a/by_employer/<string:committee_id>/<int:cycle>/<int:topk>')
 
 
 
