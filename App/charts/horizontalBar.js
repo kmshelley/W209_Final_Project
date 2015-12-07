@@ -128,6 +128,9 @@ d3.custom.horizontalBar = function () {
 
             //**** BARS -- CENTER TO RIGHT ****
             //stacked bars, center to right
+
+            svg.selectAll(".bar.right.stacked").data(data).exit().remove();
+
             g.selectAll(".bar.right.stacked")
                 .data(rightData)
                 .enter()
@@ -146,6 +149,8 @@ d3.custom.horizontalBar = function () {
 
             //**** BARS -- CENTER TO LEFT ****
             //stacked bars, center to right
+            svg.selectAll(".bar.left.stacked").data(data).exit().remove();
+
             g.selectAll(".bar.left.stacked")
                 .data(leftData)
                 .enter()
@@ -193,8 +198,7 @@ d3.custom.horizontalBar = function () {
                 .data([data])
                 .enter() // return the selection of data with no elements yet bound
                 .append("text")
-                .attr("class", "receipts label")
-;
+                .attr("class", "receipts label");
 
             svg.selectAll(".receipts.label")
                 .data([data])

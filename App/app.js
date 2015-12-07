@@ -65,6 +65,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
         };
 
         factory.get_receipts_disbursements_by_committees = function(committee_ids, cycle) {
+            //console.log(BASE_URL+'/com_fins/'+ committee_ids +'/'+cycle);
             return $http.get(BASE_URL+'/com_fins/'+ committee_ids +'/'+cycle);
         };
 
@@ -437,27 +438,38 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
             link:
                 function(scope, element, attrs){
-                    var parties = {
-                        Democrat: colorbrewer.Blues[5].slice(1),
-                        Republican: colorbrewer.Reds[5].slice(1)
-                    };
 
+                    function getColors(party, i){
+                        var j = Math.min(Math.max(i,3),9);
+                        var cols =  {
+                            Democrat: colorbrewer.Blues[j],
+                            Republican: colorbrewer.Reds[j]
+                        };
+                        //if (i<j){console.log(i, j, j-i);}
+
+                        return cols[party].reverse();
+                    }
                     var chartEl = d3.select(element[0]);
 
                     scope.$watch('candidate', function() {
                         if (Object.keys(scope.candidate).length){
 
                             function supporting(d){ if (d){return d.id} }
-                            var ctte_ids = [scope.candidate.Principal.id].concat(scope.candidate.Supporting.map(supporting)).reverse().toString()
-
-                            var chart = d3.custom['horizontalBar']()
-                                .h(scope.height)
-                                .w(scope.width)
-                                .rcolors(parties[scope.candidate.CAND_PTY_AFFILIATION])
-                                .lcolors(parties[scope.candidate.CAND_PTY_AFFILIATION]);
+                            var ctte_ids = [scope.candidate.Principal.id].concat(scope.candidate.Supporting.map(supporting)).toString()
 
                             vizAPI.get_receipts_disbursements_by_committees(ctte_ids, scope.cycle)
                                 .success(function(json){
+
+                                    //console.log(json[0]);
+
+                                    var colors = getColors(scope.candidate.CAND_PTY_AFFILIATION, json[0].data.length);
+
+                                    var chart = d3.custom['horizontalBar']()
+                                        .h(scope.height)
+                                        .w(scope.width)
+                                        .rcolors(colors)
+                                        .lcolors(colors);
+
                                     chartEl.datum(json).call(chart);
                                 });
                         }
