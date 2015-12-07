@@ -340,31 +340,30 @@ class CommiteeMonthlyFinances(Resource):
 
         ids = cmte_ids.split(",")
 
-        print {'cmte_id': {"$in": ids}, 'cycle': cycle}
         query_results = db.cmte_finances.find({'cmte_id': {"$in": ids}, 'cycle': str(cycle)})
 
         response = []
         query_results = list(query_results)
 
-        print query_results
-        
         if len(query_results) > 0:
             all_months = query_results[0]['date']
 
             for idx, month in enumerate(all_months):
-                doc = {'date': month, 'data': []}
-
+                doc = {'date': month, 'data': None}
+                tmp = dict((i,None) for i in ids)
+                
                 for cid in query_results:
-                    cdoc = {'cte_id': cid.get('name','nan'), 
-                            'name': cid.get('cmte_name','nan'), 
-                            'data': {"receipts": cid['receipts'][idx], 
+                    cdoc = {'cte_id': cid.get('cmte_id','nan'),
+                            'name': cid.get('cmte_name','nan'),
+                            'data': {"receipts": cid['receipts'][idx],
                                      "expenditures": cid['expenditures'][idx]}
                             }
 
-                    doc['data'].append(cdoc)
-
+                    tmp[cid.get('cmte_id')] = cdoc
+                    
+                doc['data'] = [tmp[i] for i in ids]
                 response.append(doc)
-        
+
         return response
         
 # API ROUTING
