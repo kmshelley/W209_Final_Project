@@ -7,18 +7,6 @@ d3.custom.horizontalBar = function () {
         formatValue = d3.format(".2s"),
         formatCurrency = function(d) { return "$" + formatValue(d); },
 
-    /*
-     INPUT DATA FORMAT
-     [
-     {'date': date,
-     'data': [
-     {'cte_id': 'C00431445', name:'Obama For America', data: {"reciepts": amount, "expenditures": amount}},
-     {'cte_id': 'C00495861', name:'Priorities USA Action', data: {"reciepts": amount, "expenditures": amount}},
-     {'cte_id': 'C00010603', name:'DNC Services Corp', data: {"reciepts": amount, "expenditures": amount}}
-     ]
-     }
-     ]
-     */
     //functions to access data
         xData = function(d) { return d.data; }, //access data for stacked bar mapping
         xName = function(d) { return d.name; },
@@ -35,7 +23,6 @@ d3.custom.horizontalBar = function () {
         yScale = d3.scale.ordinal(),
         xLeftAxis = d3.svg.axis().scale(xLeftScale).orient("top").tickSize(6, 0).ticks(4).tickFormat(formatCurrency),
         xRightAxis = d3.svg.axis().scale(xRightScale).orient("top").tickSize(6, 0).ticks(4).tickFormat(formatCurrency),
-        yAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(0, 0).tickFormat(monthFormat),
 
         rcolors = colorbrewer.Blues[5],
         lcolors = colorbrewer.Reds[5];
@@ -106,14 +93,14 @@ d3.custom.horizontalBar = function () {
 
             // Enter actions: these are applied to data selections with no elements existing yet
             // As a result, they are performed on 'g', which is an enter selection:
-            var g = svg.enter()// this only returns a non-empty selection when the chart is first initialized
+            var gEnter = svg.enter()// this only returns a non-empty selection when the chart is first initialized
                 .append("svg")
                 .attr("class", "horizontal bars")
                 .append("g");
 
             //add the axes
-            svg.append("g").attr("class", "x left axis");
-            svg.append("g").attr("class", "x right axis");
+            gEnter.append("g").attr("class", "x left axis");
+            gEnter.append("g").attr("class", "x right axis");
 
 
             // Update the outer dimensions.
@@ -123,13 +110,13 @@ d3.custom.horizontalBar = function () {
             svg.call(tip);
 
             // Update the inner dimensions.
-            svg.selectAll("g")
+            var g = svg.select("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             //**** BARS -- CENTER TO RIGHT ****
             //stacked bars, center to right
 
-            svg.selectAll(".bar.right.stacked").data(data).exit().remove();
+            g.selectAll(".bar.right.stacked").data(rightData).exit().remove();
 
             g.selectAll(".bar.right.stacked")
                 .data(rightData)
@@ -137,10 +124,15 @@ d3.custom.horizontalBar = function () {
                 .append("rect")
                 .attr("class","bar right stacked");
 
-            svg.selectAll(".bar.right.stacked")
+            g.selectAll(".bar.right.stacked")
                 .data(rightData)
+                .transition()
+                .duration(300)
                 .attr("x", function(d) { return xRightScale(d.x0); })
-                .attr("height", yScale.rangeBand())
+                .attr("height", yScale.rangeBand());
+
+            g.selectAll(".bar.right.stacked")
+                .data(rightData)
                 .attr("y", function(d) { return yScale(d.y); })
                 .attr("width", function(d) { return xRightScale(d.x1) - xRightScale(d.x0); })
                 .style("fill",function(d){ return rcolorScale(d.name); })
@@ -149,7 +141,7 @@ d3.custom.horizontalBar = function () {
 
             //**** BARS -- CENTER TO LEFT ****
             //stacked bars, center to right
-            svg.selectAll(".bar.left.stacked").data(data).exit().remove();
+            g.selectAll(".bar.left.stacked").data(leftData).exit().remove();
 
             g.selectAll(".bar.left.stacked")
                 .data(leftData)
@@ -157,16 +149,20 @@ d3.custom.horizontalBar = function () {
                 .append("rect")
                 .attr("class","bar left stacked");
 
-            svg.selectAll(".bar.left.stacked")
+            g.selectAll(".bar.left.stacked")
                 .data(leftData)
+                .transition()
+                .duration(300)
                 .attr("x", function(d) { return xLeftScale(d.x1); })
-                .attr("height", yScale.rangeBand())
+                .attr("height", yScale.rangeBand());
+
+            g.selectAll(".bar.left.stacked")
                 .attr("y", function(d) { return yScale(d.y); })
+                .data(leftData)
                 .attr("width", function(d) { return xLeftScale(d.x0) - xLeftScale(d.x1); })
                 .style("fill",function(d){ return lcolorScale(d.name); })
                 .on("mouseover", tip.show)
                 .on("mouseout", tip.hide);
-
 
             //**** AXES ****
             // Update the x-axes.
@@ -183,7 +179,7 @@ d3.custom.horizontalBar = function () {
                 .append("text")
                 .attr("class", "y labels");
 
-            svg.selectAll(".y.labels")
+            g.selectAll(".y.labels")
                 .data(data)
                 .text(function(d){
                     if(yValue(d).getMonth()==0){ return monthYrFormat(yValue(d)); }

@@ -254,15 +254,18 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                     scope.topk = 5;
                     scope.real_nominal = 'nominal';
                     scope.$watchGroup(['outsideGroup','topk'], function() {
-                        if (Object.keys(scope.outsideGroup).length){
-                            vizAPI.outsideTopContributors(scope.outsideGroup.pac_committee_id, scope.cycle, scope.topk, scope.real_nominal)
-                                .success(function(json){
-                                    scope.outsideGroup.contributors = json;
-                                    scope.outsideGroup.contributors.forEach(function (d) {
-                                        d.total_spend_formatted = formatCurrency(+d.total_spend);
+                        if (scope.outsideGroup){
+                            if (Object.keys(scope.outsideGroup).length){
+                                vizAPI.outsideTopContributors(scope.outsideGroup.pac_committee_id, scope.cycle, scope.topk, scope.real_nominal)
+                                    .success(function(json){
+                                        scope.outsideGroup.contributors = json;
+                                        scope.outsideGroup.contributors.forEach(function (d) {
+                                            d.total_spend_formatted = formatCurrency(+d.total_spend);
+                                        });
                                     });
-                                });
+                            }
                         }
+
                     });
                 },
 
@@ -441,11 +444,11 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                     function getColors(party, i){
                         var j = Math.min(Math.max(i,3),9);
+                        var slicer = Math.max(0,j-i);
                         var cols =  {
-                            Democrat: colorbrewer.Blues[j],
-                            Republican: colorbrewer.Reds[j]
+                            Democrat: colorbrewer.Blues[j].slice(slicer),
+                            Republican: colorbrewer.Reds[j].slice(slicer)
                         };
-                        //if (i<j){console.log(i, j, j-i);}
 
                         return cols[party].reverse();
                     }
@@ -457,10 +460,13 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                             function supporting(d){ if (d){return d.id} }
                             var ctte_ids = [scope.candidate.Principal.id].concat(scope.candidate.Supporting.map(supporting)).toString()
 
+
+
+
                             vizAPI.get_receipts_disbursements_by_committees(ctte_ids, scope.cycle)
                                 .success(function(json){
 
-                                    //console.log(json[0]);
+                                    //console.log(json);
 
                                     var colors = getColors(scope.candidate.CAND_PTY_AFFILIATION, json[0].data.length);
 

@@ -121,8 +121,12 @@ d3.custom.segmentedBar = function () {
 
             svg.selectAll(".bar.seg")
                 .data(data)
+                .transition()
+                .duration(300)
                 .attr("x", function(d) { return wScale(d.x0); })
-                .attr("height", bar_height)
+                .attr("height", bar_height);
+
+            svg.selectAll(".bar.seg")
                 .attr("y", hcenter)
                 .attr("width", function(d) { return wScale(d.x1) - wScale(d.x0); })
                 .style("fill",function(d) { return colorScale(dCategory(d)); })

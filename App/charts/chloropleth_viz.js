@@ -59,11 +59,16 @@ d3.custom.choropleth = function () {
 
             svg.selectAll(".loc")
                 .data(data)
-                .style("fill",function(d){ return quantize(yValue(d)); })
                 .style("stroke","#f5f5f5")  // Almost white, but still visible
                 .attr("d", path)
                 .on("mouseover", tip.show)
                 .on("mouseout", tip.hide);
+
+            svg.selectAll(".loc")
+                .data(data)
+                .transition()
+                .duration(300)
+                .style("fill",function(d){ return quantize(yValue(d)); });
 
             svg.append("g")
                 .attr("class", "legendQuant")
