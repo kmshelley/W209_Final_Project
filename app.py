@@ -389,9 +389,6 @@ api.add_resource(ScheduleAByEmployer, '/schedule_a/by_employer/<string:committee
 
 
 
-
-
-
 api.add_resource(OutsideForAgainst, '/outside/for-against/<string:candidate_id>/<string:cycle>/<string:for_against>/<int:topk>/<string:real_nom>/')
 
 api.add_resource(OutsideTopContributors,

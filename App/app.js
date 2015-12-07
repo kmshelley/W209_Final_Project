@@ -62,8 +62,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             return $http.get('./data/states.json');
         };
 
-        factory.get_by_employer = function(committee_id, cycle) {
-            return $http.get(BASE_URL+'/schedule_a/by_employer/'+ committee_id +'/'+cycle);
+        factory.get_by_employer = function(committee_id, cycle, topk) {
+            return $http.get(BASE_URL+'/schedule_a/by_employer/'+ committee_id +'/'+cycle +'/'+topk);
         };
 
         factory.get_receipts_disbursements_by_committees = function(committee_ids, cycle) {
@@ -153,6 +153,71 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             '</div>'
         }
     })
+
+        .directive('byEmployer', ['vizAPI', function(vizAPI){
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                candidate: '=',
+                cycle: "="
+            },
+
+            link:
+                function(scope, element, attrs){
+                    var formatValue = d3.format(".2s"),
+                        formatCurrency = function(d) { return "$" + formatValue(d); };
+                    scope.topk = 5;
+                    scope.$watchGroup(['candidate', 'topk'], function() {
+                        if (Object.keys(scope.candidate).length){
+                            vizAPI.get_by_employer(scope.candidate.Principal.id, scope.cycle, scope.topk)
+                                .success(function(json){
+                                    scope.employers = json;
+                                    scope.employers.forEach(function (d) {
+                                        d.total = formatCurrency(+d.total);
+                                    });
+                                });
+                        }
+                    });
+
+                    scope.selectPAC = function (group){
+                        scope.outsideGroup = group;
+                    }
+
+                },
+
+            template:
+            '<div class="panel panel-default">'+
+                '<div class="panel-heading">'+
+                    '<h3 class="panel-title">Top {{topk}} Employers of Employees contributing > $200 to {{candidate.Principal.name}}</h3>'+
+                '</div>'+
+                '<div class="panel-body">'+
+                    '<div class="btn-toolbar">'+
+
+                        '<div class="btn-group btn-group-xs" ng-model="topk" bs-radio-group>'+
+                            '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="5">Top 5</label>' +
+                            '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="10">10</label>' +
+                            '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="20">20</label>' +
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+
+                '<table class="table table-condensed table-striped table-hover">'+
+                    '<tr>'+
+                        '<th class="col-xs-8">Employer</th>'+
+                        '<th class="col-xs-4">Total</th>'+
+                    '</tr>'+
+                    '<tr ng-repeat="e in employers">'+
+                        '<td class="vert-align">{{ e.employer }}</td>'+
+                        '<td class="vert-align">{{ e.total }}</td>'+
+                    '</tr>'+
+                '</table>'+
+            '</div>'
+        }
+    }])
+
+
+
 
     .directive('outsideGroups', ['vizAPI', function(vizAPI){
         return {
