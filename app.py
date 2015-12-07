@@ -388,7 +388,7 @@ api.add_resource(ScheduleAByZip, '/schedule_a/by_zip/<string:committee_id>/<int:
 api.add_resource(ScheduleAByEmployer, '/schedule_a/by_employer/<string:committee_id>/<int:cycle>/')
 
 # FIX PARAMS OF ALL 3 API's
-api.add_resource(TopPACs, '/top_pacs/<string:candidate_id>/<int:cycle>/<string:for_against>/<int:topk>/<string:real_nom>/')
+api.add_resource(TopPACs, '/top_pacs/<string:candidate_id>/<string:cycle>/<string:for_against>/<int:topk>/<string:real_nom>/')
 
 api.add_resource(TopContributorsToPACs,
                  '/top_pacs/<string:cmte_id>/<string:cycle>/<int:topk>/<string:real_nom>/')
