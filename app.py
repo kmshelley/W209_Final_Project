@@ -212,44 +212,52 @@ class TopContributorsToPACs(Resource):
 
 class ContributorsByGeography(Resource):
     @staticmethod
-    def get(cycle, cmte_id=None, aggregation_level='fips'):
-    
-        geo_level = ['COUNTY', 'county','state']
-        if aggregation_level == 'zip_code':
-            geo_level = ['ZIP_CODE', 'county','state']
-        elif aggregation_level == 'state':
-            geo_level = ['state']
+    def get(cycle, cmte_id, aggregation_level='fips'):
         
-        start = datetime.datetime(int(cycle)-1, 1, 1)
-        end = datetime.datetime(int(cycle)+1, 1, 1)
-
-        condition = {'month_year': {'$gte': start, '$lt': end}}
+        cached = db.cached_pac_geography.find_one({'cmte_id': cmte_id, 
+                                             'cycle': cycle, 
+                                             'aggregation_level':aggregation_level})
         
-        if cmte_id:
-            condition['CMTE_ID'] = cmte_id
-            
-            
-        query_results = db.pac_contributors.group(                                       
-                               geo_level,
-                               condition,
-                               { "total" : 0 },
-                               'function(curr, result) {result.total += curr.TRANSACTION_AMT}')
-                                    
-
-        response = []
-        for qr in query_results:
-
-            res = {    
-                        "level": geo_level[0],
-                        "cmte_id": condition.get('CMTE_ID'),
-                        "location_id": str(int(qr.get(geo_level[0]))) if geo_level[0] in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level[0]),
-                        "name": qr.get(geo_level[1]) if geo_level[0] in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level[0]),
-                        "state": qr.get(geo_level[-1]), 
-                        "amount": qr.get('total'),
-                    }
-            response.append(res)
+        if cached:
+            return cached['data']
         
-        return response
+        else:
+            geo_level = ['COUNTY', 'county','state']
+            if aggregation_level == 'zip_code':
+                geo_level = ['ZIP_CODE', 'county','state']
+            elif aggregation_level == 'state':
+                geo_level = ['state']
+
+            start = datetime.datetime(int(cycle)-1, 1, 1)
+            end = datetime.datetime(int(cycle)+1, 1, 1)
+
+            condition = {'month_year': {'$gte': start, '$lt': end}}
+
+            if cmte_id:
+                condition['CMTE_ID'] = cmte_id
+
+
+            query_results = db.pac_contributors.group(                                       
+                                   geo_level,
+                                   condition,
+                                   { "total" : 0 },
+                                   'function(curr, result) {result.total += curr.TRANSACTION_AMT}')
+
+
+            response = []
+            for qr in query_results:
+
+                res = {    
+                            "level": geo_level[0],
+                            "cmte_id": condition.get('CMTE_ID'),
+                            "location_id": str(int(qr.get(geo_level[0]))) if geo_level[0] in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level[0]),
+                            "name": qr.get(geo_level[1]) if geo_level[0] in ['COUNTY', 'ZIP_CODE'] else qr.get(geo_level[0]),
+                            "state": qr.get(geo_level[-1]), 
+                            "amount": qr.get('total'),
+                        }
+                response.append(res)
+
+            return response
 
 
 class MonthlyCommitteeTimeSeries(Resource):
@@ -299,7 +307,7 @@ class MonthlyCommitteeTimeSeries(Resource):
 
 class ContributorsByEmployer(Resource):
     @staticmethod
-    def get_employers(cycle, cmte_id=None, topk=10, real_nom=False):
+    def get(cycle, cmte_id=None, topk=10, real_nom=False):
 
         start = datetime.datetime(int(cycle)-1 , 1, 1)
         end = datetime.datetime(int(cycle)+1, 1 , 1, )
@@ -340,31 +348,30 @@ class CommiteeMonthlyFinances(Resource):
 
         ids = cmte_ids.split(",")
 
-        print {'cmte_id': {"$in": ids}, 'cycle': cycle}
         query_results = db.cmte_finances.find({'cmte_id': {"$in": ids}, 'cycle': str(cycle)})
 
         response = []
         query_results = list(query_results)
 
-        print query_results
-        
         if len(query_results) > 0:
             all_months = query_results[0]['date']
 
             for idx, month in enumerate(all_months):
-                doc = {'date': month, 'data': []}
-
+                doc = {'date': month, 'data': None}
+                tmp = dict((i,None) for i in ids)
+                
                 for cid in query_results:
-                    cdoc = {'cte_id': cid.get('name','nan'), 
-                            'name': cid.get('cmte_name','nan'), 
-                            'data': {"receipts": cid['receipts'][idx], 
+                    cdoc = {'cte_id': cid.get('cmte_id','nan'),
+                            'name': cid.get('cmte_name','nan'),
+                            'data': {"receipts": cid['receipts'][idx],
                                      "expenditures": cid['expenditures'][idx]}
                             }
 
-                    doc['data'].append(cdoc)
-
+                    tmp[cid.get('cmte_id')] = cdoc
+                    
+                doc['data'] = [tmp[i] for i in ids]
                 response.append(doc)
-        
+
         return response
         
 # API ROUTING
