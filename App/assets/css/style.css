@@ -1,7 +1,7 @@
 body {
     font: 14px sans-serif;
+    padding-top: 40px;
 }
-
 .background {
     fill: none;
 }
@@ -113,10 +113,10 @@ h4 {
 
 
 .module-small {
-    padding: 70px 0;
+    padding: 40px 0;
 }
 .module-top {
-    padding: 20px 0 70px 0;
+    padding: 20px 0 40px 0;
 }
 
 /* Sections dividers */
@@ -179,6 +179,7 @@ h4 {
     background-color: #4b4b4b
 }
 
+.nav-padded {padding:80px 0 0 0;}
 
 
 .bs-header {
@@ -314,5 +315,5 @@ h4 {
     color: white;
 }
 
-.navbar-header {min-width: 100%}
-.navbar-selects {padding: 17px 0 0 0}
+.navbar-header {min-width: 100%;}
+.navbar-selects {padding: 16px 0 0 0;}

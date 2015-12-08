@@ -66,7 +66,7 @@
 
 
 <div class="container bs-docs-container">
-    <div class="row">
+    <div class="row nav-padded">
 
         <div class="col-md-2 hidden-sm hidden-xs">
             <div>
@@ -74,9 +74,9 @@
                     <ul class="nav bs-sidenav" bs-scrollspy-list="">
 
                         <li><a href="#top">Top</a></li>
-                        <li><a href="#view-over-time">The View Over Time</a></li>
-                        <li><a href="#current-cycle">{{model.cycle}} Election Cycle</a></li>
-                        <li><a href="#candidate_committees">Candidate Committees</a>
+                        <li><a href="#view-over-time">Visualizing Presidential Campaign Financing</a></li>
+                        <!--<li><a href="#current-cycle">{{model.cycle}} Election Cycle</a></li>-->
+                        <li><a href="#candidate_committees">Candidates & Campaign Committees</a>
                         <ul class="nav">
                             <li><a href="#monthly-receipts">Monthly Fundraising & Spending</a></li>
                             <li><a href="#contributions-by-size">Contributions by Size</a></li>
@@ -88,8 +88,8 @@
                         <ul class="nav">
                             <li><a href="#top-outside-groups">Top Outside Groups</a></li>
                             <li><a href="#top-contributors">Top Contributors</a></li>
-                            <li><a href="#outside-contributions-by-state-county">Contributions by State/County??</a></li>
-                            <li><a href="#outside-over-tiime">Fundraising Over Time??</a></li>
+                            <!--<li><a href="#outside-contributions-by-state-county">Contributions by State/County??</a></li>-->
+                            <!--<li><a href="#outside-over-tiime">Fundraising Over Time??</a></li>-->
                         </ul>
                         </li>
 
@@ -103,26 +103,26 @@
             <section id="view-over-time" class="module-top">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h2>The View Over Time</h2>
-						
-						<p>It's no secret in the United States that it takes a lot of money to win an election. What is not well understood, is 
-						the amount and source of campaign finances. The FEC is responsible for enforcing federal campaign finance laws, and candidates and 
-						fundraising committees are required to report all receipts and expenditures. However, with the various laws regulating the frequency, source, 
-						and amount of funds different groups can contribute, the real picture of just <em>how much</em> money is spent becomes easily obscured. 
-						With this visualization we seek to better understand both the sources of federal campaign funding, and their impact.</p>
-							
-                        <div class="spacer"></div>
+                        <h2>Visualizing Presidential Campaign Financing</h2>
 
-                        <div class="well well-lg" style="padding: 150px 20px;">
-                            <p>Here, if have enough historical data, we can put in Katherine's visualization of total
-                                fundraising or spending over time in different cycles.</p>
-                            <p>We can either use the viz to select candidates, or just a dropdown like the one below.</p>
-                        </div>
+						<p>It's no secret in the United States that it takes a lot of money to win an election. What is not well understood, is
+						the amount and source of campaign finances. The FEC is responsible for enforcing federal campaign finance laws, and candidates and
+						fundraising committees are required to report all receipts and expenditures. However, with the various laws regulating the frequency, source,
+						and amount of funds different groups can contribute, the real picture of just <em>how much</em> money is spent becomes easily obscured.
+						With this visualization we seek to better understand both the sources of federal campaign funding, and their impact.</p>
+							<!---->
+                        <!--<div class="spacer"></div>-->
+
+                        <!--<div class="well well-lg" style="padding: 150px 20px;">-->
+                            <!--<p>Here, if have enough historical data, we can put in Katherine's visualization of total-->
+                                <!--fundraising or spending over time in different cycles.</p>-->
+                            <!--<p>We can either use the viz to select candidates, or just a dropdown like the one below.</p>-->
+                        <!--</div>-->
 
                     </div>
                 </div>
 
-                <div class="row">
+                <!--<div class="row">-->
                     <!--<div class="col-xs-4">-->
                         <!--<div class="form-group">-->
                             <!--<label for="cycleSelector">Select Election Cycle</label>-->
@@ -131,31 +131,31 @@
                             <!--</select>-->
                         <!--</div>-->
                     <!--</div>-->
-                </div>
+                <!--</div>-->
 
             </section>
 
 
-            <div class="divider-d"></div>
-            <section id="current-cycle" class="module-small">
+            <!--<div class="divider-d"></div>-->
+            <!--<section id="current-cycle" class="module-small">-->
 
-                <div class="row">
+                <!--<div class="row">-->
 
-                    <div class="col-xs-12">
-                        <h2>{{model.cycle}} Election Cycle:</h2>
-                        <div class="spacer"></div>
+                    <!--<div class="col-xs-12">-->
+                        <!--<h2>{{model.cycle}} Election Cycle:</h2>-->
+                        <!--<div class="spacer"></div>-->
 
-                        <div class="well well-lg" style="padding: 150px 20px;">
-                            <p>Here, if we want and we have time, we
-                            can add a visualization of total fundraising or spending for all candidates, color-segmented
-                            by candidate, in the {{model.cycle}} election.</p>
-                            <p>We can either use the viz to select candidates, or just dropdowns like the one below.</p>
-                        </div>
+                        <!--<div class="well well-lg" style="padding: 150px 20px;">-->
+                            <!--<p>Here, if we want and we have time, we-->
+                            <!--can add a visualization of total fundraising or spending for all candidates, color-segmented-->
+                            <!--by candidate, in the {{model.cycle}} election.</p>-->
+                            <!--<p>We can either use the viz to select candidates, or just dropdowns like the one below.</p>-->
+                        <!--</div>-->
 
 
 
-                        <h3>Select Candidates to Compare</h3>
-                    </div>
+                        <!--<h3>Select Candidates to Compare</h3>-->
+                    <!--</div>-->
                     <!--<div class="col-xs-4">-->
                         <!--<candidate-selector candidate-json="model.candidateJson" cycle="model.cycle"-->
                                             <!--candidate="model.candidates[0]" party-index="1"></candidate-selector>-->
@@ -169,14 +169,14 @@
                         <!--<p><strong>Committee ID: </strong>{{model.candidates[1].Principal.id}}</p>-->
 
                     <!--</div>-->
-                </div>
-            </section>
+                <!--</div>-->
+            <!--</section>-->
 
             <div class="divider-d"></div>
             <section id="candidate_committees" class="module-small">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h2>Candidate Campaign Committees</h2>
+                        <h2>Candidates & Campaign Committees</h2>
 						
 						<p>The funds that finance American elections come from various groups and special interests, 
 						and each kind of organization follows different laws enforced by the FEC.</p>
