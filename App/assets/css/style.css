@@ -303,3 +303,16 @@ h4 {
         margin-right: 30px
     }
 }
+
+
+.input-xs, select.input-xs {
+  height: 20px;
+  line-height: 20px;
+}
+
+.white-text {
+    color: white;
+}
+
+.navbar-header {min-width: 100%}
+.navbar-selects {padding: 17px 0 0 0}

@@ -137,17 +137,17 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                 },
 
             template:
-            '<div>'+
+            '<div class="form-inline">'+
                 '<div class="form-group">' +
-                    '<label for="partySelector">Select Party</label>' +
+                    '<label for="partySelector" class="white-text">Party:&nbsp;</label>' +
                     '<select id="partySelector" ng-model="ddOptions.party" ng-change="updateCandidates()"' +
-                    'ng-options="p for p in ddOptions.parties" class="form-control">' +
+                    'ng-options="p for p in ddOptions.parties" class="form-control input-xs">' +
                     '</select>' +
-                '</div>' +
+                '</div>&nbsp;' +
                 '<div class="form-group">' +
-                    '<label for="candidateSelector">Select Candidate</label>' +
+                    '<label for="candidateSelector" class="white-text">Candidate:&nbsp;</label>' +
                     '<select id="candidateSelector" ng-model="ddOptions.candidate" ng-change="updateCandidate(c.value)"' +
-                    'ng-options="c for c in ddOptions.candidates" class="form-control">' +
+                    'ng-options="c for c in ddOptions.candidates" class="form-control input-xs">' +
                     '</select>' +
                 '</div>' +
             '</div>'

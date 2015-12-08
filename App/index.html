@@ -12,10 +12,36 @@
 
 
 <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
-    <div class="container">
+    <div>
         <div class="navbar-header">
-            <a href="" class="navbar-brand">The Price of a US Presidential Election</a>
+
+
+            <div class="col-xs-3">
+            <a href="" class="navbar-brand">The Price of A US Presidential Election</a>
         </div>
+        <div class="col-xs-9 navbar-selects">
+            <div class="col-xs-2">
+
+                <div class="form-group form-inline">
+                            <label for="cycleSelector" class="white-text">Election:&nbsp;</label>
+                            <select id="cycleSelector" ng-model="model.cycle"
+                                    ng-options="c for c in model.cycles" class="form-control input-xs">
+                            </select>
+                        </div>
+
+            </div>
+            <div class="col-xs-5">
+                <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle"
+                                    candidate="model.candidates[0]" party-index="1"></candidate-selector>
+            </div>
+            <div class="col-xs-5">
+                <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle"
+                                    candidate="model.candidates[1]" party-index="0"></candidate-selector>
+            </div>
+        </div>
+
+        </div>
+
     </div>
 </header>
 
@@ -97,14 +123,14 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-4">
-                        <div class="form-group">
-                            <label for="cycleSelector">Select Election Cycle</label>
-                            <select id="cycleSelector" ng-model="model.cycle"
-                                    ng-options="c for c in model.cycles" class="form-control">
-                            </select>
-                        </div>
-                    </div>
+                    <!--<div class="col-xs-4">-->
+                        <!--<div class="form-group">-->
+                            <!--<label for="cycleSelector">Select Election Cycle</label>-->
+                            <!--<select id="cycleSelector" ng-model="model.cycle"-->
+                                    <!--ng-options="c for c in model.cycles" class="form-control">-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
                 </div>
 
             </section>
@@ -130,19 +156,19 @@
 
                         <h3>Select Candidates to Compare</h3>
                     </div>
-                    <div class="col-xs-4">
-                        <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle"
-                                            candidate="model.candidates[0]" party-index="1"></candidate-selector>
-                        <p><strong>Candidate ID: </strong>{{model.candidates[0].CAND_ID}}</p>
-                        <p><strong>Committee ID: </strong>{{model.candidates[0].Principal.id}}</p>
-                    </div>
-                    <div class="col-xs-4 col-xs-offset-2">
-                        <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle"
-                                            candidate="model.candidates[1]" party-index="0"></candidate-selector>
-                        <p><strong>Candidate ID: </strong>{{model.candidates[1].CAND_ID}}</p>
-                        <p><strong>Committee ID: </strong>{{model.candidates[1].Principal.id}}</p>
+                    <!--<div class="col-xs-4">-->
+                        <!--<candidate-selector candidate-json="model.candidateJson" cycle="model.cycle"-->
+                                            <!--candidate="model.candidates[0]" party-index="1"></candidate-selector>-->
+                        <!--<p><strong>Candidate ID: </strong>{{model.candidates[0].CAND_ID}}</p>-->
+                        <!--<p><strong>Committee ID: </strong>{{model.candidates[0].Principal.id}}</p>-->
+                    <!--</div>-->
+                    <!--<div class="col-xs-4 col-xs-offset-2">-->
+                        <!--<candidate-selector candidate-json="model.candidateJson" cycle="model.cycle"-->
+                                            <!--candidate="model.candidates[1]" party-index="0"></candidate-selector>-->
+                        <!--<p><strong>Candidate ID: </strong>{{model.candidates[1].CAND_ID}}</p>-->
+                        <!--<p><strong>Committee ID: </strong>{{model.candidates[1].Principal.id}}</p>-->
 
-                    </div>
+                    <!--</div>-->
                 </div>
             </section>
 
