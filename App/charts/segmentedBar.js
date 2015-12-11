@@ -22,45 +22,7 @@ d3.custom.segmentedBar = function () {
             });
     
     var alpha = 0.5,
-        spacing = 10;
-
-    function relax(element) {
-	    again = false;
-	    element.each(function (d, i) {
-		a = this;
-		da = d3.select(a);
-		x1 = da.attr("x");
-		element.each(function (d, j) {
-		    b = this;
-		    // a & b are the same element and don't collide.
-		    if (a == b) return;
-		    db = d3.select(b);
-		    // a & b are on opposite sides of the chart and
-		    // don't collide
-		    if (da.attr("y") != db.attr("y")) return;
-		    // Now let's calculate the distance between
-		    // these elements. 
-		    x2 = db.attr("x");
-		    deltaX = x1 - x2;
-		    // If spacing is greater than our specified spacing,
-		    // they don't collide.
-		    if (Math.abs(deltaX) > spacing) return;
-		    
-		    // If the labels collide, we'll push each 
-		    // of the two labels up and down a little bit.
-		    again = true;
-		    sign = deltaX > 0 ? 1 : -1;
-		    adjust = sign * alpha;
-		    da.attr("x",+x1 + adjust);
-		    db.attr("x",+x2 - adjust);
-		});
-	    });
-	    // Adjust our line leaders here
-	    // so that they follow the labels. 
-	    if(again) {
-		setTimeout(relax,20)
-	    }
-	};
+        spacing = 0;
 
 
     function chart(selection) {
@@ -69,8 +31,10 @@ d3.custom.segmentedBar = function () {
             var width = w - margin.left - margin.height,
                 height = h - margin.top - margin.bottom,
                 hcenter = h/ 2, //center from top
-                left = margin.left,
-                right = (w - margin.right),
+				left = 0,
+				right = w,
+                //left = margin.left,
+                //right = (w - margin.right),
                 colorScale = d3.scale.ordinal().range(colors);
 
 
@@ -114,6 +78,8 @@ d3.custom.segmentedBar = function () {
             var legend = g.selectAll("legend").data(data);
 
             //segmented bar
+			//bar.exit().remove();
+			
             bar
                 .enter() // return the selection of data with no elements yet bound
                 .append("rect")
@@ -122,7 +88,8 @@ d3.custom.segmentedBar = function () {
             svg.selectAll(".bar.seg")
                 .data(data)
                 .transition()
-                .duration(300)
+				.duration(300)
+				//.delay(function(d,i){ return i*300; }) 
                 .attr("x", function(d) { return wScale(d.x0); })
                 .attr("height", bar_height);
 
@@ -141,6 +108,7 @@ d3.custom.segmentedBar = function () {
             svg.selectAll(".legend")
                 .data(data)
                 .text(function(d){ return categories[dCategory(d)]; })
+				.attr("class","legend")
                 .attr("x", function(d) { return wScale(d.x0); })
                 .attr("y", function(d,i){
                     if (i%2 === 0){
@@ -150,10 +118,81 @@ d3.custom.segmentedBar = function () {
                     }
                 })
                 .style("fill",function(d) { return colorScale(dCategory(d)); })
-                .style("font-size","10px");
-            
-            //relax(<*what do we pass here?*>);
-
+                .style("font-size","10px")
+				.each(function(d) { //calculate width of labels for label "relaxing" function
+						d.width = this.getBBox().width;
+					});
+				
+			//function to relax the location of the legend labels based on other labels    
+			relax = function () {
+				again = false;
+				xMin = +d3.min(wScale.range()); //min x-value
+				xMax = +d3.max(wScale.range()); //max x-value
+				
+				svg.selectAll(".legend").each(function (d, i) {
+					a = this;
+					da = d3.select(a);
+					x1 = +da.attr("x");
+					w1 = +d.width; 
+					deltaX = 0;
+					
+					svg.selectAll(".legend").each(function (d, j) {
+						b = this;
+						// a & b are the same element and don't collide.
+						if (i == j) return;
+						db = d3.select(b);
+						
+						// a & b are on opposite sides of the chart and
+						// don't collide
+						if (da.attr("y") != db.attr("y")) return;
+						
+						// Now let's calculate the distance between
+						// these elements. 
+						x2 = +db.attr("x");
+						w2 = +d.width; 				
+			
+						//use the width of the first label
+						if (i < j) {
+							spacing = w1;
+							//deltaX = (x1+w1) - x2;
+						}else{
+							spacing = w2;
+							//deltaX = x1 - (x2+w2);
+						}
+						
+						// If spacing is greater than our specified spacing,
+						// they don't collide.
+						deltaX = x1 - x2;
+						if (Math.abs(deltaX) >= spacing) return;
+						
+						// If the labels collide, we'll push each 
+						// of the two labels left and right a little bit.
+						again = true;
+						sign = deltaX > 0 ? 1 : -1;
+						adjust = spacing * alpha;
+						new_x1 = +x1 + adjust*sign;
+						new_x2 = +x2 - adjust*sign;
+						
+						if (i < j) {
+							//do not push x1 past the minimum x value, or x2 past the max value minus the label width
+							da.attr("x",d3.max([xMin,new_x1]));
+							db.attr("x",d3.min([xMax - w2,new_x2]));
+						}else{
+							//do not push x2 past the minimum x value, or x1 past the max value minus the label width
+							da.attr("x",d3.min([xMax - w1,new_x1]));
+							db.attr("x",d3.max([xMin,new_x2]));
+						}
+						
+					});
+				});
+				
+				if(again) {
+					setTimeout(relax,5)
+				}
+		
+			};
+			relax();
+			
         });
     }
 
