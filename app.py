@@ -381,6 +381,37 @@ class CommiteeMonthlyFinances(Resource):
 
         return response
         
+class CandidateMonthlyFinances(Resource):
+    @staticmethod
+    def get(cand_ids, cycle):
+
+        ids = cand_ids.split(",")
+
+        query_results = db.cand_finances.find({'cand_id': {"$in": ids}, 'cycle': str(cycle)})
+
+        response = []
+        query_results = list(query_results)
+
+        if len(query_results) > 0:
+            all_months = query_results[0]['date']
+
+            for idx, month in enumerate(all_months):
+                doc = {'date': month, 'data': None}
+                tmp = dict((i,None) for i in ids)
+                
+                for cid in query_results:
+                    cdoc = {'cand_id': cid.get('cand_id','nan'),
+                            'name': cid.get('cand_name','nan'),
+                            'data': {"receipts": cid['receipts'][idx],
+                                     "expenditures": cid['expenditures'][idx]}
+                            }
+
+                    tmp[cid.get('cand_id')] = cdoc
+                    
+                doc['data'] = [tmp[i] for i in ids]
+                response.append(doc)
+
+        return response
 # API ROUTING
 api.add_resource(ScheduleABySize, '/schedule_a/by_size/<string:committee_id>/<int:cycle>/')
 api.add_resource(ScheduleAByState, '/schedule_a/by_state/<string:committee_id>/<int:cycle>/')
@@ -404,7 +435,8 @@ api.add_resource(ContributorsByEmployer,
                  '/contributors/by_employer/<string:cmte_id>/<string:cycle>/<int:topk>/<string:real_nom>/')
                  
 api.add_resource(CommiteeMonthlyFinances, '/com_fins/<string:cmte_ids>/<string:cycle>/')
-                 
+api.add_resource(CandidateMonthlyFinances, '/com_fins/<string:cand_ids>/<string:cycle>/')
+    
 
 # MONGO_DB
 host = "data.enalytica.com"
