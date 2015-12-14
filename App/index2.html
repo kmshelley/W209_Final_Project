@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp" ng-controller="myController">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans|Domine">
+
+    <link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+<body>
+
+
+<nav class="navbar navbar-custom navbar-fixed-top bs-docs-nav" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header col-xs-4">
+            <a href="" class="navbar-brand">The Price of A US Presidential Election</a>
+        </div>
+        <div class="col-xs-2 navbar-brand gray">Select Candidates:</div>
+        <div class="col-xs-3">
+            <navbar-selector cycle="model.cycles[0]" candidate="model.candidates[0]" party-index="1"></navbar-selector>
+        </div>
+
+        <div class="col-xs-3">
+            <navbar-selector cycle="model.cycles[1]" candidate="model.candidates[1]" party-index="0"></navbar-selector>
+        </div>
+    </div>
+</nav>
+
+
+<div class="bs-header" id="content">
+    <div class="container">
+        <div class="col-md-12">
+            <section id="top" class="module-small">
+                <h1>The Price of a US Presidential Election</h1>
+                <h3>Visualization by Tom Kunicki, Charles Maalouf, Janak Mayer & Katherine Shelley</h3>
+
+                <p>The purpose of this visualization is to walk the viewer through the complicated
+                    world of Presidential campaign financing in the United States.
+                    All data in this visualization comes from the <a href=http://www.fec.gov>Federal Election Commision</a> (FEC).
+                    Each section delves into a different area of campaign financing, with interactive features that
+                    allow for filtering and summarizing in order to enhance understanding.</p>
+
+            </section>
+        </div>
+    </div>
+</div>
+
+
+<div class="container bs-docs-container">
+    <div class="row nav-padded">
+
+        <div class="col-md-2 hidden-sm hidden-xs">
+            <div>
+                <div class="bs-sidebar hidden-print" role="complementary" data-offset-top="-100" bs-affix="">
+                    <ul class="nav bs-sidenav" bs-scrollspy-list="">
+
+                        <li><a href="#top">Top</a></li>
+                        <li><a href="#view-over-time">Visualizing Presidential Campaign Financing</a></li>
+                        <!--<li><a href="#current-cycle">{{model.cycle}} Election Cycle</a></li>-->
+                        <li><a href="#candidate_committees">Candidates & Campaign Committees</a>
+                        <ul class="nav">
+                            <li><a href="#monthly-receipts">Monthly Fundraising & Spending</a></li>
+                            <li><a href="#contributions-by-size">Contributions by Size</a></li>
+                            <li><a href="#contributions-by-state-county">Contributions > $200 by State/County</a></li>
+                            <li><a href="#top-employers">Top Employers of > $200 Campaign Contributors</a></li>
+                        </ul>
+                        </li>
+                        <li><a href="#outside_groups">Outside Groups</a>
+                        <ul class="nav">
+                            <li><a href="#top-outside-groups">Top Outside Groups</a></li>
+                            <li><a href="#top-contributors">Top Contributors</a></li>
+                        </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-10">
+            <section id="view-over-time" class="module-top">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h1>Visualizing Presidential Campaign Financing</h1>
+
+						<p>It's no secret in the United States that it takes a lot of money to win an election. What is not well understood, is
+						the amount and source of campaign finances. The FEC is responsible for enforcing federal campaign finance laws, and candidates and
+						fundraising committees are required to report all receipts and expenditures. However, with the various laws regulating the frequency, source,
+						and amount of funds different groups can contribute, the real picture of just <em>how much</em> money is spent becomes easily obscured.
+						With this visualization we seek to better understand both the sources of federal campaign funding, and their impact.</p>
+							<!---->
+                        <!--<div class="spacer"></div>-->
+
+                        <!--<div class="well well-lg" style="padding: 150px 20px;">-->
+                            <!--<p>Here, if have enough historical data, we can put in Katherine's visualization of total-->
+                                <!--fundraising or spending over time in different cycles.</p>-->
+                            <!--<p>We can either use the viz to select candidates, or just a dropdown like the one below.</p>-->
+                        <!--</div>-->
+
+                    </div>
+                </div>
+
+            </section>
+
+
+            <div class="divider-d"></div>
+            <section id="candidate_committees" class="module-small">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h1>Candidates & Campaign Committees</h1>
+						
+						<p>The funds that finance American elections come from various groups and special interests, 
+						and each kind of organization follows different laws enforced by the FEC.</p>
+						
+						<p>A <strong>candidate committee</strong> is a group organized by a particular candidate to support their nomination
+						and election to office. Individual donors can contribute up to $2,700 to candidate committees per election cycle 
+						(the two years leading up to an election).</p>
+						
+						<p>A <strong>Political Action Committee</strong>, or PAC, is a group formed for the purpose of raising and spending money to support or
+						oppose the election of candidates. Dating back to 1944, PACs can legally contribute money directly to a candidate's 
+						committee, national party committee, or other PACs. Federal law limits the contribution of individuals to PACs to a maximum of 
+						$5000 per year.</p>
+						
+						<p>A <strong>National Party Committee</strong> such as the Democratic National Committee (DNC) or Republican National Committee (RNC),
+						is the official fundraising organization of a political party. Registered with the FEC, National Party Committees can receive 
+						up to $33,400 per year from individual contributors.<p>
+						
+						<p>A <strong>Super PAC</strong> is a special kind of PAC that makes no direct contributions to candidates or committees, instead financing
+						advertising and other campaign materials independently. Because they are not directly related to a candidate or 
+						political committee, Super PACs are not required to follow FEC restrictions on the amount of money raised or spent for the purposes of 
+						an election. Legalized by the Supreme Court in 2010, Super PACs and their unlimited funds have changed the playing field of 
+						American politics. Super PACs have become a popular vehicle for outside fundraising; while not allowed to officially support a 
+						particular candidate, so-called single-candidate Super PACs focus almost exclusively on the election of a single individual.</p>
+						
+						<p>The following charts show the breakdown of candidates' fundraising totals across the last three presidential elections, 
+						and how different types of fundraising committees, sizes of contributions, and locations of donors all play a role in making or breaking 
+						a candidate.</p>
+                        <div class="spacer"></div>
+                    </div>
+
+                    <div class="col-xs-12">
+						<h3 id="monthly-receipts">Monthly Fundraising and Spending</h3>
+						<p>These charts show total monthly fundraising and spending by candidate committee, the candidate's primary Super PAC, and
+						National Committee.</p>
+					</div>
+                    <div class="col-xs-6">
+                        <monthly-rev-ex candidate="model.candidates[0]" cycle="model.cycles[0]" height="300" width="460" domain-max="model.monthlyRevEx" pos="'left'"></monthly-rev-ex>
+                    </div>
+                    <div class="col-xs-6">
+                        <monthly-rev-ex candidate="model.candidates[1]" cycle="model.cycles[1]" height="300" width="460" domain-max="model.monthlyRevEx" pos="'right'"></monthly-rev-ex>
+                    </div>
+
+                    <div class="col-xs-12">
+						<h3 id="contributions-by-size">Contributions by Size</h3>
+						<p>These charts show all individual contributions given to the candidate committee 
+						broken down by the size of contribution.</p>
+					</div>
+                    <div class="col-xs-6">
+                        <contributions-by-size candidate="model.candidates[0]" cycle="model.cycles[0]" height="100" width="460"></contributions-by-size>
+                    </div>
+                    <div class="col-xs-6">
+                        <contributions-by-size candidate="model.candidates[1]" cycle="model.cycles[1]" height="100" width="460"></contributions-by-size>
+                    </div>
+
+                    <div class="col-xs-12">
+						<h3 id="contributions-by-state-county">Individual Contributions > $200 by State or County</h3>
+						<p>These maps show all contributions greater than $200 reported to the FEC by the candidate committees. 
+						Use the buttons to toggle between state and county level data.</p>
+					</div>
+                    <div class="col-xs-6">
+                        <choropleth candidate="model.candidates[0]" cycle="model.cycles[0]" height="460" width="460" scale="650" domain-max="model.choropleth" pos="'left'"></choropleth>
+                    </div>
+                    <div class="col-xs-6">
+                        <choropleth candidate="model.candidates[1]" cycle="model.cycles[1]" height="460" width="460" scale="650" domain-max="model.choropleth" pos="'right'"></choropleth>
+                    </div>
+
+                    <div class="col-xs-12"><h4 id="top-employers">Top Employers of > $200 Campaign Contributors</h4></div>
+                    <div class="col-xs-6">
+                        <by-employer candidate="model.candidates[0]" cycle="model.cycles[0]"></by-employer>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <by-employer candidate="model.candidates[1]" cycle="model.cycles[1]"></by-employer>
+                    </div>
+
+                </div>
+            </section>
+
+
+            <div class="divider-d"></div>
+            <section id="outside_groups" class="module-small">
+
+
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h1>Outside Groups</h1>
+
+                        <p>While outside groups have always played outsized role in American politics, their influence has
+                            increased dramatically since 2010. In that year, the United States Supreme Court
+                            ruled in <em>Citizens United v. FEC</em> that the first amendment prohibited the government from restricting
+                            independent political expenditures - that is contributions to and expenditures made by outside groups
+                            not coordinating their activities with a political candidate.</p>
+
+                        <p>Contributions to candidates and their committees are strictly regulated and capped at a
+                            relatively low level - in the 2015-2016 election cycle, an individual can give a maximum of $2,700
+                            to any candidate committee, or a maximum of $5,000 to a traditional PAC. The aftermath of Citizens United, 
+							however was to see a proliferation of "independent-expenditure-only Political Action Committees", 
+							also known as Super PACs. Contributions to these groups are entirely uncapped, enabling the wealthiest 
+							Americans to have an outized voice in recent elections.</p>
+
+                        <p>To date, since the era of Super PACs began, Super PAC fundraising has been dominated by the Republican side of
+                            politics. While Obama in 2012 had a highly funded Super PAC, <em>Priorities USA Action</em>, it served
+                            almost entirely as a vehicle to fund attacks against Mitt Romney, rather than by which to promote Obama's
+                            candidacy. Pro-democratic outside groups are still relatively more likely to be small-donor traditional PACs
+                            run by organizations like trade unions, rather than Super PACs.</p>
+
+                        <div class="spacer"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h3 id="top-outside-groups">Top Outside Groups</h3>
+                    </div>
+                    <div class="col-xs-6">
+                        <outside-groups candidate="model.candidates[0]" cycle="model.cycles[0]" outside-group="model.outsideGroups[0]"></outside-groups>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <outside-groups candidate="model.candidates[1]" cycle="model.cycles[1]" outside-group="model.outsideGroups[1]"></outside-groups>
+                    </div>
+
+                    <div class="col-xs-12">
+                        <h3 id="top-contributors">Top Outside Group Contributors</h3>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <group-donors outside-group="model.outsideGroups[0]" cycle="model.cycles[0]"></group-donors>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <group-donors outside-group="model.outsideGroups[1]" cycle="model.cycles[1]"></group-donors>
+                    </div>
+
+                    <!--<div class="col-xs-12"><h4 id="outside-contributions-by-state-county">Contributions by State/County?</h4></div>-->
+                    <!--<div class="col-xs-6">-->
+                        <!--<div class="well well-lg" style="padding: 250px 20px;">Choropleth chart of contributions by state/county here??</div>-->
+                    <!--</div>-->
+                    <!--<div class="col-xs-6">-->
+                        <!--<div class="well well-lg" style="padding: 250px 20px;">Choropleth chart of contributions by state/county here??</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="col-xs-12"><h4 id="outside-over-tiime">Total Fundraising Over Time??</h4></div>-->
+                    <!--<div class="col-xs-6">-->
+                        <!--<div class="well well-lg" style="padding: 250px 20px;">Chart of contributions over time here???</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="col-xs-6">-->
+                        <!--<div class="well well-lg" style="padding: 250px 20px;">Chart of contributions over time here???</div>-->
+                    <!--</div>-->
+                </div>
+
+            </section>
+
+
+        </div>
+    </div>
+</div>
+
+<script src="assets/js/angular.min.js"></script>
+<script src="assets/js/angular-strap.min.js"></script>
+<script src="assets/js/angular-strap.tpl.min.js"></script>
+
+<script src="app.js"></script>
+
+<script src="assets/js/d3.js"></script>
+<script src="assets/js/topojson.v1.min.js"></script>
+<script src="assets/js/d3-legend.js"></script>
+<script src="assets/js/d3.tip.v0.6.3.js"></script>
+<script src="assets/js/colorbrewer.js"></script>
+<script>d3.custom = {};</script>
+
+<script src="charts/chloropleth_viz.js"></script>
+<script src="charts/segmentedBar.js"></script>
+<script src="charts/horizontalBar.js"></script>
+<script src="charts/sparklineBar.js"></script>
+
+</body>
+</html>

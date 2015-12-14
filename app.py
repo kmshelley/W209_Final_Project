@@ -435,7 +435,7 @@ api.add_resource(ContributorsByEmployer,
                  '/contributors/by_employer/<string:cmte_id>/<string:cycle>/<int:topk>/<string:real_nom>/')
                  
 api.add_resource(CommiteeMonthlyFinances, '/com_fins/<string:cmte_ids>/<string:cycle>/')
-api.add_resource(CandidateMonthlyFinances, '/com_fins/<string:cand_ids>/<string:cycle>/')
+api.add_resource(CandidateMonthlyFinances, '/cand_fins/<string:cand_ids>/<string:cycle>/')
     
 
 # MONGO_DB
