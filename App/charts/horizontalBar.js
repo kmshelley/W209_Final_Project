@@ -228,7 +228,7 @@ d3.custom.horizontalBar = function () {
                 .style("font-size","10px");
 
 
-            g.selectAll(".legend")
+            svg.selectAll(".legend")
                 .data(color.domain().slice().reverse())
                 .exit()
                 .remove();
@@ -238,19 +238,19 @@ d3.custom.horizontalBar = function () {
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", function(d, i) { return "translate(0," + (margin.top + (i * 17)) + ")"; });
+                .attr("transform", function(d, i) { return "translate(0," + (margin.top + (i * 15)) + ")"; });
 
             legend.append("rect")
-                .attr("x", w - 15)
-                .attr("width", 15)
-                .attr("height", 15);
+                .attr("x", w - 13)
+                .attr("width", 13)
+                .attr("height", 13);
 
             svg.selectAll(".legend rect")
                 .data(color.domain().slice().reverse())
                 .style("fill", color);
 
             legend.append("text")
-                .attr("x", w - 24)
+                .attr("x", w - 22)
                 .attr("y", 9)
                 .attr("dy", ".35em");
 

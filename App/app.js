@@ -628,13 +628,13 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                             function getColors(party, i){
                                 var j = Math.min(Math.max(i,3),9);
-                                var slicer = Math.max(0,j-i);
                                 var cols =  {
                                     Democrat: colorbrewer.Blues[j],
                                     Republican: colorbrewer.Reds[j]
                                 };
-
-                                return cols[party];
+                                var colors = cols[party];
+                                if (i>9){ colors = colors.concat(cols[party])}
+                                return colors
                             }
 
                             var candidate_ids = Object.keys(scope.candidateJson[scope.cycle]).map(function(party) {
