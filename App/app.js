@@ -626,16 +626,33 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                     scope.$watchGroup(['cycle', 'domainMax.left', 'domainMax.right'], function() {
                         if (scope.cycle>0 && scope.domainMax){
 
+                            function getColors(party, i){
+                                var j = Math.min(Math.max(i,3),9);
+                                var slicer = Math.max(0,j-i);
+                                var cols =  {
+                                    Democrat: colorbrewer.Blues[j],
+                                    Republican: colorbrewer.Reds[j]
+                                };
+
+                                return cols[party];
+                            }
+
                             var candidate_ids = Object.keys(scope.candidateJson[scope.cycle]).map(function(party) {
                                 return scope.candidateJson[scope.cycle][party].map(function(candidate) {
                                     if(candidate.CAND_ID){ return candidate.CAND_ID }
                                 })
                             });
+
+                            candidate_ids[0] = candidate_ids[0].filter(function(n){ return n != undefined }).reverse();
+                            candidate_ids[1] = candidate_ids[1].filter(function(n){ return n != undefined }).reverse();
+
+                            var parties = Object.keys(scope.candidateJson[scope.cycle]);
+                            var cLength = Math.max(candidate_ids[0].length, candidate_ids[1].length);
+
+                            var colors = getColors(parties[0], cLength).slice(-candidate_ids[0].length)
+                                .concat(getColors(parties[1], cLength).slice(-candidate_ids[1].length));
+
                             candidate_ids = [].concat.apply([], candidate_ids);
-                            candidate_ids = candidate_ids.filter(function(n){ return n != undefined });
-
-
-
 
 
                             vizAPI.get_receipts_disbursements_by_candidates(candidate_ids, scope.cycle)
@@ -643,7 +660,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                                     var chart = d3.custom['horizontalBar']()
                                         .h(scope.height)
-                                        .w(scope.width);
+                                        .w(scope.width)
+                                        .colors(colors);
 
                                     chartEl.datum([json, scope.domainMax, scope.pos]).call(chart);
 

@@ -1,5 +1,5 @@
 d3.custom.horizontalBar = function () {
-    var margin = {top: 40, right: 20, bottom: 20, left: 20, middle: 35},
+    var margin = {top: 40, right: 50, bottom: 20, left: 20, middle: 35},
         w = 760,
         h = 360,
         monthFormat = d3.time.format("%b"),
@@ -32,9 +32,6 @@ d3.custom.horizontalBar = function () {
                 return "<strong>"+ monthYrFormat(d.y)+": </strong><span style='color:#000000'>"+ d.name+" - " + formatCurrency (d.x1 - d.x0)+"</span>";
         });
 
-		/*var legend = d3.legend.color()
-			.useClass(false)
-			.orient("horizontal");*/
 		
     function chart(selection) {
         selection.each(function(d) {
@@ -236,31 +233,31 @@ d3.custom.horizontalBar = function () {
                 .exit()
                 .remove();
 
-            var legend = g.selectAll(".legend")
+            var legend = svg.selectAll(".legend")
                 .data(color.domain().slice().reverse())
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", function(d, i) { return "translate(0," + (5 + (i * 20)) + ")"; });
+                .attr("transform", function(d, i) { return "translate(0," + (margin.top + (i * 17)) + ")"; });
 
             legend.append("rect")
-                .attr("x", width - 18)
-                .attr("width", 18)
-                .attr("height", 18);
+                .attr("x", w - 15)
+                .attr("width", 15)
+                .attr("height", 15);
 
-            g.selectAll(".legend rect")
+            svg.selectAll(".legend rect")
                 .data(color.domain().slice().reverse())
                 .style("fill", color);
 
             legend.append("text")
-                .attr("x", width - 24)
+                .attr("x", w - 24)
                 .attr("y", 9)
                 .attr("dy", ".35em");
 
-            g.selectAll(".legend text")
+            svg.selectAll(".legend text")
                 .data(color.domain().slice().reverse())
                 .style("text-anchor", "end")
-                .style("font-size","10px")
+                .style("font-size","9px")
                 .text(function(d) { return d; });
 
         });

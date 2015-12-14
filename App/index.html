@@ -89,9 +89,18 @@
 
 						<p>It's no secret in the United States that it takes a lot of money to win an election. What is not well understood, is
 						the amount and source of campaign finances. The FEC is responsible for enforcing federal campaign finance laws, and candidates and
-						fundraising committees are required to report all receipts and expenditures. However, with the various laws regulating the frequency, source,
+						fundraising committees are required to report all receipts and expenditures. However, with various laws regulating the frequency, source,
 						and amount of funds different groups can contribute, the real picture of just <em>how much</em> money is spent becomes easily obscured.
 						With this visualization we seek to better understand both the sources of federal campaign funding, and their impact.</p>
+
+                        <p><strong>Use the hierachical menus in the toolbar above to select two candidates for comparison.</strong></p>
+
+                        <p ng-show="model.cycles[0]===model.cycles[1]">The chart below shows monthly fundraising and spending by all major candidates and their affiliated groups in the
+                        {{model.cycles[0]}} election cycle. <strong>To show a second chart to compare spending between cycles, select candidates for comparison from
+                        two different election cycles</strong></p>
+
+                        <p ng-show="model.cycles[0]!==model.cycles[1]">The charts below show monthly fundraising and spending by all major candidates and their affiliated groups in the
+                        {{model.cycles[0]}} and {{model.cycles[1]}} election cycles.</p>
 
                         <div class="col-xs-6">
                             <whole-cycle candidate-json="model.candidateJson" cycle="model.cycles[0]" height="300"
@@ -134,8 +143,8 @@
 						advertising and other campaign materials independently. Because they are not directly related to a candidate or 
 						political committee, Super PACs are not required to follow FEC restrictions on the amount of money raised or spent for the purposes of 
 						an election. Legalized by the Supreme Court in 2010, Super PACs and their unlimited funds have changed the playing field of 
-						American politics. Super PACs have become a popular vehicle for outside fundraising; while not allowed to officially support a 
-						particular candidate, so-called single-candidate Super PACs focus almost exclusively on the election of a single individual.</p>
+						American politics. Super PACs have become a popular vehicle for outside fundraising; while not allowed to coordinate their activities with a
+						particular candidate or the candidate's principal committee, so-called single-candidate Super PACs focus almost exclusively on the election of a single individual.</p>
 						
 						<p>The following charts show the breakdown of candidates' fundraising totals across the last three presidential elections, 
 						and how different types of fundraising committees, sizes of contributions, and locations of donors all play a role in making or breaking 
