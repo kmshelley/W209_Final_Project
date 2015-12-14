@@ -123,7 +123,6 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                         if (typeof item.properties !== 'undefined'){
                             scope.candidate = item.properties;
-                            scope.party = item.properties.CAND_PTY_AFFILIATION;
                             scope.cycle = item.properties.cycle;
                             scope.navObj[0].title = scope.candidate.CAND_NAME +" ("+ scope.candidate.cycle+")";
 
@@ -134,15 +133,14 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                     // Initialize dropdown by getting json object for candidate
                     vizAPI.get_candiates()
                         .success(function(json){
-
                             var cycles =  Object.keys(json);
                             var cycleIndex = cycles.length - 2; // using 2012 as default for the moment
-                            scope.cycle = cycles[cycleIndex];
+                            var cycle = cycles[cycleIndex];
+                            var parties = Object.keys(json[cycle]);
+                            var party = parties[+scope.partyIndex];
+                            var candidates = json[cycle][party];
 
-                            var parties = Object.keys(json[scope.cycle]);
-                            scope.party = parties[+scope.partyIndex];
-
-                            var candidates = json[scope.cycle][scope.party];
+                            scope.cycle = cycle;
                             scope.candidate = candidates[0];
 
                             scope.navObj = [{
@@ -208,8 +206,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                     var formatValue = d3.format(".2s"),
                         formatCurrency = function(d) { return "$" + formatValue(d); };
                     scope.topk = 5;
-                    scope.$watchGroup(['candidate', 'topk'], function() {
-                        if (Object.keys(scope.candidate).length){
+                    scope.$watchGroup(['candidate', 'topk', 'cycle'], function() {
+                        if (Object.keys(scope.candidate).length  && scope.cycle>0){
                             vizAPI.get_by_employer(scope.candidate.Principal.id, scope.cycle, scope.topk)
                                 .success(function(json){
                                     scope.employers = json;

@@ -5,45 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans|Domine">
     <link rel="stylesheet" href="assets/css/style.css">
 
 </head>
 <body>
 
 
-<header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
-    <div>
-        <div class="navbar-header">
-
-
-            <div class="col-xs-3">
+<nav class="navbar navbar-custom navbar-fixed-top bs-docs-nav" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header col-xs-4">
             <a href="" class="navbar-brand">The Price of A US Presidential Election</a>
         </div>
-        <div class="col-xs-9 navbar-selects">
-            <div class="col-xs-2">
-
-                <div class="form-group form-inline">
-                            <label for="cycleSelector" class="white-text">Election:&nbsp;</label>
-                            <select id="cycleSelector" ng-model="model.cycle"
-                                    ng-options="c for c in model.cycles" class="form-control input-xs">
-                            </select>
-                        </div>
-
-            </div>
-            <div class="col-xs-5">
-                <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle"
-                                    candidate="model.candidates[0]" party-index="1"></candidate-selector>
-            </div>
-            <div class="col-xs-5">
-                <candidate-selector candidate-json="model.candidateJson" cycle="model.cycle"
-                                    candidate="model.candidates[1]" party-index="0"></candidate-selector>
-            </div>
+        <div class="col-xs-2 navbar-brand gray">Select Candidates:</div>
+        <div class="col-xs-3">
+            <navbar-selector cycle="model.cycles[0]" candidate="model.candidates[0]" party-index="1"></navbar-selector>
         </div>
 
+        <div class="col-xs-3">
+            <navbar-selector cycle="model.cycles[1]" candidate="model.candidates[1]" party-index="0"></navbar-selector>
         </div>
-
     </div>
-</header>
+</nav>
 
 
 <div class="bs-header" id="content">
@@ -88,8 +72,6 @@
                         <ul class="nav">
                             <li><a href="#top-outside-groups">Top Outside Groups</a></li>
                             <li><a href="#top-contributors">Top Contributors</a></li>
-                            <!--<li><a href="#outside-contributions-by-state-county">Contributions by State/County??</a></li>-->
-                            <!--<li><a href="#outside-over-tiime">Fundraising Over Time??</a></li>-->
                         </ul>
                         </li>
 
@@ -122,55 +104,7 @@
                     </div>
                 </div>
 
-                <!--<div class="row">-->
-                    <!--<div class="col-xs-4">-->
-                        <!--<div class="form-group">-->
-                            <!--<label for="cycleSelector">Select Election Cycle</label>-->
-                            <!--<select id="cycleSelector" ng-model="model.cycle"-->
-                                    <!--ng-options="c for c in model.cycles" class="form-control">-->
-                            <!--</select>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-
             </section>
-
-
-            <!--<div class="divider-d"></div>-->
-            <!--<section id="current-cycle" class="module-small">-->
-
-                <!--<div class="row">-->
-
-                    <!--<div class="col-xs-12">-->
-                        <!--<h2>{{model.cycle}} Election Cycle:</h2>-->
-                        <!--<div class="spacer"></div>-->
-
-                        <!--<div class="well well-lg" style="padding: 150px 20px;">-->
-                            <!--<p>Here, if we want and we have time, we-->
-                            <!--can add a visualization of total fundraising or spending for all candidates, color-segmented-->
-                            <!--by candidate, in the {{model.cycle}} election.</p>-->
-                            <!--<p>We can either use the viz to select candidates, or just dropdowns like the one below.</p>-->
-                        <!--</div>-->
-
-
-
-                        <!--<h3>Select Candidates to Compare</h3>-->
-                    <!--</div>-->
-                    <!--<div class="col-xs-4">-->
-                        <!--<candidate-selector candidate-json="model.candidateJson" cycle="model.cycle"-->
-                                            <!--candidate="model.candidates[0]" party-index="1"></candidate-selector>-->
-                        <!--<p><strong>Candidate ID: </strong>{{model.candidates[0].CAND_ID}}</p>-->
-                        <!--<p><strong>Committee ID: </strong>{{model.candidates[0].Principal.id}}</p>-->
-                    <!--</div>-->
-                    <!--<div class="col-xs-4 col-xs-offset-2">-->
-                        <!--<candidate-selector candidate-json="model.candidateJson" cycle="model.cycle"-->
-                                            <!--candidate="model.candidates[1]" party-index="0"></candidate-selector>-->
-                        <!--<p><strong>Candidate ID: </strong>{{model.candidates[1].CAND_ID}}</p>-->
-                        <!--<p><strong>Committee ID: </strong>{{model.candidates[1].Principal.id}}</p>-->
-
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</section>-->
 
             <div class="divider-d"></div>
             <section id="candidate_committees" class="module-small">
@@ -208,7 +142,7 @@
                     </div>
 
                     <div class="col-xs-12">
-						<h3 id="monthly-receipts">Committee Financial Filing Rules</h3>
+						<h3 id="filing-rules">Committee Financial Filing Rules</h3>
 						<p>The frequency of reporting varies by the type of committee. Candidate Campaign Committees have the choice to file financial information 
 						with the FEC either monthly or quarterly, National Party Committees must report monthly, and PACs and Super PACs can file either monthly or semi-annually.</p>
 						<p>In order to compare monthly fundraising and expenditure totals for all types of committees, regardless of their filing schedule, 
@@ -223,10 +157,10 @@
 						National Committee.</p>
 					</div>
                     <div class="col-xs-6">
-                        <monthly-rev-ex candidate="model.candidates[0]" cycle="model.cycle" height="300" width="460" domain-max="model.monthlyRevEx" pos="'left'"></monthly-rev-ex>
+                        <monthly-rev-ex candidate="model.candidates[0]" cycle="model.cycles[0]" height="300" width="460" domain-max="model.monthlyRevEx" pos="'left'"></monthly-rev-ex>
                     </div>
                     <div class="col-xs-6">
-                        <monthly-rev-ex candidate="model.candidates[1]" cycle="model.cycle" height="300" width="460" domain-max="model.monthlyRevEx" pos="'right'"></monthly-rev-ex>
+                        <monthly-rev-ex candidate="model.candidates[1]" cycle="model.cycles[1]" height="300" width="460" domain-max="model.monthlyRevEx" pos="'right'"></monthly-rev-ex>
                     </div>
 
                     <div class="col-xs-12">
@@ -235,10 +169,10 @@
 						broken down by the size of contribution.</p>
 					</div>
                     <div class="col-xs-6">
-                        <contributions-by-size candidate="model.candidates[0]" cycle="model.cycle" height="100" width="460"></contributions-by-size>
+                        <contributions-by-size candidate="model.candidates[0]" cycle="model.cycles[0]" height="100" width="460"></contributions-by-size>
                     </div>
                     <div class="col-xs-6">
-                        <contributions-by-size candidate="model.candidates[1]" cycle="model.cycle" height="100" width="460"></contributions-by-size>
+                        <contributions-by-size candidate="model.candidates[1]" cycle="model.cycles[1]" height="100" width="460"></contributions-by-size>
                     </div>
 
                     <div class="col-xs-12">
@@ -247,19 +181,19 @@
 						Use the buttons to toggle between state and county level data.</p>
 					</div>
                     <div class="col-xs-6">
-                        <choropleth candidate="model.candidates[0]" cycle="model.cycle" height="460" width="460" scale="650" domain-max="model.choropleth" pos="'left'"></choropleth>
+                        <choropleth candidate="model.candidates[0]" cycle="model.cycles[0]" height="460" width="460" scale="650" domain-max="model.choropleth" pos="'left'"></choropleth>
                     </div>
                     <div class="col-xs-6">
-                        <choropleth candidate="model.candidates[1]" cycle="model.cycle" height="460" width="460" scale="650" domain-max="model.choropleth" pos="'right'"></choropleth>
+                        <choropleth candidate="model.candidates[1]" cycle="model.cycles[1]" height="460" width="460" scale="650" domain-max="model.choropleth" pos="'right'"></choropleth>
                     </div>
 
                     <div class="col-xs-12"><h4 id="top-employers">Top Employers of > $200 Campaign Contributors</h4></div>
                     <div class="col-xs-6">
-                        <by-employer candidate="model.candidates[0]" cycle="model.cycle"></by-employer>
+                        <by-employer candidate="model.candidates[0]" cycle="model.cycles[0]"></by-employer>
                     </div>
 
                     <div class="col-xs-6">
-                        <by-employer candidate="model.candidates[1]" cycle="model.cycle"></by-employer>
+                        <by-employer candidate="model.candidates[1]" cycle="model.cycles[1]"></by-employer>
                     </div>
 
                 </div>
@@ -303,11 +237,11 @@
                         <h4 id="top-outside-groups">Top Outside Groups</h4>
                     </div>
                     <div class="col-xs-6">
-                        <outside-groups candidate="model.candidates[0]" cycle="model.cycle" outside-group="model.outsideGroups[0]"></outside-groups>
+                        <outside-groups candidate="model.candidates[0]" cycle="model.cycles[0]" outside-group="model.outsideGroups[0]"></outside-groups>
                     </div>
 
                     <div class="col-xs-6">
-                        <outside-groups candidate="model.candidates[1]" cycle="model.cycle" outside-group="model.outsideGroups[1]"></outside-groups>
+                        <outside-groups candidate="model.candidates[1]" cycle="model.cycles[1]" outside-group="model.outsideGroups[1]"></outside-groups>
                     </div>
 
                     <div class="col-xs-12">
@@ -315,29 +249,13 @@
                     </div>
 
                     <div class="col-xs-6">
-                        <group-donors outside-group="model.outsideGroups[0]" cycle="model.cycle"></group-donors>
+                        <group-donors outside-group="model.outsideGroups[0]" cycle="model.cycles[0]"></group-donors>
                     </div>
 
                     <div class="col-xs-6">
-                        <group-donors outside-group="model.outsideGroups[1]" cycle="model.cycle"></group-donors>
+                        <group-donors outside-group="model.outsideGroups[1]" cycle="model.cycles[1]"></group-donors>
                     </div>
 
-                    <!--<div class="col-xs-12"><h4 id="outside-contributions-by-state-county">Contributions by State/County?</h4></div>-->
-                    <!--<div class="col-xs-6">-->
-                        <!--<div class="well well-lg" style="padding: 250px 20px;">Choropleth chart of contributions by state/county here??</div>-->
-                    <!--</div>-->
-                    <!--<div class="col-xs-6">-->
-                        <!--<div class="well well-lg" style="padding: 250px 20px;">Choropleth chart of contributions by state/county here??</div>-->
-                    <!--</div>-->
-
-                    <!--<div class="col-xs-12"><h4 id="outside-over-tiime">Total Fundraising Over Time??</h4></div>-->
-                    <!--<div class="col-xs-6">-->
-                        <!--<div class="well well-lg" style="padding: 250px 20px;">Chart of contributions over time here???</div>-->
-                    <!--</div>-->
-
-                    <!--<div class="col-xs-6">-->
-                        <!--<div class="well well-lg" style="padding: 250px 20px;">Chart of contributions over time here???</div>-->
-                    <!--</div>-->
                 </div>
 
             </section>
