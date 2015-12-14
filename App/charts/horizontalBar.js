@@ -23,13 +23,13 @@ d3.custom.horizontalBar = function () {
         yScale = d3.scale.ordinal(),
         xLeftAxis = d3.svg.axis().scale(xLeftScale).orient("top").tickSize(6, 0).ticks(4).tickFormat(formatCurrency),
         xRightAxis = d3.svg.axis().scale(xRightScale).orient("top").tickSize(6, 0).ticks(4).tickFormat(formatCurrency);
-        colors = colorbrewer.Blues[5];
+        colors = null;
 
         var tip = d3.tip()
             .attr('class', 'd3-tip')
             .offset([-5, 0])
             .html(function(d) {
-                return "<strong>"+ monthYrFormat(d.y)+": </strong><span style='color:#000000'>"+ d.name+" - " + formatCurrency (d.x1)+"</span>";
+                return "<strong>"+ monthYrFormat(d.y)+": </strong><span style='color:#000000'>"+ d.name+" - " + formatCurrency (d.x1 - d.x0)+"</span>";
         });
 
 		/*var legend = d3.legend.color()
@@ -71,7 +71,12 @@ d3.custom.horizontalBar = function () {
 
             //update color scales
             var fields = d3.map(rightData.concat(leftData), function(d){return d.name;}).keys();
-            var color = d3.scale.ordinal().range(colors).domain(fields);
+            if (colors){
+                var color = d3.scale.ordinal().range(colors).domain(fields);
+            } else {
+                var color = d3.scale.category20().domain(fields);
+            }
+
 
             //********
 

@@ -9,6 +9,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             mapData: null,
             candidateJson: null,
             monthlyRevEx: {'left': 0, 'right': 0},
+            wholeCycle: {'left': 0, 'right': 0},
             choropleth: {'left': 0, 'right': 0}
         };
 
@@ -57,6 +58,9 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             return $http.get(BASE_URL+'/com_fins/'+ committee_ids +'/'+cycle);
         };
 
+        factory.get_receipts_disbursements_by_candidates = function(candidate_ids, cycle) {
+            return $http.get(BASE_URL+'/cand_fins/'+ candidate_ids +'/'+cycle);
+        };
         return factory;
     })
 
@@ -71,7 +75,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             scope: {
                 cycle: "=",
                 candidate: "=",
-                partyIndex: "="
+                partyIndex: "=",
+                candidateJson: "="
             },
 
             link:
@@ -101,7 +106,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                         if ($event.currentTarget.getElementsByClassName('dropdown').length){
                             var Menu2LevelWidth = subMenu.offsetWidth;
-                            if (scope.innerWidth/4 - MenuLeftOffset - Menu1LevelWidth < Menu2LevelWidth){
+                            if (scope.innerWidth/5 - MenuLeftOffset - Menu1LevelWidth < Menu2LevelWidth){
                                 angular.element(subMenu).addClass('left-side');
                             }else{
                                 angular.element(subMenu).removeClass('left-side');
@@ -142,6 +147,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                             scope.cycle = cycle;
                             scope.candidate = candidates[0];
+                            scope.candidateJson = json;
 
                             scope.navObj = [{
                                 'title': scope.candidate.CAND_NAME +" ("+ scope.candidate.cycle+")",
@@ -555,7 +561,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                         if (Object.keys(scope.candidate).length && scope.domainMax){
 
                             function supporting(d){ if (d){return d.id} }
-                            var ctte_ids = [scope.candidate.Principal.id].concat(scope.candidate.Supporting.map(supporting)).toString()
+                            var ctte_ids = [scope.candidate.Principal.id].concat(scope.candidate.Supporting.map(supporting)).toString();
 
                             vizAPI.get_receipts_disbursements_by_committees(ctte_ids, scope.cycle)
                                 .success(function(json){
@@ -599,14 +605,76 @@ angular.module('myApp', ['mgcrea.ngStrap'])
     }])
 
 
+    .directive('wholeCycle', ['vizAPI', function(vizAPI){
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                cycle: '=',
+                candidateJson: "=",
+                height: '=',
+                width: '=',
+                domainMax: "=",
+                pos: "="
+            },
+
+            link:
+                function(scope, element, attrs){
+
+                    var chartEl = d3.select(element[0]).selectAll(".chart");
+
+                    scope.$watchGroup(['cycle', 'domainMax.left', 'domainMax.right'], function() {
+                        if (scope.cycle>0 && scope.domainMax){
+
+                            var candidate_ids = Object.keys(scope.candidateJson[scope.cycle]).map(function(party) {
+                                return scope.candidateJson[scope.cycle][party].map(function(candidate) {
+                                    if(candidate.CAND_ID){ return candidate.CAND_ID }
+                                })
+                            });
+                            candidate_ids = [].concat.apply([], candidate_ids);
+                            candidate_ids = candidate_ids.filter(function(n){ return n != undefined });
 
 
 
 
 
+                            vizAPI.get_receipts_disbursements_by_candidates(candidate_ids, scope.cycle)
+                                .success(function(json){
+
+                                    var chart = d3.custom['horizontalBar']()
+                                        .h(scope.height)
+                                        .w(scope.width);
+
+                                    chartEl.datum([json, scope.domainMax, scope.pos]).call(chart);
+
+                                    var formatValue = d3.format("0,000"),
+                                        formatCurrency = function(d) { return "$" + formatValue(Math.round(d/10000)/100) + "M"; };
+
+                                    scope.receipts = formatCurrency(d3.sum(json.map(function(d) {
+                                        return d3.sum(d.data.map(function(d) { return d.data.receipts }))
+                                    })));
+                                    scope.expenditures = formatCurrency(d3.sum(json.map(function(d) {
+                                        return d3.sum(d.data.map(function(d) { return d.data.expenditures }))
+                                    })));
 
 
+                                });
+                        }
+                    });
+                },
 
+            template:
+            '<div>' +
+            '<div style="padding: 15px 0; font-weight: bold"> Monthly Fundraising and Spending by Major Candidates\' Principal Committees and Affiliated Groups in the {{cycle}} Election Cycle</div>' +
+            '<div class="chart" ></div>' +
+                '<div style="padding: 15px 25px; font-size: 16px">' +
+                    '<span>Total Raised: <strong>{{receipts}}</strong></span>' +
+                    '<span class="pull-right">Total Spent: <strong>{{expenditures}}</strong></span>' +
+                '</div>' +
+
+            '</div>'
+        }
+    }])
 
     .directive('customChart', function(){
         return {
