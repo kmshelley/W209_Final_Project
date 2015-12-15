@@ -10,7 +10,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             candidateJson: null,
             monthlyRevEx: {'left': 0, 'right': 0},
             wholeCycle: {'left': 0, 'right': 0},
-            choropleth: {'left': 0, 'right': 0}
+            choropleth: {'left': 0, 'right': 0},
+            stateFips: 'state'
         };
 
     }])
@@ -30,7 +31,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             return $http.get(BASE_URL+'/schedule_a/by_size/' + committee_id + '/' + cycle);
         };
 
-        factory.contributors_by_geo = function(committee_id, cycle, geo_agg, real_nom) {
+        factory.contributors_by_geo = function(committee_id, cycle, geo_agg) {
+            console.log(BASE_URL+'/contributors/by_geo/'+ committee_id +'/'+cycle +'/'+ geo_agg+'/');
             return $http.get(BASE_URL+'/contributors/by_geo/'+ committee_id +'/'+cycle +'/'+ geo_agg+'/');
         };
 
@@ -307,6 +309,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                     '<h3 class="panel-title">Top {{topk}} Outside Groups Spending {{for_against}} {{candidate.CAND_NAME}}</h3>'+
                 '</div>'+
                 '<div class="panel-body">'+
+                    'Selecting a row in this table will show top contributors to the selected group in the Contributors table below.<br><br>'+
                     '<div class="btn-toolbar">'+
 
                         '<div class="btn-group btn-group-xs" ng-model="for_against" bs-radio-group>'+
@@ -330,7 +333,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                         '<th class="col-xs-4">Spending Over Time</th>'+
                     '</tr>'+
                     '<tr ng-repeat="group in topGroups" ng-click="selectPAC(group)">'+
-                        '<td class="vert-align">{{ group.committee_name }}</td>'+
+                        '<td class="vert-align"><a href="#top-contributors">{{ group.committee_name }}</a></td>'+
                         '<td class="vert-align">{{ group.total_spend_formatted }}</td>'+
                         '<td class="vert-align">{{ group.for_against }}</td>'+
                         '<td class="vert-align">' +
@@ -419,7 +422,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                 width: '=',
                 scale: '=',
                 domainMax: "=",
-                pos: "="
+                pos: "=",
+                stateFips: "="
             },
 
             link:
@@ -443,9 +447,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                     var chartEl = d3.select(element[0]);
 
-                    scope.state_fips = 'state';
-
-                    scope.$watchGroup(['candidate','state_fips', 'domainMax.left', 'domainMax.right'], function() {
+                    scope.$watchGroup(['candidate','stateFips'], function() {
                         if (Object.keys(scope.candidate).length){
 
                             var chart = d3.custom['choropleth']()
@@ -454,30 +456,41 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                                 .scale(scope.scale)
                                 .colors(parties[scope.candidate.CAND_PTY_AFFILIATION]);
 
-                            scope.state_county = f_to_c[scope.state_fips];
+                            scope.state_county = f_to_c[scope.stateFips];
 
-                            vizAPI.contributors_by_geo(scope.candidate.Principal.id, scope.cycle, scope.state_fips)
+                            vizAPI.contributors_by_geo(scope.candidate.Principal.id, scope.cycle, scope.stateFips)
                                 .success(function(json){
                                     var map = d3.map(); //a hash to define mapping from locations to values
                                     json.forEach(function(d){ map.set(d.location_id, {'total': d.amount, 'name': d.name}); });
-                                    data[scope.state_fips].forEach(function(loc){
+
+                                    data[scope.stateFips].forEach(function(loc){
                                         if (map.get(loc.id)){ loc.properties = map.get(loc.id); }
                                     });
-                                    chartEl.datum([data[scope.state_fips], scope.domainMax, scope.pos]).call(chart);
+                                    scope.dataCache = data;
+                                    chartEl.datum([data[scope.stateFips], scope.domainMax, scope.pos]).call(chart);
                                 })
                         }
                     });
+
+                    scope.$watchGroup(['domainMax.left', 'domainMax.right'], function() {
+                        if (scope.dataCache){
+
+                            var chart = d3.custom['choropleth']()
+                                .height(scope.height)
+                                .width(scope.width)
+                                .scale(scope.scale)
+                                .colors(parties[scope.candidate.CAND_PTY_AFFILIATION]);
+
+                            chartEl.datum([scope.dataCache[scope.stateFips], scope.domainMax, scope.pos]).call(chart);
+
+                        }
+                    });
+
                 },
 
             template:
             '<div style="font-weight: bold">' +
                 'Contributions > $200 to {{candidate.Principal.name}} by {{state_county}} <br><br>' +
-                '<div class="btn-toolbar">'+
-                    '<div class="btn-group btn-group-xs" ng-model="state_fips" bs-radio-group>'+
-                        '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="state">State</label>' +
-                        '<label class="btn btn-default"><input type="radio" class="btn btn-default" value="fips">County</label>' +
-                    '</div>'+
-                '</div>'+
                 '<div class="chart"></div>' +
             '</div>'
         }
@@ -557,7 +570,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                     }
                     var chartEl = d3.select(element[0]).selectAll(".chart");
 
-                    scope.$watchGroup(['candidate', 'domainMax.left', 'domainMax.right'], function() {
+                    scope.$watch('candidate', function() {
                         if (Object.keys(scope.candidate).length && scope.domainMax){
 
                             function supporting(d){ if (d){return d.id} }
@@ -565,6 +578,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                             vizAPI.get_receipts_disbursements_by_committees(ctte_ids, scope.cycle)
                                 .success(function(json){
+
+                                    scope.dataCache = json;
 
                                     var colors = getColors(scope.candidate.CAND_PTY_AFFILIATION, json[0].data.length);
 
@@ -587,6 +602,31 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
 
                                 });
+                        }
+                    });
+
+                    scope.$watchGroup(['domainMax.left', 'domainMax.right'], function() {
+                        if (scope.dataCache){
+
+                            var colors = getColors(scope.candidate.CAND_PTY_AFFILIATION, scope.dataCache[0].data.length);
+
+                            var chart = d3.custom['horizontalBar']()
+                                .h(scope.height)
+                                .w(scope.width)
+                                .colors(colors);
+
+                            chartEl.datum([scope.dataCache, scope.domainMax, scope.pos]).call(chart);
+
+                            var formatValue = d3.format("0,000"),
+                                formatCurrency = function(d) { return "$" + formatValue(Math.round(d/10000)/100) + "M"; };
+
+                            scope.receipts = formatCurrency(d3.sum(scope.dataCache.map(function(d) {
+                                return d3.sum(d.data.map(function(d) { return d.data.receipts }))
+                            })));
+                            scope.expenditures = formatCurrency(d3.sum(scope.dataCache.map(function(d) {
+                                return d3.sum(d.data.map(function(d) { return d.data.expenditures }))
+                            })));
+
                         }
                     });
                 },
@@ -623,7 +663,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
                     var chartEl = d3.select(element[0]).selectAll(".chart");
 
-                    scope.$watchGroup(['cycle', 'domainMax.left', 'domainMax.right'], function() {
+                    scope.$watch('cycle', function() {
                         if (scope.cycle>0 && scope.domainMax){
 
                             function getColors(party, i){
@@ -649,7 +689,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                             var parties = Object.keys(scope.candidateJson[scope.cycle]);
                             var cLength = Math.max(candidate_ids[0].length, candidate_ids[1].length);
 
-                            var colors = getColors(parties[0], cLength).slice(-candidate_ids[0].length)
+                            scope.colors = getColors(parties[0], cLength).slice(-candidate_ids[0].length)
                                 .concat(getColors(parties[1], cLength).slice(-candidate_ids[1].length));
 
                             candidate_ids = [].concat.apply([], candidate_ids);
@@ -661,7 +701,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                                     var chart = d3.custom['horizontalBar']()
                                         .h(scope.height)
                                         .w(scope.width)
-                                        .colors(colors);
+                                        .colors(scope.colors);
 
                                     chartEl.datum([json, scope.domainMax, scope.pos]).call(chart);
 
@@ -677,6 +717,29 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
 
                                 });
+                        }
+                    });
+
+                    scope.$watchGroup(['domainMax.left', 'domainMax.right'], function() {
+                        if (scope.dataCache){
+
+                        var chart = d3.custom['horizontalBar']()
+                            .h(scope.height)
+                            .w(scope.width)
+                            .colors(scope.colors);
+
+                        chartEl.datum([scope.dataCache, scope.domainMax, scope.pos]).call(chart);
+
+                        var formatValue = d3.format("0,000"),
+                            formatCurrency = function(d) { return "$" + formatValue(Math.round(d/10000)/100) + "M"; };
+
+                        scope.receipts = formatCurrency(d3.sum(scope.dataCache.map(function(d) {
+                            return d3.sum(d.data.map(function(d) { return d.data.receipts }))
+                        })));
+                        scope.expenditures = formatCurrency(d3.sum(scope.dataCache.map(function(d) {
+                            return d3.sum(d.data.map(function(d) { return d.data.expenditures }))
+                        })));
+
                         }
                     });
                 },

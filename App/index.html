@@ -190,12 +190,21 @@
 						<h3 id="contributions-by-state-county">Individual Contributions > $200 by State or County</h3>
 						<p>These maps show all contributions greater than $200 reported to the FEC by the Candidate Committees. 
 						Use the buttons to toggle between state and county level data.</p>
-					</div>
-                    <div class="col-xs-6">
-                        <choropleth candidate="model.candidates[0]" cycle="model.cycles[0]" height="460" width="460" scale="650" domain-max="model.choropleth" pos="'left'"></choropleth>
+                    </div>
+                    <div class="col-xs-7 col-xs-offset-5">
+                        <div class="btn-toolbar">
+                            <div class="btn-group btn-group-xs" ng-model="model.stateFips" bs-radio-group>
+                                <label class="btn btn-default"><input type="radio" class="btn btn-default" value="state">State</label>
+                                <label class="btn btn-default"><input type="radio" class="btn btn-default" value="fips">County</label>
+                            </div>
+                        </div>
+                        <br>
                     </div>
                     <div class="col-xs-6">
-                        <choropleth candidate="model.candidates[1]" cycle="model.cycles[1]" height="460" width="460" scale="650" domain-max="model.choropleth" pos="'right'"></choropleth>
+                        <choropleth candidate="model.candidates[0]" cycle="model.cycles[0]" state-fips="model.stateFips" height="460" width="460" scale="650" domain-max="model.choropleth" pos="'left'"></choropleth>
+                    </div>
+                    <div class="col-xs-6">
+                        <choropleth candidate="model.candidates[1]" cycle="model.cycles[1]" state-fips="model.stateFips" height="460" width="460" scale="650" domain-max="model.choropleth" pos="'right'"></choropleth>
                     </div>
 
                     <div class="col-xs-12"><h4 id="top-employers">Top Employers of > $200 Campaign Contributors</h4></div>
