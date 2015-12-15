@@ -15,7 +15,7 @@ api = Api(app)
 @app.after_request
 def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'accept-language, origin, accept-encoding, content-type')
+    response.headers.add('Access-Control-Allow-Headers', 'accept-language, origin, accept-encoding, cache-control, content-type')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     return response
 
