@@ -180,7 +180,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
             template:
             '<div class="collapse navbar-collapse" id="custom-collapse">'+
                 '<script type="text/ng-template" id="navTree">'+
-                    '<a ng-class="{\'dropdown-toggle\':item.children}" ng-href="{{item.link}}" class="section-scroll"' +
+                    '<a ng-class="{\'dropdown-toggle\':item.children}" ng-href="{{item.link}}"' +
                         'ng-click="clickHandler($event, item)">{{ item.title }}</a>'+
                     '<ul ng-if="item.children" class="dropdown-menu">'+
                         '<li ng-repeat="item in item.children track by $index" ng-include="\'navTree\'"' +
@@ -782,4 +782,13 @@ angular.module('myApp', ['mgcrea.ngStrap'])
                 });
             }
         }
-    });
+    })
+
+.directive('a', function() {
+  return {
+    restrict: 'E',
+    link: function(scope, element) {
+        element.attr('href', '#' + element.attr('href'));
+    }
+  };
+});
