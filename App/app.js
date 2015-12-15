@@ -18,8 +18,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
     .factory('vizAPI', function($http) {
 
-        var BASE_URL = "http://data.enalytica.com:9600";
-        //var BASE_URL = "http://127.0.0.1:5000";
+        //var BASE_URL = "http://data.enalytica.com:9600";
+        var BASE_URL = "http://127.0.0.1:5000";
 
         var factory = {};
 
@@ -28,7 +28,7 @@ angular.module('myApp', ['mgcrea.ngStrap'])
         };
 
 		factory.contributors_by_size = function(committee_id, cycle) {
-            return $http.get(BASE_URL+'/schedule_a/by_size/' + committee_id + '/' + cycle);
+            return $http.get(BASE_URL+'/schedule_a/by_size/' + committee_id + '/' + cycle+'/');
         };
 
         factory.contributors_by_geo = function(committee_id, cycle, geo_agg) {
@@ -53,15 +53,15 @@ angular.module('myApp', ['mgcrea.ngStrap'])
         };
 
         factory.get_by_employer = function(committee_id, cycle, topk) {
-            return $http.get(BASE_URL+'/schedule_a/by_employer/'+ committee_id +'/'+cycle +'/'+topk);
+            return $http.get(BASE_URL+'/schedule_a/by_employer/'+ committee_id +'/'+cycle +'/'+topk+'/');
         };
 
         factory.get_receipts_disbursements_by_committees = function(committee_ids, cycle) {
-            return $http.get(BASE_URL+'/com_fins/'+ committee_ids +'/'+cycle);
+            return $http.get(BASE_URL+'/com_fins/'+ committee_ids +'/'+cycle+'/');
         };
 
         factory.get_receipts_disbursements_by_candidates = function(candidate_ids, cycle) {
-            return $http.get(BASE_URL+'/cand_fins/'+ candidate_ids +'/'+cycle);
+            return $http.get(BASE_URL+'/cand_fins/'+ candidate_ids +'/'+cycle+'/');
         };
         return factory;
     })
