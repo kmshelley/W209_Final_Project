@@ -18,8 +18,8 @@ angular.module('myApp', ['mgcrea.ngStrap'])
 
     .factory('vizAPI', function($http) {
 
-        var BASE_URL = "http://data.enalytica.com:9600";
-        //var BASE_URL = "http://127.0.0.1:5000";
+        //var BASE_URL = "http://data.enalytica.com:9600";
+        var BASE_URL = "http://127.0.0.1:5000";
 
         var factory = {};
 
